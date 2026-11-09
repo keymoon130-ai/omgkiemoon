@@ -375,7 +375,8 @@ function audioUnlock() {
   bgmSync();
 }
 ['pointerdown', 'keydown', 'touchstart'].forEach((ev) => window.addEventListener(ev, audioUnlock, { passive: true }));
-function sfxVol() { return muted ? 0 : Math.max(0.0001, vol); }
+// 게임 소리(효과음, 의자 뺏기 음악, 노래방 반주)는 메인 배경음 설정과 상관없이 항상 나와요
+function sfxVol() { return 0.8; }
 
 function tone(freq, dur, type = 'square', gain = 0.15, slide = 0, when = 0) {
   if (!AC) return;
