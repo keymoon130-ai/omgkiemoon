@@ -159,7 +159,49 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 .rotate{position:absolute;inset:0;display:none;place-items:center;background:var(--sky);z-index:20;font-family:"Jua",sans-serif;font-size:26px;text-align:center;padding:30px}
 @media (orientation:portrait){ .is-touch .rotate.want{display:grid} }
 
+/* 노래방 */
+#game.kara{background:#1b2350}
+#game.kara .keys,#game.kara .touch,#game.kara .tbtns,#game.kara .rotate,#game.kara .hud-top{display:none!important}
+#kara{position:absolute;inset:0}
+#kara canvas{display:block;width:100%;height:100%}
+.k-tools{position:absolute;right:12px;top:66px;display:flex;flex-direction:column;gap:8px;align-items:flex-end;z-index:4}
+.k-tools .btn{font-size:15px}
+.k-tools .mic{background:var(--paper);border:3px solid var(--ink);border-radius:12px;padding:6px 10px;font-weight:700;font-size:13px}
+.k-tools .mic.on{background:var(--mint)}
+.k-tools .mic.off{background:var(--sun)}
+.tray{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:10px;align-items:flex-end;z-index:4}
+.kcard{width:110px;height:120px;border:3px solid var(--ink);border-radius:16px;background:var(--paper);box-shadow:4px 4px 0 var(--ink);font-family:"Jua",sans-serif;font-size:16px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:6px;text-align:center}
+.kcard .ci{font-size:32px}
+.kcard:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.kcard:disabled{opacity:.4}
+.lyric-in{position:absolute;left:50%;bottom:150px;transform:translateX(-50%);display:flex;gap:8px;z-index:5;width:min(440px,92vw)}
+.lyric-in .field{font-size:16px;padding:10px}
+.k-hint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);color:#fff;font-weight:700;font-size:14px;text-align:center;width:min(560px,92vw);text-shadow:1px 1px 0 var(--ink)}
+.songs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 6px;text-align:left}
+.songbtn{font-size:17px;padding:12px;text-align:left;line-height:1.3}
+.songbtn small{display:block;font-family:"IBM Plex Sans KR",sans-serif;font-size:12px;font-weight:600;color:var(--muted);margin-top:2px}
+.guess{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px;text-align:left}
+.guess li{display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--soft);border-radius:var(--r-small);padding:8px 10px;font-weight:700}
+.guess select{font:inherit;border:2px solid var(--ink);border-radius:10px;padding:6px 8px;background:#fff}
+.rank{list-style:none;padding:0;margin:12px 0;display:grid;gap:6px;text-align:left}
+.rank li{display:flex;justify-content:space-between;background:var(--soft);border-radius:var(--r-small);padding:8px 12px;font-weight:700}
+.kara .overlay .panel{max-height:88vh;overflow:auto}
+.kara .overlay p{margin:6px 0}
+#game.kara .feed{top:auto;bottom:150px}
+.lyric-in.hidden,.tray.hidden,.k-tools .hidden{display:none}
+.kcard.lyric-open{background:var(--sun)}
+.kara .overlay .panel h3{font-family:"Jua",sans-serif;font-weight:400;font-size:20px;margin:16px 0 4px;text-align:left}
+.order{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.order span{display:flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:4px 10px 4px 4px;font-weight:700;font-size:14px}
+.order .blob{width:24px;height:27px;border-width:2px}
+.order .blob::before,.order .blob::after{top:8px;width:3px;height:5px}
+.order .blob::before{left:5px}.order .blob::after{right:5px}
+.ok{color:#0f8a5f}.no{color:#d6204f}
+
 @media (max-width:820px){
+  .kcard{width:88px;height:98px;font-size:13px}
+  .kcard .ci{font-size:26px}
+  .songs{grid-template-columns:1fr}
   .main-wrap{grid-template-columns:1fr;gap:28px;padding-top:64px}
   .lobby-grid{grid-template-columns:1fr}
   .lobby-head{padding-right:0;padding-top:44px}
@@ -413,7 +455,7 @@ const GAMES = [
   { id: 'chair', ico: '🪑', bg: '#ffd23f', name: '의자 뺏기', desc: '발로 차고 던지고 끌어내리는 의자 뺏기', ppl: '2~8명', live: true },
   { id: 'rope', ico: '🪢', bg: '#33d69f', name: '단체 줄넘기 지옥', desc: '줄 돌리는 사람도 플레이어', ppl: '2~8명' },
   { id: 'ramen', ico: '🍜', bg: '#ff7a59', name: '엄마한테 안 들키기 라면', desc: '새벽 3시, 소리 내면 끝', ppl: '3~6명' },
-  { id: 'karaoke', ico: '🎤', bg: '#a678ff', name: '노래방 망치기', desc: '노래하는 친구 몰래 방해하기', ppl: '3~6명' },
+  { id: 'karaoke', ico: '🎤', bg: '#a678ff', name: '노래방 망치기', desc: '마이크로 음정 맞추고, 남은 사람은 몰래 방해', ppl: '2~8명', live: true },
   { id: 'pigeon', ico: '🐦', bg: '#4aa8f0', name: '비둘기 결혼식 습격', desc: '케이크 훔치고 부케 낚아채기', ppl: '2~8명' },
 ];
 function ticketHTML(g) {
@@ -544,7 +586,7 @@ function onData(from, d) {
     case 'hello':
       if (!isHost()) return;
       net.to(from, { k: 'lobby', ...lobbyState });
-      if (game) net.to(from, { k: 'sync', roster: game.rosterInfo(), opts: game.opts });
+      if (game) net.to(from, { k: 'sync', game: game.kind, roster: game.rosterInfo(), opts: game.opts });
       return;
     case 'lobby':
       if (from !== net.hostId) return;
@@ -552,9 +594,9 @@ function onData(from, d) {
       renderLobby(); return;
     case 'start':
       if (from !== net.hostId) return;
-      startGame(d.roster, d.opts, false); return;
+      startGame(d.roster, d.opts, false, d.game); return;
     case 'sync':
-      if (!game) startGame(d.roster, d.opts, true); return;
+      if (!game) startGame(d.roster, d.opts, true, d.game); return;
     case 'toLobby':
       if (from !== net.hostId && from !== myId) return;
       stopGame(); return;
@@ -574,7 +616,12 @@ function renderLobby() {
   $('#plist').innerHTML = rows.join('');
   const total = net.players.length + lobbyState.bots.length;
   $('#pcount').textContent = `참가자 ${total}명`;
-  $('#pickList').innerHTML = GAMES.map((g) => `<li class="ticket ${g.live ? 'pick' : 'soon'}" aria-pressed="${g.id === lobbyState.game}">${ticketHTML(g)}</li>`).join('');
+  $('#pickList').innerHTML = GAMES.map((g) => `<li class="ticket ${g.live ? 'pick' : 'soon'}" data-g="${g.id}" aria-pressed="${g.id === lobbyState.game}" ${g.live && host ? 'tabindex="0" role="button"' : ''}>${ticketHTML(g)}</li>`).join('');
+  $('#pickList').querySelectorAll('.ticket.pick').forEach((li) => {
+    const pick = () => { if (!isHost()) return; lobbyState.game = li.dataset.g; hostLobbyChanged(); };
+    li.onclick = pick; li.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } };
+  });
+  $('#evToggle').closest('label').classList.toggle('hidden', lobbyState.game !== 'chair');
   $('#evToggle').checked = !!lobbyState.events;
   $('#evToggle').disabled = !host;
   $('#startBtn').disabled = total < 2;
@@ -598,9 +645,10 @@ $('#startBtn').onclick = () => {
   const roster = net.players.map((p) => ({ id: p.id, name: p.name, color: p.color, bot: false }))
     .concat(lobbyState.bots.map((b) => ({ ...b, bot: true })));
   if (roster.length < 2) return;
+  if (!roster.some((r) => !r.bot)) return;
   const opts = { events: lobbyState.events };
-  net.bcast({ k: 'start', roster, opts });
-  startGame(roster, opts, false);
+  net.bcast({ k: 'start', game: lobbyState.game, roster, opts });
+  startGame(roster, opts, false, lobbyState.game);
 };
 $('#backBtn').onclick = () => endGameAll();
 
@@ -614,10 +662,11 @@ function toast(msg) {
 
 /* =============== 게임 공통 =============== */
 let game = null;
-function startGame(roster, opts, late) {
+function startGame(roster, opts, late, kind) {
   if (game) game.destroy();
   show('game');
-  game = new ChairGame(roster, opts, late);
+  gameEl.classList.toggle('kara', kind === 'karaoke');
+  game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : new ChairGame(roster, opts, late);
 }
 function stopGame() {
   if (game) { game.destroy(); game = null; }
@@ -1059,7 +1108,7 @@ class Char {
 
 class ChairGame {
   constructor(roster, opts, late) {
-    this.roster = roster.slice(); this.opts = opts || {}; this.late = late;
+    this.kind = 'chair'; this.roster = roster.slice(); this.opts = opts || {}; this.late = late;
     this.chars = new Map(); this.chairs = new Map(); this.props = new Map();
     this.phase = null; this.round = 0; this.alive = roster.map((r) => r.id); this.event = 'none';
     this.wind = new V3(); this.tl = 0; this.time = 0; this.sendT = 0; this.worldT = 0;
@@ -1807,6 +1856,669 @@ ChairGame.prototype.onData = function (from, d) {
   if (d.k === 'out') { if (from === net.hostId) this.showOut(d.ids, d.redo); return; }
   return _origOnData.call(this, from, d);
 };
+
+/* =============== 노래방 망치기 =============== */
+// 곡은 전부 저작권이 끝난 노래예요 (외국 동요·캐럴, 생일 축하 노래, 아리랑).
+// 표기: 음이름:박자:가사  ("-"로 끝나면 다음 글자와 붙여 써요, "~"는 앞 글자 늘이기, "|"는 줄바꿈)
+const PC = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };
+const noteNum = (n) => { const m = /^([A-G]#?)(\d)$/.exec(n); return 12 * (+m[2] + 1) + PC[m[1]]; };
+const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+const SONG_SRC = [
+  { id: 'bday', cat: '생일 축하 노래', title: '생일 축하합니다', bpm: 96, bpb: 3,
+    notes: `G4:.75:생- G4:.25:일 A4:1:축- G4:1:하- C5:1:합- B4:1:니- B4:1:다 |
+      G4:.75:생- G4:.25:일 A4:1:축- G4:1:하- D5:1:합- C5:1:니- C5:1:다 |
+      G4:.75:사- G4:.25:랑- G5:1:하- E5:1:는 C5:1:친- B4:1:구- A4:1:의 |
+      F5:.75:생- F5:.25:일 E5:1:축- C5:1:하- D5:1:합- C5:1:니- C5:2:다`,
+    chords: 'C:1 C:3 G:2 G:1 G:3 C:2 C:1 C:2 F:3 F:1 C:2 G:1 C:3' },
+  { id: 'jingle', cat: '외국 동요·캐럴', title: 'Jingle Bells', bpm: 116, bpb: 4,
+    notes: `E4:1:Jin- E4:1:gle E4:2:bells, E4:1:jin- E4:1:gle E4:2:bells, |
+      E4:1:jin- G4:1:gle C4:1.5:all D4:.5:the E4:4:way |
+      F4:1:Oh F4:1:what F4:1.5:fun F4:.5:it F4:1:is E4:1:to E4:1:ride E4:.5:in E4:.5:a |
+      E4:1:one D4:1:horse D4:1:o- E4:1:pen D4:2:sleigh, G4:2:hey! |
+      E4:1:Jin- E4:1:gle E4:2:bells, E4:1:jin- E4:1:gle E4:2:bells, |
+      E4:1:jin- G4:1:gle C4:1.5:all D4:.5:the E4:4:way |
+      F4:1:Oh F4:1:what F4:1.5:fun F4:.5:it F4:1:is E4:1:to E4:1:ride E4:.5:in E4:.5:a |
+      G4:1:one G4:1:horse F4:1:o- D4:1:pen C4:4:sleigh`,
+    chords: 'C:4 C:4 C:4 C:4 F:4 C:4 D7:4 G:4 C:4 C:4 C:4 C:4 F:4 C:4 G7:4 C:4' },
+  { id: 'twinkle', cat: '외국 동요·캐럴', title: 'Twinkle Twinkle Little Star', bpm: 100, bpb: 4,
+    notes: `C4:1:Twin- C4:1:kle G4:1:twin- G4:1:kle A4:1:lit- A4:1:tle G4:2:star, |
+      F4:1:how F4:1:I E4:1:won- E4:1:der D4:1:what D4:1:you C4:2:are |
+      G4:1:Up G4:1:a- F4:1:bove F4:1:the E4:1:world E4:1:so D4:2:high, |
+      G4:1:like G4:1:a F4:1:dia- F4:1:mond E4:1:in E4:1:the D4:2:sky |
+      C4:1:Twin- C4:1:kle G4:1:twin- G4:1:kle A4:1:lit- A4:1:tle G4:2:star, |
+      F4:1:how F4:1:I E4:1:won- E4:1:der D4:1:what D4:1:you C4:2:are`,
+    chords: 'C:2 C:2 F:2 C:2 F:2 C:2 G:2 C:2 C:2 F:2 C:2 G:2 C:2 F:2 C:2 G:2 C:2 C:2 F:2 C:2 F:2 C:2 G:2 C:2' },
+  { id: 'london', cat: '외국 동요·캐럴', title: 'London Bridge', bpm: 112, bpb: 4,
+    notes: `G4:1.5:Lon- A4:.5:don G4:1:Bridge F4:1:is E4:1:fall- F4:1:ing G4:2:down, |
+      D4:1:fall- E4:1:ing F4:2:down, E4:1:fall- F4:1:ing G4:2:down |
+      G4:1.5:Lon- A4:.5:don G4:1:Bridge F4:1:is E4:1:fall- F4:1:ing G4:2:down, |
+      D4:2:my G4:2:fair E4:1:la- C4:3:dy |
+      G4:1.5:Build A4:.5:it G4:1:up F4:1:with E4:1:i- F4:1:ron G4:2:bars, |
+      D4:1:i- E4:1:ron F4:2:bars, E4:1:i- F4:1:ron G4:2:bars |
+      G4:1.5:Build A4:.5:it G4:1:up F4:1:with E4:1:i- F4:1:ron G4:2:bars, |
+      D4:2:my G4:2:fair E4:1:la- C4:3:dy`,
+    chords: 'C:4 C:4 G:4 C:4 C:4 C:4 G:4 C:4 C:4 C:4 G:4 C:4 C:4 C:4 G:4 C:4' },
+  { id: 'row', cat: '외국 동요·캐럴', title: 'Row Row Row Your Boat', bpm: 92, bpb: 4, rep: 2,
+    notes: `C4:1:Row, C4:1:row, C4:.75:row D4:.25:your E4:1:boat E4:.75:gent- D4:.25:ly E4:.75:down F4:.25:the G4:2:stream |
+      C5:.34:mer- C5:.33:ri- C5:.33:ly G4:.34:mer- G4:.33:ri- G4:.33:ly E4:.34:mer- E4:.33:ri- E4:.33:ly C4:.34:mer- C4:.33:ri- C4:.33:ly
+      G4:.75:life F4:.25:is E4:.75:but D4:.25:a C4:2:dream`,
+    chords: 'C:4 C:4 C:4 G:2 C:2' },
+  { id: 'wewish', cat: '외국 동요·캐럴', title: 'We Wish You a Merry Christmas', bpm: 132, bpb: 3, rep: 2,
+    notes: `D4:1:We G4:1:wish G4:.5:you A4:.5:a G4:.5:mer- F#4:.5:ry E4:1:Christ- E4:1:mas, |
+      E4:1:we A4:1:wish A4:.5:you B4:.5:a A4:.5:mer- G4:.5:ry F#4:1:Christ- D4:1:mas, |
+      D4:1:we B4:1:wish B4:.5:you C5:.5:a B4:.5:mer- A4:.5:ry G4:1:Christ- E4:1:mas, |
+      D4:.5:and D4:.5:a E4:1:hap- A4:1:py F#4:1:new G4:3:year!`,
+    chords: 'D:1 G:3 C:3 A:3 D:3 B7:3 Em:3 C:2 D:1 G:3' },
+  { id: 'arirang', cat: '민요', title: '아리랑', bpm: 84, bpb: 3,
+    notes: `G4:1.5:아 A4:.5:리- G4:.5:랑 A4:.5:~ C5:1.5:아 D5:.5:리- C5:.5:랑 D5:.5:~ E5:1:아- D5:.5:라- C5:.5:리- A4:1:요 C5:.5:~ A4:.5:~ G4:2:~ |
+      G4:1.5:아 A4:.5:리- G4:.5:랑 A4:.5:~ C5:1.5:고- D5:.5:개- C5:.5:로 D5:.5:~ E5:1:넘- D5:.5:어- C5:.5:간- A4:1:다 C5:.5:~ A4:.5:~ G4:2:~ |
+      E5:1.5:나- D5:.5:를 C5:.5:버- D5:.5:리- C5:1:고 A4:.5:~ G4:1.5:~ G4:1.5:가- A4:.5:시- C5:.5:는 D5:.5:님- C5:1.5:은 D5:.5:~ C5:1:~ |
+      G4:1.5:십- A4:.5:리- G4:.5:도 A4:.5:~ C5:1.5:못 D5:.5:가- C5:.5:서 D5:.5:~ E5:1:발- D5:.5:병 C5:.5:난- A4:1:다 C5:.5:~ A4:.5:~ G4:2:~`,
+    chords: 'C:3 F:3 C:3 C:3 C:3 F:3 C:3 C:3 C:3 C:3 F:3 C:3 C:3 F:3 C:3 C:3' },
+];
+function parseSong(s) {
+  const toks = [];
+  for (let r = 0; r < (s.rep || 1); r++) { if (r) toks.push('|'); toks.push(...s.notes.trim().split(/\s+/)); }
+  const notes = [], lines = [[]];
+  let b = 0;
+  for (const t of toks) {
+    if (t === '|') { if (lines[lines.length - 1].length) lines.push([]); continue; }
+    const [n, d, syl = '~'] = t.split(':'); const dur = parseFloat(d);
+    if (n === 'R') { b += dur; continue; }
+    const note = { m: noteNum(n), b, d: dur, syl, line: lines.length - 1 };
+    notes.push(note); if (syl !== '~') lines[lines.length - 1].push(note);
+    b += dur;
+  }
+  if (!lines[lines.length - 1].length) lines.pop();
+  const chords = []; let cb = 0;
+  for (let r = 0; r < (s.rep || 1); r++) for (const t of s.chords.trim().split(/\s+/)) { const [name, d] = t.split(':'); chords.push({ name, b: cb, d: +d }); cb += +d; }
+  const ms = notes.map((n) => n.m);
+  return { ...s, notes, lines, chords, total: Math.max(b, cb), lo: Math.min(...ms), hi: Math.max(...ms) };
+}
+const SONGS = SONG_SRC.map(parseSong);
+const songById = (id) => SONGS.find((s) => s.id === id);
+function chordNotes(name) {
+  const m = /^([A-G]#?)(m?)(7?)$/.exec(name); let root = PC[m[1]];
+  const iv = m[2] ? [0, 3, 7] : [0, 4, 7]; if (m[3]) iv.push(10);
+  const base = 60 + root > 66 ? 48 + root : 60 + root;
+  return { root: 36 + root + (root < 4 ? 12 : 0), notes: iv.map((i) => base + i) };
+}
+const lineText = (notes) => notes.map((n) => n.syl.endsWith('-') ? n.syl.slice(0, -1) : n.syl + ' ').join('').trim();
+
+// 음정 인식 (자기상관)
+function detectPitch(raw, sr) {
+  const n = raw.length >> 1, buf = new Float32Array(n);
+  for (let i = 0; i < n; i++) buf[i] = (raw[i * 2] + raw[i * 2 + 1]) * 0.5;
+  const fs = sr / 2;
+  let e0 = 0; for (let i = 0; i < n; i++) e0 += buf[i] * buf[i];
+  if (Math.sqrt(e0 / n) < 0.012) return 0;
+  const minLag = Math.floor(fs / 1000), maxLag = Math.min(n >> 1, Math.floor(fs / 70));
+  const c = new Float32Array(maxLag + 2);
+  for (let lag = minLag; lag <= maxLag + 1; lag++) { let s = 0; for (let i = 0; i < n - lag; i++) s += buf[i] * buf[i + lag]; c[lag] = s; }
+  let lag = minLag; while (lag < maxLag && c[lag] > c[lag + 1]) lag++;
+  let best = -1, bv = 0;
+  for (let l = lag; l <= maxLag; l++) if (c[l] > bv) { bv = c[l]; best = l; }
+  if (best < 0 || bv / e0 < 0.3) return 0;
+  for (let l = lag + 1; l < best; l++) if (c[l] >= bv * 0.88 && c[l] >= c[l - 1] && c[l] >= c[l + 1]) { best = l; break; }
+  const a = c[best - 1], b = c[best], d = c[best + 1], den = a - 2 * b + d;
+  return fs / (best + (den ? 0.5 * (a - d) / den : 0));
+}
+
+const CARDS = {
+  key: { ico: '🎹', name: '키 올리기', fx: '누군가 키를 올렸어요!', dur: 6 },
+  tempo: { ico: '⏩', name: '템포 업', fx: '누군가 템포를 올렸어요!', dur: 5 },
+  lyric: { ico: '✏️', name: '가사 바꿔치기', fx: '누군가 가사를 바꿨어요!', dur: 3 },
+  tamb: { ico: '🥁', name: '탬버린 폭주', fx: '탬버린 폭주!', dur: 6 },
+  flip: { ico: '🌀', name: '화면 뒤집기', fx: '화면이 뒤집혔어요!', dur: 5 },
+};
+const BOT_LYRICS = ['배고파서 노래 못 하겠다', '의자 내놔', '라면 먹고 싶다', '이 노래 누가 골랐어', '나는 사실 고양이다', '박자 놓쳤다 망했다'];
+const aNow = () => (AC ? AC.currentTime : performance.now() / 1000);
+let NOISE = null;
+function kNoise(when, dur, gain, freq, type) {
+  if (!AC) return;
+  if (!NOISE) { NOISE = AC.createBuffer(1, AC.sampleRate, AC.sampleRate); const d = NOISE.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+  const t = AC.currentTime + when;
+  const s = AC.createBufferSource(); s.buffer = NOISE;
+  const f = AC.createBiquadFilter(); f.type = type; f.frequency.value = freq;
+  const g = AC.createGain(); g.gain.setValueAtTime(gain * sfxVol(), t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  s.connect(f); f.connect(g); g.connect(master); s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.02);
+}
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+class KaraokeGame {
+  constructor(roster, opts, late) {
+    this.kind = 'karaoke'; this.roster = roster.slice(); this.opts = opts || {}; this.late = late; this.dead = false;
+    this.ph = null; this.tl = 0; this.order = []; this.turn = -1; this.singer = null; this.songId = null; this.song = null;
+    this.scores = {};
+    for (const r of roster) this.scores[r.id] = { pts: 0, acc: null, sab: 0, det: 0, name: r.name, color: r.color, bot: !!r.bot };
+    this.cards = {}; this.sabs = []; this.reveal = null; this.lastAcc = 0;
+    this.trail = []; this.fxList = []; this.swaps = {}; this.flashT = 0; this.flashMsg = '';
+    this.cb = -4; this.ct = aNow(); this.bps = 1; this.rate = 1; this.evs = []; this.evi = 0; this.tambB = 0;
+    this.kwT = 0; this.ksT = 0; this.lastKs = 0; this.shownAcc = 0;
+
+    const w = this.wrap = document.createElement('div'); w.id = 'kara';
+    w.innerHTML = `<canvas></canvas>
+      <div class="k-tools"><span class="mic hidden" id="kMic"></span></div>
+      <div class="tray hidden" id="kTray"></div>
+      <div class="lyric-in hidden" id="kLyric"><input class="field" maxlength="20" placeholder="바꿀 가사 (20자까지)"><button class="btn small pop">바꾸기</button><button class="btn small plain">취소</button></div>
+      <div class="k-hint" id="kHint"></div>
+      <div class="overlay hidden" id="kOv"><div class="panel" id="kPanel"></div></div>`;
+    gameEl.appendChild(w);
+    this.cv = w.querySelector('canvas'); this.cx = this.cv.getContext('2d');
+    this.el = { mic: w.querySelector('#kMic'), tray: w.querySelector('#kTray'), lyr: w.querySelector('#kLyric'), hint: w.querySelector('#kHint'), ov: w.querySelector('#kOv'), panel: w.querySelector('#kPanel') };
+    const li = this.el.lyr.querySelector('input');
+    const [okB, noB] = this.el.lyr.querySelectorAll('button');
+    okB.onclick = () => { const t = li.value.trim(); if (t) { this.useCard('lyric', t); } this.closeLyric(); };
+    noB.onclick = () => this.closeLyric();
+    li.addEventListener('keydown', (e) => { if (e.key === 'Enter') okB.click(); if (e.key === 'Escape') noB.click(); });
+    // 손가락 노래 (마이크가 없을 때)
+    this.cv.addEventListener('pointerdown', (e) => { if (this.finger && this.singer === myId) { this.fingerDown = true; this.fingerY = e.clientY; } });
+    this.cv.addEventListener('pointermove', (e) => { if (this.fingerDown) this.fingerY = e.clientY; });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => this.cv.addEventListener(ev, () => { this.fingerDown = false; }));
+
+    $('#loading').classList.add('hidden'); $('#endOv').classList.add('hidden'); $('#feed').innerHTML = '';
+    this.last = performance.now();
+    this.loop = this.loop.bind(this); this.raf = requestAnimationFrame(this.loop);
+    this.sched = setInterval(() => this.schedule(), 25);
+    if (isHost() && !late) { this.order = shuffle(roster.map((r) => r.id)); this.setPhase('intro', 5); }
+  }
+  isBot(id) { return !!id && id.startsWith('bot_'); }
+  nameOf(id) { return (this.scores[id] || net.players.find((p) => p.id === id) || { name: '?' }).name; }
+  colorOf(id) { return (this.scores[id] || net.players.find((p) => p.id === id) || { color: '#fff' }).color; }
+  present() { return new Set([...net.players.map((p) => p.id), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
+  rosterInfo() { return this.roster; }
+  destroy() {
+    this.dead = true; cancelAnimationFrame(this.raf); clearInterval(this.sched);
+    this.voiceStop();
+    if (this.mic) { this.mic.st.getTracks().forEach((t) => t.stop()); this.mic = null; }
+    this.wrap.remove(); gameEl.classList.remove('kara');
+  }
+
+  // ---- 박자 시계 ----
+  beat() { return this.cb + (aNow() - this.ct) * this.bps * this.rate; }
+  setBeat(b) { this.cb = b; this.ct = aNow(); }
+  setRate(r) { const b = this.beat(); this.rate = r; this.setBeat(b); }
+
+  // ---- 방장 진행 ----
+  stateMsg() {
+    return { k: 'kw', ph: this.ph, tl: Math.round(this.tl * 10) / 10, order: this.order, turn: this.turn, singer: this.singer, song: this.songId,
+      scores: this.scores, cards: this.cards, sabs: this.sabs.map((s) => ({ type: s.type, text: s.text })), reveal: this.reveal, acc: this.lastAcc };
+  }
+  setPhase(ph, dur) {
+    const prev = this.ph; this.ph = ph; this.tl = dur;
+    this.enter(ph, prev);
+    net.bcast(this.stateMsg()); this.kwT = 1;
+  }
+  hostTick(dt) {
+    this.tl -= dt;
+    const ph = this.ph;
+    if (ph === 'intro' && this.tl <= 0) this.nextTurn();
+    else if (ph === 'pick') {
+      if (this.botPickT != null) { this.botPickT -= dt; if (this.botPickT <= 0) { this.botPickT = null; this.chooseSong(SONGS[Math.floor(Math.random() * SONGS.length)].id); return; } }
+      if (this.tl <= 0) this.chooseSong(SONGS[Math.floor(Math.random() * SONGS.length)].id);
+    } else if (ph === 'sing') {
+      const b = this.beat();
+      for (const p of this.botPlans || []) if (!p.done && b >= p.b) { p.done = true; this.hostSab(p.id, p.type, p.type === 'lyric' ? BOT_LYRICS[Math.floor(Math.random() * BOT_LYRICS.length)] : ''); }
+      if (this.tl <= 0) this.finishSing(this.lastAcc);
+    } else if (ph === 'guess') {
+      if (this.botGuessT != null) {
+        this.botGuessT -= dt;
+        if (this.botGuessT <= 0) {
+          this.botGuessT = null;
+          const sus = Object.keys(this.cards).length ? Object.keys(this.cards) : this.roster.map((r) => r.id).filter((id) => id !== this.singer);
+          this.doReveal(this.sabs.map((s) => (Math.random() < 0.45 ? s.by : sus[Math.floor(Math.random() * sus.length)])));
+          return;
+        }
+      }
+      if (this.tl <= 0) this.doReveal([]);
+    } else if (ph === 'score' && this.tl <= 0) this.nextTurn();
+    else if (ph === 'end' && this.tl <= 0) { endGameAll(); return; }
+    this.kwT -= dt;
+    if (this.kwT <= 0 && !this.dead) { this.kwT = 1; net.bcast(this.stateMsg()); }
+  }
+  nextTurn() {
+    const pr = this.present();
+    do { this.turn++; } while (this.turn < this.order.length && !pr.has(this.order[this.turn]));
+    if (this.turn >= this.order.length) { this.singer = null; this.setPhase('end', 18); return; }
+    this.singer = this.order[this.turn]; this.songId = null; this.sabs = []; this.reveal = null; this.lastAcc = 0; this.cards = {};
+    this.botPickT = this.isBot(this.singer) ? rand(1.5, 3) : null;
+    this.setPhase('pick', 15);
+  }
+  chooseSong(id) {
+    if (this.ph !== 'pick') return;
+    this.songId = songById(id) ? id : SONGS[0].id;
+    const pr = this.present(), types = Object.keys(CARDS);
+    this.cards = {};
+    for (const r of this.roster) if (r.id !== this.singer && pr.has(r.id)) this.cards[r.id] = shuffle(types).slice(0, 2);
+    const s = songById(this.songId);
+    this.botPlans = [];
+    for (const [id2, cs] of Object.entries(this.cards)) if (this.isBot(id2)) cs.forEach((t) => this.botPlans.push({ id: id2, type: t, b: rand(2, s.total - 4) }));
+    this.setPhase('sing', (s.total + 4) / (s.bpm / 60) + 10);
+  }
+  hostSab(by, type, text) {
+    if (this.ph !== 'sing') return;
+    const cs = this.cards[by]; if (!cs) return;
+    const i = cs.indexOf(type); if (i < 0) return;
+    cs.splice(i, 1);
+    const t = type === 'lyric' ? String(text || '').replace(/[<>]/g, '').slice(0, 20) : '';
+    this.sabs.push({ type, by, text: t });
+    const fx = { k: 'sabfx', type, text: t };
+    net.bcast(fx); this.applyFx(type, t);
+    net.bcast(this.stateMsg());
+  }
+  finishSing(acc) {
+    if (this.ph !== 'sing') return;
+    this.lastAcc = clamp(Math.round(acc || 0), 0, 100);
+    if (this.sabs.length) { this.botGuessT = this.isBot(this.singer) ? rand(2, 4) : null; this.setPhase('guess', 25); }
+    else this.doReveal([]);
+  }
+  doReveal(picks) {
+    if (this.ph !== 'sing' && this.ph !== 'guess') return;
+    const S = this.scores, sg = this.singer;
+    if (S[sg]) { S[sg].pts += this.lastAcc; S[sg].acc = Math.max(S[sg].acc ?? 0, this.lastAcc); }
+    this.reveal = this.sabs.map((s, i) => {
+      const guess = picks[i] || '', ok = guess === s.by;
+      if (ok) { if (S[sg]) { S[sg].pts += 20; S[sg].det++; } if (S[s.by]) S[s.by].pts -= 10; }
+      else if (S[s.by]) { S[s.by].pts += 20; S[s.by].sab++; }
+      return { type: s.type, text: s.text, by: s.by, guess, ok };
+    });
+    this.setPhase('score', 9);
+  }
+
+  // ---- 메시지 ----
+  onData(from, d) {
+    const host = isHost();
+    switch (d.k) {
+      case 'kw': {
+        if (host || from !== net.hostId) return;
+        const prev = this.ph;
+        Object.assign(this, { tl: d.tl, order: d.order, turn: d.turn, singer: d.singer, songId: d.song, scores: d.scores, cards: d.cards, reveal: d.reveal, lastAcc: d.acc });
+        this.sabsPub = d.sabs; this.ph = d.ph;
+        if (d.ph !== prev) this.enter(d.ph, prev); else this.renderTray();
+        return;
+      }
+      case 'sabfx': if (!host && from === net.hostId) this.applyFx(d.type, d.text); return;
+      case 'ks': {
+        const okFrom = from === this.singer || (this.isBot(this.singer) && from === net.hostId);
+        if (!okFrom || this.ph !== 'sing' || this.singer === myId) return;
+        this.trail.push({ b: d.b, m: d.m, h: d.h });
+        this.shownAcc = d.a; this.lastKs = performance.now();
+        if (Math.abs(d.b - this.beat()) > 0.4) this.setBeat(d.b);
+        if (d.syn) this.voiceSet(d.m); else this.voiceSet(null);
+        return;
+      }
+    }
+    if (!host) return;
+    switch (d.k) {
+      case 'pick': if (from === this.singer && this.ph === 'pick') this.chooseSong(d.song); return;
+      case 'sab': this.hostSab(from, d.type, d.text); return;
+      case 'kdone': if (from === this.singer) this.finishSing(d.acc); return;
+      case 'guess': if (from === this.singer && this.ph === 'guess') this.doReveal(Array.isArray(d.picks) ? d.picks : []); return;
+    }
+  }
+  onRoster() {
+    if (!isHost()) return;
+    const pr = this.present();
+    if (this.singer && !pr.has(this.singer)) {
+      if (this.ph === 'pick') this.nextTurn();
+      else if (this.ph === 'sing') this.finishSing(this.lastAcc);
+      else if (this.ph === 'guess') this.doReveal([]);
+    }
+    for (const id of Object.keys(this.cards)) if (!pr.has(id)) delete this.cards[id];
+  }
+
+  // ---- 단계 화면 ----
+  enter(ph, prev) {
+    if (prev === 'sing' && ph !== 'sing') { this.voiceStop(); this.song = null; }
+    this.closeLyric();
+    this.el.hint.textContent = '';
+    const me = this.singer === myId;
+    this.el.mic.classList.toggle('hidden', !(me && (ph === 'pick' || ph === 'sing')));
+    if (ph === 'intro') {
+      this.panel(`<h2>노래방 망치기</h2>
+        <p>한 명씩 돌아가며 마이크로 노래해요. 음정이 맞을수록 점수가 올라가요.</p>
+        <p>나머지는 방해 카드 2장으로 몰래 노래를 망쳐요. 노래가 끝나면 부른 사람이 범인을 맞혀요.</p>
+        <p>노래하는 사람은 <b>이어폰</b>을 끼면 음정이 훨씬 잘 잡혀요.</p>
+        <h3>부르는 순서</h3><div class="order">${this.order.map((id) => `<span><i class="blob" style="--c:${this.colorOf(id)}"></i>${esc(this.nameOf(id))}</span>`).join('')}</div>`);
+    } else if (ph === 'pick') {
+      this.trail = [];
+      if (me) {
+        this.ensureMic();
+        this.panel(`<h2>노래 고르기</h2><p>15초 안에 골라주세요. 안 고르면 아무 곡이나 나와요.</p>
+          <div class="songs">${SONGS.map((s) => `<button class="btn plain songbtn" data-s="${s.id}">${esc(s.title)}<small>${s.cat}</small></button>`).join('')}</div>
+          <p id="kMicLine"></p>`);
+        this.el.panel.querySelectorAll('.songbtn').forEach((b) => b.onclick = () => { net.toHost({ k: 'pick', song: b.dataset.s }); this.el.panel.querySelectorAll('.songbtn').forEach((x) => x.disabled = true); });
+        this.updateMic();
+      } else this.panel(`<h2>${esc(this.nameOf(this.singer))}님이 노래 고르는 중</h2><p>곧 방해 카드 2장이 나와요. 몰래 쓸 타이밍을 노려보세요.</p>`);
+    } else if (ph === 'sing') {
+      this.hidePanel();
+      this.song = songById(this.songId);
+      this.bps = this.song.bpm / 60; this.rate = 1; this.setBeat(-4);
+      this.buildEvents(); this.trail = []; this.fxList = []; this.swaps = {};
+      this.hitT = 0; this.totT = 0; this.acc = 0; this.shownAcc = 0; this.ni = 0; this.doneSent = false; this.mHist = [];
+      this.botErr = rand(0.2, 0.9);
+      if (me) this.el.hint.textContent = this.finger ? '화면을 누른 채 위아래로 움직여서 음을 내요' : '노란 막대에 맞춰 불러요. 옥타브는 상관없어요.';
+    } else if (ph === 'guess') {
+      const subs = this.sabsPub || this.sabs;
+      if (me) {
+        const sus = this.roster.filter((r) => r.id !== myId);
+        this.panel(`<h2>범인 찾기</h2><p>누가 어떤 방해를 했을까요? 맞히면 +20점을 뺏어와요.</p>
+          <ul class="guess">${subs.map((s, i) => `<li><span>${CARDS[s.type].ico} ${CARDS[s.type].name}${s.text ? ` “${esc(s.text)}”` : ''}</span>
+            <select data-i="${i}"><option value="">모르겠어요</option>${sus.map((r) => `<option value="${r.id}">${esc(r.name)}</option>`).join('')}</select></li>`).join('')}</ul>
+          <button class="btn pop" id="kGuessBtn">제출하기</button>`);
+        const gb = $('#kGuessBtn');
+        gb.onclick = () => {
+          const picks = [...this.el.panel.querySelectorAll('select')].map((s) => s.value);
+          gb.disabled = true; gb.textContent = '제출했어요';
+          net.toHost({ k: 'guess', picks });
+        };
+      } else this.panel(`<h2>${esc(this.nameOf(this.singer))}님이 범인 찾는 중</h2><p>방해 ${subs.length}번 중 몇 개나 들킬까요?</p>`);
+    } else if (ph === 'score') {
+      const rv = this.reveal || [];
+      this.panel(`<h2>${esc(this.nameOf(this.singer))}님 결과</h2>
+        <p>음정 정확도 <b>${this.lastAcc}%</b> → +${this.lastAcc}점</p>
+        ${rv.length ? `<ul class="guess">${rv.map((r) => `<li><span>${CARDS[r.type].ico} ${CARDS[r.type].name}</span><span>범인 ${esc(this.nameOf(r.by))} · ${r.ok ? '<span class="ok">맞혔어요 +20</span>' : '<span class="no">못 맞혔어요</span>'}</span></li>`).join('')}</ul>` : '<p>이번엔 아무도 방해하지 않았어요.</p>'}
+        <h3>지금 순위</h3>${this.rankHTML()}`);
+    } else if (ph === 'end') {
+      const st = Object.entries(this.scores);
+      const top = (f) => st.reduce((a, b) => (f(b[1]) > (a ? f(a[1]) : 0) ? b : a), null);
+      const win = st.slice().sort((a, b) => b[1].pts - a[1].pts)[0];
+      const aw = [];
+      const p1 = top((s) => s.acc ?? 0), p2 = top((s) => s.sab), p3 = top((s) => s.det);
+      if (p1) aw.push(`<li><b>음정왕</b>${esc(p1[1].name)} (${p1[1].acc}%)</li>`);
+      if (p2) aw.push(`<li><b>방해왕</b>${esc(p2[1].name)} (${p2[1].sab}번 안 들킴)</li>`);
+      if (p3) aw.push(`<li><b>명탐정</b>${esc(p3[1].name)} (${p3[1].det}번 맞힘)</li>`);
+      SFX.fanfare();
+      this.panel(`<h2>${win ? esc(win[1].name) + ' 우승!' : '노래 끝!'}</h2><ul class="awards">${aw.join('')}</ul>${this.rankHTML()}
+        ${isHost() ? '<button class="btn pop" id="kBack">대기실로 돌아가기</button>' : '<p class="wait">잠시 뒤 대기실로 돌아가요.</p>'}`);
+      if (isHost()) $('#kBack').onclick = () => endGameAll();
+    }
+    this.renderTray();
+  }
+  rankHTML() {
+    const st = Object.values(this.scores).slice().sort((a, b) => b.pts - a.pts);
+    return `<ul class="rank">${st.map((s, i) => `<li><span>${i + 1}. ${esc(s.name)}${s.bot ? ' (봇)' : ''}</span><span>${s.pts}점</span></li>`).join('')}</ul>`;
+  }
+  panel(html) { this.el.panel.innerHTML = html; this.el.ov.classList.remove('hidden'); }
+  hidePanel() { this.el.ov.classList.add('hidden'); }
+
+  // ---- 방해 카드 ----
+  renderTray() {
+    const mine = this.ph === 'sing' && this.singer !== myId ? (this.cards[myId] || []) : null;
+    const t = this.el.tray;
+    if (!mine) { t.classList.add('hidden'); t.innerHTML = ''; this.trayKey = ''; return; }
+    const key = mine.join(',');
+    if (key === this.trayKey && !t.classList.contains('hidden')) return;
+    this.trayKey = key; t.classList.remove('hidden');
+    if (!mine.length) { t.innerHTML = ''; this.el.hint.textContent = '카드를 다 썼어요. 들키지 않게 시치미 떼세요!'; return; }
+    this.el.hint.textContent = '';
+    t.innerHTML = mine.map((type) => `<button class="kcard" data-t="${type}"><span class="ci">${CARDS[type].ico}</span>${CARDS[type].name}</button>`).join('');
+    t.querySelectorAll('.kcard').forEach((b) => b.onclick = () => {
+      if (this.beat() < 0) return;
+      if (b.dataset.t === 'lyric') { this.el.lyr.classList.remove('hidden'); b.classList.add('lyric-open'); const i = this.el.lyr.querySelector('input'); i.value = ''; i.focus(); return; }
+      b.disabled = true; this.useCard(b.dataset.t);
+    });
+  }
+  useCard(type, text) { net.toHost({ k: 'sab', type, text: text || '' }); }
+  closeLyric() { this.el.lyr.classList.add('hidden'); this.el.tray.querySelectorAll('.lyric-open').forEach((b) => b.classList.remove('lyric-open')); }
+  applyFx(type, text) {
+    if (this.ph !== 'sing' || !this.song) return;
+    const now = performance.now() / 1000;
+    this.fxList.push({ type, end: now + CARDS[type].dur });
+    if (type === 'lyric') {
+      const b = this.beat(), L = this.song.lines;
+      const cur = this.curLine(b);
+      const started = L[cur] && L[cur][0].b <= b + 0.3;
+      const target = started ? cur + 1 : cur;
+      if (target < L.length) this.swaps[target] = text;
+    }
+    this.flashMsg = CARDS[type].fx; this.flashT = 1.8;
+    SFX.pop();
+  }
+  fxCount(type) { return this.fxList.filter((f) => f.type === type).length; }
+  keyShift() { return this.fxCount('key') * 3; }
+
+  // ---- 반주 ----
+  buildEvents() {
+    const s = this.song, ev = [], bpb = s.bpb;
+    for (let b = -4; b < 0; b++) ev.push({ b, t: 'click', acc: b === -4 });
+    const T = Math.ceil(s.total);
+    const chordAt = (b) => s.chords.find((c) => b >= c.b && b < c.b + c.d) || s.chords[s.chords.length - 1];
+    for (let b = 0; b < T; b++) {
+      const p = b % bpb, ch = chordNotes(chordAt(b).name);
+      if (p === 0 || (bpb === 4 && p === 2)) { ev.push({ b, t: 'kick' }); ev.push({ b, t: 'bass', n: ch.root + (p === 2 ? 7 : 0) }); }
+      if (bpb === 4 && (p === 1 || p === 3)) ev.push({ b, t: 'snare' });
+      ev.push({ b, t: 'hat' }); ev.push({ b: b + 0.5, t: 'hat', soft: 1 });
+      if (bpb === 3 ? p > 0 : (p === 1 || p === 3)) ev.push({ b, t: 'chord', ns: ch.notes });
+      if (bpb === 4 && (p === 0 || p === 2)) ev.push({ b: b + 0.5, t: 'chord', ns: ch.notes, soft: 1 });
+    }
+    ev.sort((a, c) => a.b - c.b);
+    this.evs = ev; this.evi = 0;
+  }
+  schedule() {
+    if (this.ph !== 'sing' || !this.song || !AC) return;
+    const now = this.beat(), bpsR = this.bps * this.rate, ahead = now + 0.15 * bpsR, k = this.keyShift();
+    while (this.evi < this.evs.length && this.evs[this.evi].b < ahead) {
+      const e = this.evs[this.evi++];
+      if (e.b < now - 0.15) continue;
+      const w = Math.max(0, (e.b - now) / bpsR), spb = 1 / bpsR;
+      if (e.t === 'click') tone(e.acc ? 1760 : 1320, 0.06, 'square', 0.12, 1, w);
+      else if (e.t === 'kick') tone(110, 0.18, 'sine', 0.45, 0.35, w);
+      else if (e.t === 'snare') kNoise(w, 0.12, 0.2, 1800, 'bandpass');
+      else if (e.t === 'hat') kNoise(w, 0.04, e.soft ? 0.04 : 0.07, 8000, 'highpass');
+      else if (e.t === 'bass') tone(mtof(e.n + k), 0.8 * spb, 'triangle', 0.3, 1, w);
+      else if (e.t === 'chord') for (const n of e.ns) tone(mtof(n + k), 0.45 * spb, 'triangle', e.soft ? 0.035 : 0.055, 1, w);
+    }
+    if (this.fxCount('tamb')) {
+      if (this.tambB < now - 0.2) this.tambB = Math.ceil(now * 4) / 4;
+      while (this.tambB < ahead) { const w = Math.max(0, (this.tambB - now) / bpsR); kNoise(w, 0.07, 0.22, 6500, 'highpass'); tone(rand(2400, 3200), 0.03, 'square', 0.03, 1, w); this.tambB += 0.25; }
+    }
+  }
+  voiceSet(m) {
+    if (!AC) return;
+    if (!this.voice) {
+      const o = AC.createOscillator(); o.type = 'sawtooth';
+      const f = AC.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1400; f.Q.value = 5;
+      const g = AC.createGain(); g.gain.value = 0;
+      o.connect(f); f.connect(g); g.connect(master); o.start();
+      this.voice = { o, g };
+    }
+    const t = AC.currentTime;
+    if (m == null) this.voice.g.gain.setTargetAtTime(0, t, 0.03);
+    else { this.voice.o.frequency.setTargetAtTime(mtof(m), t, 0.02); this.voice.g.gain.setTargetAtTime(0.08 * sfxVol(), t, 0.03); }
+  }
+  voiceStop() { if (this.voice) { try { this.voice.o.stop(); } catch (e) {} this.voice = null; } }
+
+  // ---- 마이크 ----
+  async ensureMic() {
+    if (this.mic || this.micTried) { this.updateMic(); return; }
+    this.micTried = true; this.updateMic();
+    try {
+      const st = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: false, autoGainControl: false } });
+      if (this.dead) { st.getTracks().forEach((t) => t.stop()); return; }
+      audioUnlock();
+      const src = AC.createMediaStreamSource(st), an = AC.createAnalyser(); an.fftSize = 2048; src.connect(an);
+      this.mic = { st, an, buf: new Float32Array(2048) }; this.finger = false;
+    } catch (e) { this.finger = true; }
+    this.updateMic();
+  }
+  updateMic() {
+    const t = this.mic ? '🎤 마이크 켜짐' : this.finger ? '👆 손가락 모드' : '🎤 마이크 연결 중…';
+    this.el.mic.textContent = t; this.el.mic.className = 'mic ' + (this.mic ? 'on' : 'off') + (this.el.mic.classList.contains('hidden') ? ' hidden' : '');
+    const l = document.getElementById('kMicLine');
+    if (l) l.textContent = this.mic ? '마이크가 연결됐어요.' : this.finger ? '마이크를 쓸 수 없어서 손가락 모드로 불러요. 화면을 눌러 위아래로 움직이면 음이 나요.' : '마이크 권한을 허용해 주세요.';
+  }
+
+  // ---- 노래 판정 ----
+  noteAt(b) {
+    const N = this.song.notes;
+    while (this.ni < N.length - 1 && N[this.ni].b + N[this.ni].d <= b) this.ni++;
+    const n = N[this.ni];
+    return n && b >= n.b && b < n.b + n.d ? n : null;
+  }
+  curLine(b) {
+    const N = this.song.notes;
+    const n = N.find((x) => x.b + x.d > b) || N[N.length - 1];
+    return n.line;
+  }
+  laneM(y) {
+    const L = this.lay; if (!L) return null;
+    let yy = y - this.cv.getBoundingClientRect().top;
+    if (this.fxCount('flip')) yy = L.top + L.bot - yy;
+    return L.lo + (L.bot - yy) / (L.bot - L.top) * (L.hi - L.lo);
+  }
+  singInput(dt, b, n) {
+    if (this.isBot(this.singer)) {
+      if (!n) return null;
+      if (Math.random() < 0.06 * dt * 60) this.botOff = Math.random() < 0.25 ? rand(-4, 4) : 0;
+      if (this.botVoiced == null || Math.random() < 0.02) this.botVoiced = Math.random() < 0.9;
+      return this.botVoiced ? n.m + this.keyShift() + (this.botOff || 0) + Math.sin(performance.now() / 90) * this.botErr : null;
+    }
+    if (this.finger) return this.fingerDown ? this.laneM(this.fingerY) : null;
+    if (!this.mic) return null;
+    this.pf = !this.pf;
+    if (this.pf) {
+      this.mic.an.getFloatTimeDomainData(this.mic.buf);
+      const f = detectPitch(this.mic.buf, AC.sampleRate);
+      const m = f > 0 ? 69 + 12 * Math.log2(f / 440) : null;
+      this.mHist.push(m); if (this.mHist.length > 3) this.mHist.shift();
+      const v = this.mHist.filter((x) => x != null).sort((a, c) => a - c);
+      this.lastM = v.length >= 2 ? v[v.length >> 1] : null;
+    }
+    return this.lastM;
+  }
+  singFrame(dt) {
+    const b = this.beat(), n = this.noteAt(b);
+    const m = this.singInput(dt, b, n);
+    let disp = null, h = 0;
+    if (n) {
+      const tgt = n.m + this.keyShift(); this.lastTgt = tgt; this.totT += dt;
+      if (m != null) {
+        let d = m - tgt; d = ((d % 12) + 18) % 12 - 6; disp = tgt + d;
+        const ad = Math.abs(d);
+        if (ad <= 1) { h = 2; this.hitT += dt; } else if (ad <= 2) { h = 1; this.hitT += dt * 0.5; }
+      }
+    } else if (m != null) { const ref = this.lastTgt ?? 64; let d = m - ref; d = ((d % 12) + 18) % 12 - 6; disp = ref + d; }
+    this.acc = this.totT > 0 ? (this.hitT / this.totT) * 100 : 0; this.shownAcc = Math.round(this.acc);
+    if (b >= 0) this.trail.push({ b, m: disp, h });
+    const synth = this.isBot(this.singer) || this.finger;
+    if (synth) this.voiceSet(disp);
+    this.ksT -= dt;
+    if (this.ksT <= 0) { this.ksT = 1 / 15; net.bcast({ k: 'ks', b: Math.round(b * 100) / 100, m: disp == null ? null : Math.round(disp * 10) / 10, h, a: this.shownAcc, syn: synth ? 1 : 0 }); }
+    if (b >= this.song.total + 0.5 && !this.doneSent) {
+      this.doneSent = true;
+      if (this.isBot(this.singer)) this.finishSing(this.acc); else net.toHost({ k: 'kdone', acc: this.acc });
+    }
+  }
+
+  // ---- 루프 ----
+  loop(t) {
+    if (this.dead) return;
+    this.raf = requestAnimationFrame(this.loop);
+    const dt = Math.min(0.05, (t - this.last) / 1000); this.last = t;
+    if (isHost()) { this.hostTick(dt); if (this.dead) return; } else this.tl -= dt;
+    if (this.ph === 'sing' && this.song) {
+      const now = performance.now() / 1000;
+      this.fxList = this.fxList.filter((f) => f.end > now);
+      const want = Math.min(2.25, Math.pow(1.5, this.fxCount('tempo')));
+      if (want !== this.rate) this.setRate(want);
+      const iSing = this.singer === myId || (isHost() && this.isBot(this.singer));
+      if (iSing) this.singFrame(dt);
+      else if (performance.now() - this.lastKs > 350) this.voiceSet(null);
+      const b = this.beat();
+      while (this.trail.length && this.trail[0].b < b - 5) this.trail.shift();
+    }
+    this.flashT = Math.max(0, this.flashT - dt);
+    this.draw();
+  }
+  draw() {
+    const cv = this.cv, g = this.cx, dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = cv.clientWidth, H = cv.clientHeight;
+    if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.fillStyle = '#1b2350'; g.fillRect(0, 0, W, H);
+    const T = performance.now() / 1000;
+    ['#ff4f8b', '#ffd23f', '#33d69f', '#a678ff', '#4aa8f0'].forEach((c, i) => {
+      const x = W * (0.5 + 0.42 * Math.sin(T * 0.3 + i * 1.7)), y = H * (0.45 + 0.35 * Math.cos(T * 0.23 + i * 2.3)), r = Math.max(W, H) * 0.22;
+      const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, c + '30'); gr.addColorStop(1, c + '00');
+      g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    });
+    const small = H < 520;
+    const font = (px) => `${px}px Jua, sans-serif`;
+    const outline = (txt, x, y, px, fill, align = 'center', maxW) => {
+      g.font = font(px); g.textAlign = align; g.textBaseline = 'middle'; g.lineJoin = 'round';
+      g.lineWidth = Math.max(3, px / 7); g.strokeStyle = '#1b2350'; g.strokeText(txt, x, y, maxW); g.fillStyle = fill; g.fillText(txt, x, y, maxW);
+    };
+    const narrow = W < 600, hw = narrow ? W - 230 : W - 360;
+    // 머리말
+    if (this.singer) {
+      outline(`🎤 ${this.nameOf(this.singer)}님의 무대`, W / 2, small ? 22 : 30, small || narrow ? 18 : 26, '#fff', 'center', hw);
+      if (this.song) outline(this.song.title, W / 2, small ? 46 : 58, small || narrow ? 14 : 18, '#ffd23f', 'center', hw);
+    }
+    if (!this.song || this.ph !== 'sing') {
+      outline('노래방 망치기', W / 2, H / 2, Math.min(64, W / 9), '#ff4f8b');
+      return;
+    }
+    outline(`${this.shownAcc}%`, 18, small ? 28 : 36, small || narrow ? 24 : 36, this.shownAcc >= 70 ? '#33d69f' : this.shownAcc >= 40 ? '#ffd23f' : '#ff4f8b', 'left');
+    g.font = '600 12px "IBM Plex Sans KR", sans-serif'; g.fillStyle = '#cfd6ff'; g.textAlign = 'left'; g.fillText('음정 정확도', 20, small ? 50 : 62);
+
+    const s = this.song, now = this.beat(), shift = this.keyShift();
+    const trayH = this.el.tray.classList.contains('hidden') ? (this.el.hint.textContent ? 44 : 20) : (small ? 112 : 142);
+    const ly2 = H - trayH - (small ? 10 : 20), ly1 = small ? ly2 : ly2 - 46;
+    const top = small ? 66 : 92, bot = ly1 - (small ? 32 : 44);
+    const lo = s.lo - 3 + Math.min(0, shift), hi = s.hi + 3 + shift;
+    this.lay = { top, bot, lo, hi };
+    const yOf = (m) => bot - ((m - lo) / (hi - lo)) * (bot - top);
+    const pxb = W / (small ? 6 : 8), px = W * 0.22, xOf = (b) => px + (b - now) * pxb;
+    // 진행 막대
+    g.fillStyle = 'rgba(255,255,255,.15)'; g.fillRect(16, top - 12, W - 32, 5);
+    g.fillStyle = '#ff4f8b'; g.fillRect(16, top - 12, (W - 32) * clamp(now / s.total, 0, 1), 5);
+
+    g.save();
+    if (this.fxCount('flip')) { g.translate(rand(-7, 7), top + bot + rand(-7, 7)); g.scale(1, -1); g.translate(0, 0); }
+    // 음정 칸
+    g.fillStyle = 'rgba(255,255,255,.07)'; g.fillRect(0, top - 4, W, bot - top + 8);
+    for (let m = Math.ceil(lo); m <= hi; m++) { g.fillStyle = m % 12 === 0 ? 'rgba(255,255,255,.18)' : 'rgba(255,255,255,.05)'; g.fillRect(0, yOf(m), W, 1); }
+    const bh = Math.max(8, ((bot - top) / (hi - lo)) * 0.9);
+    for (const n of s.notes) {
+      const x0 = xOf(n.b), x1 = xOf(n.b + n.d);
+      if (x1 < 0 || x0 > W) continue;
+      const y = yOf(n.m + shift);
+      g.fillStyle = n.b + n.d < now ? 'rgba(255,255,255,.25)' : n.b <= now ? '#ffd23f' : '#ffffff';
+      g.beginPath(); g.roundRect(x0 + 1, y - bh / 2, Math.max(4, x1 - x0 - 2), bh, bh / 2); g.fill();
+    }
+    let prev = null;
+    for (const p of this.trail) {
+      if (p.m == null) { prev = null; continue; }
+      const x = xOf(p.b), y = yOf(p.m), col = p.h === 2 ? '#33d69f' : p.h === 1 ? '#ffd23f' : '#ff4f8b';
+      if (prev && x - prev.x < 30) { g.strokeStyle = col; g.lineWidth = 5; g.lineCap = 'round'; g.beginPath(); g.moveTo(prev.x, prev.y); g.lineTo(x, y); g.stroke(); }
+      prev = { x, y };
+    }
+    g.fillStyle = '#ff4f8b'; g.fillRect(px - 1.5, top - 6, 3, bot - top + 12);
+    const lp = this.trail[this.trail.length - 1];
+    if (lp && lp.m != null && now - lp.b < 0.3) { g.fillStyle = '#fff'; g.beginPath(); g.arc(px, yOf(lp.m), 8, 0, Math.PI * 2); g.fill(); }
+    g.restore();
+
+    // 가사
+    const L = s.lines, cl = this.curLine(now);
+    const drawLine = (li, y, px2, current) => {
+      if (li >= L.length) return;
+      if (this.swaps[li] != null) { outline(this.swaps[li], W / 2, y, px2, '#ff4f8b'); return; }
+      const parts = L[li].map((n) => ({ t: n.syl.endsWith('-') ? n.syl.slice(0, -1) : n.syl + ' ', on: current && n.b <= now }));
+      g.font = font(px2); const full = parts.map((p) => p.t).join('').trimEnd();
+      let x = W / 2 - g.measureText(full).width / 2;
+      for (const p of parts) { outline(p.t, x, y, px2, p.on ? '#ffd23f' : '#ffffff', 'left'); g.font = font(px2); x += g.measureText(p.t).width; }
+    };
+    const lpx = Math.min(small ? 28 : 38, W / 16);
+    drawLine(cl, ly1, lpx, true);
+    if (!small) drawLine(cl + 1, ly2, lpx * 0.62, false);
+    // 카운트다운, 효과 알림
+    if (now < 0) outline(String(Math.ceil(-now)), W / 2, (top + bot) / 2, 90, '#ffd23f');
+    if (this.flashT > 0) { g.globalAlpha = Math.min(1, this.flashT * 2); outline(this.flashMsg, W / 2, (top + bot) / 2, Math.min(48, W / 12), '#ff4f8b'); g.globalAlpha = 1; }
+    if (this.fxCount('key')) outline(`키 +${shift}`, W - 18, top + 14, 18, '#ffd23f', 'right');
+    if (this.rate > 1) outline(`템포 x${this.rate.toFixed(2)}`, W - 18, top + 38, 18, '#ffd23f', 'right');
+  }
+}
 
 /* =============== 시작 =============== */
 const qs = new URLSearchParams(location.search);
