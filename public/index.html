@@ -132,7 +132,7 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 .feed div{background:rgba(255,255,255,.92);border:2px solid var(--ink);border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;animation:bump .3s}
 .keys{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.9);border:2px solid var(--ink);border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.7;pointer-events:none}
 .keys kbd{font-family:inherit;font-weight:700;border:2px solid var(--ink);border-radius:6px;padding:0 5px;background:var(--soft)}
-.gbtn{position:absolute;right:12px;top:12px;z-index:5}
+.gbtn{position:absolute;right:12px;top:12px;z-index:30}
 .overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(27,35,80,.35);z-index:8;padding:16px}
 .overlay .panel{max-width:480px;width:100%;text-align:center}
 .overlay h2{font-family:"Jua",sans-serif;font-weight:400;font-size:40px;margin:0 0 8px}
@@ -676,7 +676,14 @@ function leaveRoom() {
   show('main');
 }
 $('#leaveBtn').onclick = leaveRoom;
-$('#quitBtn').onclick = leaveRoom;
+// 게임 중 나가기: 방은 그대로, 대기실로만 돌아가요 (방장이 나가면 모두 대기실로)
+function quitGame() {
+  if (!game) { show('lobby'); return; }
+  if (isHost()) { endGameAll(); return; }
+  net.bcast({ k: 'leftGame', id: myId });
+  stopGame();
+}
+$('#quitBtn').onclick = quitGame;
 $('#copyBtn').onclick = async () => {
   const url = `${location.origin}/?room=${net.room}`;
   try { await navigator.clipboard.writeText(url); $('#copyBtn').textContent = '복사했어요!'; }
@@ -724,6 +731,11 @@ function onData(from, d) {
       lobbyState = { ...lobbyState, ...rest, bots: d.bots || [] };
       renderLobby(); return;
     }
+    case 'leftGame':
+      if (d.id !== from) return;
+      awayIds.add(from); if (game) game.onRoster();
+      if (game) toast(`${(net.players.find((p) => p.id === from) || {}).name || '누군가'}님이 대기실로 나갔어요`);
+      return;
     case 'start':
       if (from !== net.hostId) return;
       startGame(d.roster, d.opts, false, d.game); return;
@@ -806,12 +818,15 @@ function toast(msg) {
 /* =============== 게임 공통 =============== */
 let game = null;
 function startGame(roster, opts, late, kind) {
+  awayIds.clear();
   if (game) game.destroy();
   show('game');
   gameEl.classList.toggle('kara', kind === 'karaoke');
   gameEl.classList.toggle('rope', kind === 'rope'); gameEl.classList.remove('turner');
   game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : kind === 'rope' ? new RopeGame(roster, opts, late) : kind === 'ramen' ? new RamenGame(roster, opts, late) : kind === 'pigeon' ? new PigeonGame(roster, opts, late) : new ChairGame(roster, opts, late);
 }
+const awayIds = new Set();
+const activeIds = () => new Set(net.players.map((p) => p.id).filter((id) => !awayIds.has(id)));
 function stopGame() {
   if (game) { game.destroy(); game = null; }
   if (net.room) show('lobby');
@@ -1509,7 +1524,7 @@ class ChairGame {
   }
   rosterInfo() { return [...this.chars.values()].map((c) => ({ id: c.id, name: c.name, color: c.color, bot: c.bot })); }
   onRoster() {
-    const ids = new Set(net.players.map((p) => p.id));
+    const ids = activeIds();
     for (const [id, c] of this.chars) {
       if (id.startsWith('bot_')) continue;
       if (!ids.has(id)) {
@@ -2473,7 +2488,7 @@ class RopeGame extends ChairGame {
   }
   onRoster() {
     super.onRoster();
-    if (isHost()) { const ids = new Set(net.players.map((p) => p.id)); this.alive = this.alive.filter((a) => a.startsWith('bot_') || ids.has(a)); }
+    if (isHost()) { const ids = activeIds(); this.alive = this.alive.filter((a) => a.startsWith('bot_') || ids.has(a)); }
   }
 
   // ---- 방장 진행 ----
@@ -2510,7 +2525,7 @@ class RopeGame extends ChairGame {
     this.phase = ph; this.tl = dur;
     if (ph === 'ready') {
       this.round++;
-      const present = new Set([...net.players.map((p) => p.id), ...this.roster.filter((r) => r.bot).map((r) => r.id)]);
+      const present = new Set([...activeIds(), ...this.roster.filter((r) => r.bot).map((r) => r.id)]);
       let pair = (rp.pairs[this.round - 1] || []).filter((id) => present.has(id));
       const others = shuffle([...present].filter((id) => !pair.includes(id)));
       while (pair.length < 2 && others.length) pair.push(others.shift());
@@ -2732,7 +2747,7 @@ class RamenGame {
   rosterInfo() { return this.roster; }
   isMom(id) { return this.moms.includes(id); }
   me() { return this.ents.get(myId); }
-  present() { return new Set([...net.players.map((p) => p.id), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
+  present() { return new Set([...activeIds(), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
 
   // ---- 화면 요소 ----
   buildDom() {
@@ -3590,7 +3605,7 @@ class PigeonGame {
     if (isHost() && !late) { this.coupleOrder = shuffle(roster.map((r) => r.id)); this.setPhase('intro', 7); }
   }
   rosterInfo() { return this.roster; }
-  present() { return new Set([...net.players.map((p) => p.id), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
+  present() { return new Set([...activeIds(), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
   role(id = myId) { const i = this.couple.indexOf(id); return i === 0 ? 'groom' : i === 1 ? 'bride' : 'pigeon'; }
   nameOf(id) { return (this.roster.find((r) => r.id === id) || net.players.find((p) => p.id === id) || { name: '?' }).name; }
 
@@ -4429,7 +4444,7 @@ class KaraokeGame {
   isBot(id) { return !!id && id.startsWith('bot_'); }
   nameOf(id) { return (this.scores[id] || net.players.find((p) => p.id === id) || { name: '?' }).name; }
   colorOf(id) { return (this.scores[id] || net.players.find((p) => p.id === id) || { color: '#fff' }).color; }
-  present() { return new Set([...net.players.map((p) => p.id), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
+  present() { return new Set([...activeIds(), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
   rosterInfo() { return this.roster; }
   destroy() {
     this.dead = true; cancelAnimationFrame(this.raf); clearInterval(this.sched);
