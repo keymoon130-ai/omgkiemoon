@@ -131,6 +131,16 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 .feed{position:absolute;left:12px;top:12px;display:flex;flex-direction:column;gap:6px;pointer-events:none;max-width:44vw}
 .feed div{background:rgba(255,255,255,.92);border:2px solid var(--ink);border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;animation:bump .3s}
 .keys{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.9);border:2px solid var(--ink);border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.7;pointer-events:none}
+.tabhelp{position:absolute;inset:0;z-index:40;display:grid;place-items:center;background:rgba(27,35,80,.55);pointer-events:none;padding:16px}
+.tabhelp.hidden{display:none}
+.tabhelp .th-card{background:var(--paper);border:3px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);padding:18px 22px;max-width:min(560px,94vw);max-height:90%;overflow:auto}
+.tabhelp h2{font-family:"Jua",sans-serif;font-weight:400;font-size:24px;margin:0 0 4px}
+.tabhelp .th-role{margin:0 0 12px;color:var(--ink);opacity:.75;font-size:14px}
+.tabhelp dl{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:0;font-size:15px;align-items:baseline}
+.tabhelp dt{white-space:nowrap}
+.tabhelp dd{margin:0}
+.tabhelp kbd{font-family:inherit;font-weight:700;border:2px solid var(--ink);border-radius:6px;padding:0 6px;background:var(--soft)}
+.tabhelp .th-tip{margin:12px 0 0;font-size:13px;opacity:.75}
 .keys kbd{font-family:inherit;font-weight:700;border:2px solid var(--ink);border-radius:6px;padding:0 5px;background:var(--soft)}
 .gbtn{position:absolute;right:12px;top:12px;z-index:30}
 .overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(27,35,80,.35);z-index:8;padding:16px}
@@ -175,17 +185,6 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 .items select,.ropts select{font:inherit;border:2px solid var(--ink);border-radius:10px;padding:6px 8px;background:var(--soft)}
 .ropts{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
 @media (max-width:820px){ .skin-ed{grid-template-columns:1fr} .skin-view{max-width:300px;margin:0 auto;width:100%} }
-/* 줄넘기 */
-.rbtns{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:18px;gap:16px;align-items:flex-end}
-.is-touch .rbtns{display:none}
-.is-touch #game.turner .rbtns{display:flex}
-#game.turner #joy,#game.turner .tbtns{display:none!important}
-.rbtns button{border:3px solid var(--ink);border-radius:50%;font-family:"Jua",sans-serif;box-shadow:4px 4px 0 var(--ink);line-height:1.15}
-.r-hold{width:132px;height:132px;background:var(--pop);color:#fff;font-size:20px}
-.r-stop{width:84px;height:84px;background:var(--sun);font-size:17px}
-.rbtns button.down{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-#game.rope .b-sit{display:none}
-
 /* 노래방 */
 #game.kara{background:#1b2350}
 #game.kara .keys,#game.kara .touch,#game.kara .tbtns,#game.kara .rotate,#game.kara .hud-top{display:none!important}
@@ -242,7 +241,7 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 }
 /* 라면 */
 #game.ramen{background:#05060c}
-#game.ramen .keys,#game.ramen .tbtns,#game.ramen .rbtns,#game.ramen .hud-top,#game.ramen .rotate,#game.ramen .replay-tag{display:none!important}
+#game.ramen .keys,#game.ramen .tbtns,#game.ramen .hud-top,#game.ramen .rotate,#game.ramen .replay-tag{display:none!important}
 #game.ramen .feed{top:auto;bottom:70px}
 #ramen{position:absolute;inset:0;pointer-events:none}
 #ramen canvas{display:block;width:100%;height:100%;pointer-events:auto}
@@ -279,7 +278,7 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 #ramen .overlay .panel{max-height:88vh;overflow:auto}
 /* 비둘기 */
 #game.pigeon{background:#a5d8ff}
-#game.pigeon .keys,#game.pigeon .tbtns,#game.pigeon .rbtns,#game.pigeon .hud-top,#game.pigeon .rotate,#game.pigeon .replay-tag{display:none!important}
+#game.pigeon .keys,#game.pigeon .tbtns,#game.pigeon .hud-top,#game.pigeon .rotate,#game.pigeon .replay-tag{display:none!important}
 #game.pigeon .feed{top:auto;bottom:150px}
 #pigeon{position:absolute;inset:0;pointer-events:none}
 #pigeon canvas{display:block;width:100%;height:100%;pointer-events:auto}
@@ -416,9 +415,10 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
     <div class="chips" id="chips"></div>
   </div>
   <div class="feed" id="feed"></div>
+  <div class="tabhelp hidden" id="tabHelp" aria-live="polite"></div>
   <div class="keys" id="keys">
     <kbd>WASD</kbd> 이동 &nbsp; <kbd>Space</kbd> 점프 &nbsp; <kbd>E</kbd> 앉기/일어나기<br>
-    <kbd>클릭</kbd> 잡기·던지기 &nbsp; <kbd>우클릭</kbd> 발차기 &nbsp; (<kbd>Q</kbd> 잡기 <kbd>F</kbd> 발차기)
+    <kbd>클릭</kbd> 잡기·던지기 &nbsp; <kbd>우클릭</kbd> 발차기 &nbsp; (<kbd>Q</kbd> 잡기 <kbd>F</kbd> 발차기) &nbsp; <kbd>Tab</kbd> 조작법 전부 보기
   </div>
   <button class="btn small plain gbtn" id="quitBtn">나가기</button>
   <div class="touch" id="joy"><div id="joyBase"><div id="joyKnob"></div></div></div>
@@ -427,10 +427,6 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
     <button class="b-kick" data-act="kick">차기</button>
     <button class="b-sit" data-act="sit">앉기</button>
     <button class="b-jump" data-act="jump">점프</button>
-  </div>
-  <div class="touch rbtns">
-    <button class="r-stop" id="rStop">확<br>멈추기</button>
-    <button class="r-hold" id="rHold">꾹 누르면<br>빨라져요</button>
   </div>
   <div class="replay-tag hidden" id="replayTag">다시보기</div>
   <div class="overlay hidden" id="endOv">
@@ -494,6 +490,7 @@ function audioUnlock() {
     } catch (e) {}
   }
   if (AC && AC.state === 'suspended') AC.resume();
+  try { tts.warm(); } catch (e) {}
   bgmSync();
 }
 ['pointerdown', 'keydown', 'touchstart'].forEach((ev) => window.addEventListener(ev, audioUnlock, { passive: true }));
@@ -532,6 +529,9 @@ const SFX = {
   scratch() { noise(0.45, 0.4, 3000, 200, 3); tone(400, 0.4, 'sawtooth', 0.12, 0.2); },
   fanfare() { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.3, 'square', 0.12, 1, i * 0.13)); },
   pop() { tone(900, 0.06, 'sine', 0.2, 0.5); },
+  slap() { noise(0.07, 0.6, 3500, 1800, 0.8); tone(1200, 0.05, 'square', 0.1, 0.5); },
+  bonk() { tone(300, 0.25, 'square', 0.2, 0.3); tone(1600, 0.15, 'sine', 0.12, 1.3, 0.04); },
+  thud() { tone(90, 0.35, 'sine', 0.6, 0.4); noise(0.25, 0.35, 600, 120, 1); },
 };
 
 // 의자 뺏기 음악 (직접 만든 서커스풍 멜로디)
@@ -576,7 +576,6 @@ const titleEl = $('#title');
 
 const GAMES = [
   { id: 'chair', ico: '🪑', bg: '#ffd23f', name: '의자 뺏기', desc: '발로 차고 던지고 끌어내리는 의자 뺏기', ppl: '2~8명', live: true },
-  { id: 'rope', ico: '🪢', bg: '#33d69f', name: '단체 줄넘기 지옥', desc: '줄 돌리는 사람도 플레이어', ppl: '3~8명', live: true },
   { id: 'ramen', ico: '🍜', bg: '#ff7a59', name: '엄마한테 안 들키기 라면', desc: '새벽 3시, 1인칭으로 몰래 라면 끓이기', ppl: '3~8명', live: true },
   { id: 'karaoke', ico: '🎤', bg: '#a678ff', name: '노래방 망치기', desc: '마이크로 음정 맞추고, 남은 사람은 몰래 방해', ppl: '2~8명', live: true },
   { id: 'pigeon', ico: '🐦', bg: '#4aa8f0', name: '비둘기 결혼식 습격', desc: '신랑신부는 구경만, 비둘기는 난장판', ppl: '2~8명', live: true },
@@ -767,7 +766,7 @@ function renderLobby() {
   });
   $('#evToggle').closest('label').classList.toggle('hidden', !EV_TEXT[lobbyState.game]);
   if (EV_TEXT[lobbyState.game]) $('#evText').textContent = EV_TEXT[lobbyState.game];
-  const minP = lobbyState.game === 'rope' || lobbyState.game === 'ramen' ? 3 : 2;
+  const minP = lobbyState.game === 'ramen' ? 3 : 2;
   $('#evToggle').checked = !!lobbyState.events;
   $('#ramenOpts').classList.toggle('hidden', !['ramen', 'pigeon'].includes(lobbyState.game));
   $('#momMode').closest('label').classList.toggle('hidden', lobbyState.game !== 'ramen');
@@ -781,7 +780,7 @@ function renderLobby() {
     : '방장이 시작하길 기다리는 중이에요.';
   $('#botPlus').disabled = total >= 8; $('#botMinus').disabled = lobbyState.bots.length === 0;
 }
-const EV_TEXT = { chair: '라운드마다 랜덤 이벤트 (얼음 바닥, 도망가는 의자, 바람)', rope: '라운드마다 랜덤 이벤트 (줄 두 개, 늘어나는 줄, 트램펄린)' };
+const EV_TEXT = { chair: '라운드마다 랜덤 이벤트 (얼음 바닥, 도망가는 의자, 바람)' };
 function hostLobbyChanged() { renderLobby(); net.bcast({ k: 'lobby', ...lobbyState }); }
 $('#botPlus').onclick = () => {
   if (!isHost() || net.players.length + lobbyState.bots.length >= 8) return;
@@ -799,7 +798,7 @@ $('#startBtn').onclick = () => {
   if (!isHost()) return;
   const roster = net.players.map((p) => ({ id: p.id, name: p.name, color: p.color, bot: false }))
     .concat(lobbyState.bots.map((b) => ({ ...b, bot: true })));
-  if (roster.length < (lobbyState.game === 'rope' || lobbyState.game === 'ramen' ? 3 : 2)) return;
+  if (roster.length < (lobbyState.game === 'ramen' ? 3 : 2)) return;
   if (!roster.some((r) => !r.bot)) return;
   const opts = { events: lobbyState.events, momMode: +lobbyState.momMode || 1, rounds: +lobbyState.rRounds || 3 };
   net.bcast({ k: 'start', game: lobbyState.game, roster, opts });
@@ -822,8 +821,7 @@ function startGame(roster, opts, late, kind) {
   if (game) game.destroy();
   show('game');
   gameEl.classList.toggle('kara', kind === 'karaoke');
-  gameEl.classList.toggle('rope', kind === 'rope'); gameEl.classList.remove('turner');
-  game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : kind === 'rope' ? new RopeGame(roster, opts, late) : kind === 'ramen' ? new RamenGame(roster, opts, late) : kind === 'pigeon' ? new PigeonGame(roster, opts, late) : new ChairGame(roster, opts, late);
+  game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : kind === 'ramen' ? new RamenGame(roster, opts, late) : kind === 'pigeon' ? new PigeonGame(roster, opts, late) : new ChairGame(roster, opts, late);
 }
 const awayIds = new Set();
 const activeIds = () => new Set(net.players.map((p) => p.id).filter((id) => !awayIds.has(id)));
@@ -836,7 +834,16 @@ function endGameAll() { if (isHost()) net.bcast({ k: 'toLobby' }); stopGame(); }
 
 /* =============== 입력 =============== */
 const input = { keys: new Set(), mx: 0, my: 0, edge: { jump: 0, kick: 0, grab: 0, sit: 0 }, joyX: 0, joyY: 0 };
+// PC: Tab을 누르고 있는 동안 지금 게임·역할의 조작법을 보여줘요
+function showTabHelp(on) {
+  const el = $('#tabHelp');
+  if (!on || !game || !game.help) { el.classList.add('hidden'); return; }
+  const h = game.help();
+  el.innerHTML = `<div class="th-card"><h2>${h.title}</h2><p class="th-role">${h.role}</p><dl>${h.rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>${h.tip ? `<p class="th-tip">${h.tip}</p>` : ''}</div>`;
+  el.classList.remove('hidden');
+}
 window.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab' && game && !isTouch) { e.preventDefault(); if (!e.repeat) showTabHelp(true); return; }
   if (!game || e.target.tagName === 'INPUT') return;
   const k = e.key.toLowerCase();
   if (!input.keys.has(k)) {
@@ -848,8 +855,8 @@ window.addEventListener('keydown', (e) => {
   input.keys.add(k);
   if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
 });
-window.addEventListener('keyup', (e) => input.keys.delete(e.key.toLowerCase()));
-window.addEventListener('blur', () => { input.keys.clear(); input.mouseHeld = false; input.touchHold = false; });
+window.addEventListener('keyup', (e) => { if (e.key === 'Tab') showTabHelp(false); input.keys.delete(e.key.toLowerCase()); });
+window.addEventListener('blur', () => { showTabHelp(false); input.keys.clear(); input.mouseHeld = false; input.touchHold = false; });
 window.addEventListener('mouseup', () => { input.mouseHeld = false; });
 const gameEl = $('#game');
 gameEl.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -879,13 +886,6 @@ document.querySelectorAll('.tbtns button').forEach((b) => {
   });
   const end = (e) => { if (e.pointerId !== pid) return; pid = null; input.joyX = input.joyY = 0; base.style.display = 'none'; knob.style.left = knob.style.top = '33px'; };
   joy.addEventListener('pointerup', end); joy.addEventListener('pointercancel', end);
-})();
-(() => {
-  const h = $('#rHold'), st = $('#rStop');
-  h.addEventListener('pointerdown', (e) => { e.preventDefault(); input.touchHold = true; h.classList.add('down'); });
-  ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => h.addEventListener(ev, () => { input.touchHold = false; h.classList.remove('down'); }));
-  st.addEventListener('pointerdown', (e) => { e.preventDefault(); input.edge.sit = 1; st.classList.add('down'); });
-  ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => st.addEventListener(ev, () => st.classList.remove('down')));
 })();
 function readMove() {
   let x = 0, y = 0; const k = input.keys;
@@ -1240,7 +1240,7 @@ class Char {
     this.t += dt; this.cool = Math.max(0, this.cool - dt); this.invuln = Math.max(0, this.invuln - dt);
     this.sitLock = Math.max(0, this.sitLock - dt);
     const g = this.g;
-    if (this.rag) { this.updateRag(dt); return; }
+    if (this.rag) { this.atk = null; this.updateRag(dt); return; }
 
     // 의자에 앉기 상태 동기화 (방장이 정한 자리)
     const myChair = [...g.chairs.values()].find((c) => c.occ === this.id && !c.gone);
@@ -1253,6 +1253,7 @@ class Char {
 
     if (this.seat >= 0) {
       const c = g.chairs.get(this.seat);
+      this.atk = null;
       this.body.collisionResponse = false;
       const sp = c.mesh.position, sq = c.mesh.quaternion;
       _v1.set(0, 0.42, 0.05).applyQuaternion(sq).add(sp);
@@ -1269,7 +1270,8 @@ class Char {
     const v = this.body.velocity;
     let speed = this.spect ? 4.5 : (this.carry >= 0 ? 4.2 : 5.4);
     const ice = g.event === 'ice' && !this.spect;
-    const k = ice ? 1.4 : 12;
+    const A = this.atk, dashing = !!(A && (A.k === 'fly' || A.k === 'head') && A.t > 0.08);
+    const k = dashing ? 0.6 : ice ? 1.4 : 12;
     let dx = inp.x * speed, dz = inp.z * speed;
     const a = 1 - Math.exp(-k * dt);
     let nvx = v.x + (dx - v.x) * a, nvz = v.z + (dz - v.z) * a;
@@ -1302,10 +1304,32 @@ class Char {
       if (inp.grab && this.cool <= 0) { g.throwProp('c', this); this.cool = 1.0; this.grabT = 0.35; }
       if (inp.kick && this.cool <= 0) { g.throwProp('b', this); this.cool = 1.0; this.kickT = 0.4; }
     } else {
-      if (inp.kick && this.cool <= 0) { this.kickT = 0.4; this.cool = 0.55; this.kickHitAt = 0.28; SFX.whoosh(); }
+      const air = !this.grounded && !this.atk, f = this.fwd();
+      if (inp.kick && this.cool <= 0) {
+        if (air) { // 날아차기
+          this.atk = { k: 'fly', t: 0.6, dur: 0.6, hit: new Set() }; this.cool = 1.0;
+          v.x = f.x * 10.5; v.z = f.z * 10.5; v.y = Math.max(v.y, 2.5); SFX.whoosh();
+        } else { this.kickT = 0.4; this.cool = 0.55; this.kickHitAt = 0.28; SFX.whoosh(); }
+      }
       if (this.kickHitAt != null && this.kickT <= this.kickHitAt) { this.kickHitAt = null; g.doKick(this); }
-      if (inp.grab && this.cool <= 0) { this.cool = 0.35; this.grabT = 0.35; g.doGrab(this); }
-      if (inp.sit) g.trySit(this);
+      if (inp.grab && this.cool <= 0) {
+        if (air && this.carry < 0) { // 박치기 (몸통 다이빙)
+          this.atk = { k: 'head', t: 0.55, dur: 0.55, hit: new Set() }; this.cool = 1.0;
+          v.x = f.x * 11; v.z = f.z * 11; v.y = Math.max(v.y, 1.2); SFX.whoosh();
+        } else { this.cool = 0.35; this.grabT = 0.35; g.doGrab(this); }
+      }
+      if (inp.sit) {
+        if (air && this.carry < 0 && this.cool <= 0) { // 엉덩이 찍기
+          this.atk = { k: 'butt', t: 0.9, dur: 0.9, hit: new Set() }; this.cool = 1.0;
+          v.x *= 0.3; v.z *= 0.3; v.y = -15; tone(500, 0.2, 'triangle', 0.15, 0.3);
+        } else g.trySit(this);
+      }
+      if (this.atk) {
+        const A2 = this.atk; A2.t -= dt;
+        if ((A2.k === 'fly' || A2.k === 'head') && A2.t < A2.dur - 0.06 && A2.t > 0.06) g.dashHit(this, A2);
+        if (A2.k === 'butt' && !A2.done && ((this.grounded && A2.t < A2.dur - 0.05) || A2.t <= 0.3)) { A2.done = true; A2.t = Math.min(A2.t, 0.3); g.buttSlam(this); }
+        if (A2.t <= 0) this.atk = null;
+      }
     }
     this.computeNormalParts(dt);
 
@@ -1326,7 +1350,13 @@ class Char {
     const P = this.parts, bp = this.body.position;
     const rx = bp.x, ry = bp.y - 0.32, rz = bp.z;
     const yawQ = _q1.setFromAxisAngle(UP, this.heading).clone();
-    const torsoQ = yawQ.clone().multiply(qe(this.lean.x, 0, this.lean.z));
+    const A = this.atk, ak = A ? A.k : null, ap = A ? 1 - A.t / A.dur : 0;
+    let tp = 0, ty = 0;
+    if (ak === 'fly') tp = -0.75;
+    else if (ak === 'head') tp = 1.35;
+    else if (ak === 'butt') tp = -0.35;
+    else if (ak === 'slap') ty = -Math.sin(ap * Math.PI) * 0.7;
+    const torsoQ = yawQ.clone().multiply(qe(this.lean.x + tp, ty, this.lean.z));
     P[0].q.copy(torsoQ);
     P[0].p.set(rx, ry + 0.43, rz).add(_v1.set(0, 0.32, 0).applyQuaternion(torsoQ));
     const headQ = torsoQ.clone().multiply(qe(this.head.x + Math.sin(this.t * 2.1) * 0.05, 0, Math.sin(this.t * 1.7) * 0.07));
@@ -1342,6 +1372,10 @@ class Char {
       if (this.grabT > 0) { pitch = -1.55; roll = side * 0.1; }
       if (this.carry >= 0) { pitch = -1.25; roll = side * 0.05; }
       if (this.g.armPose) { const ap = this.g.armPose(this, i); if (ap) { pitch = ap[0]; roll = ap[1]; } }
+      if (ak === 'fly') { pitch = -0.4; roll = side * 1.9; }
+      else if (ak === 'head') { pitch = 2.6; roll = side * 0.3; }
+      else if (ak === 'butt') { pitch = -0.2; roll = side * 2.7; }
+      else if (ak === 'slap' && i === 1) { pitch = -1.45; roll = 1.7 - ap * 3.2; }
       const aq = torsoQ.clone().multiply(qe(pitch, 0, roll));
       P[2 + i].q.copy(aq);
       P[2 + i].p.copy(P[0].p).add(_v1.set(side * 0.33, 0.2, 0).applyQuaternion(torsoQ)).add(_v2.set(0, -0.2, 0).applyQuaternion(aq));
@@ -1351,7 +1385,10 @@ class Char {
       let pitch = Math.sin(this.phase + (i ? Math.PI : 0)) * 0.85 * sf;
       if (!this.grounded) pitch = (i ? -0.5 : 0.3) + Math.sin(this.t * 12 + i * 3) * 0.3 * this.flail;
       if (i === 1 && this.kickT > 0) { const k = 1 - this.kickT / 0.4; pitch = -Math.sin(k * Math.PI) * 1.9; }
-      const lq = yawQ.clone().multiply(qe(pitch, 0, 0));
+      if (ak === 'fly') pitch = i ? -2.3 : 0.5;
+      else if (ak === 'head') pitch = 0.9 + Math.sin(this.t * 20 + i * 3) * 0.3;
+      else if (ak === 'butt') pitch = -1.55;
+      const lq = yawQ.clone().multiply(qe(pitch + (ak === 'fly' || ak === 'head' ? tp : 0), 0, 0));
       P[4 + i].q.copy(lq);
       P[4 + i].p.set(rx, ry + 0.43, rz).add(_v1.set(side * 0.13, 0, 0).applyQuaternion(yawQ)).add(_v2.set(0, -0.2, 0).applyQuaternion(lq));
     }
@@ -1387,6 +1424,7 @@ class Char {
     }
   }
   knock(imp, dur, kind, by) {
+    this.rKind = kind;
     if (!this.local || this.spect && kind !== 'fall') return;
     if (this.invuln > 0 || this.seatConfirmed()) return;
     const g = this.g;
@@ -1414,7 +1452,14 @@ class Char {
       b.angularDamping = 0.35; b.linearDamping = 0.05; b.allowSleep = false;
       g.world.addBody(b); bodies.push(b);
     }
-    bodies[0].angularVelocity.set(rand(-8, 8), rand(-6, 6), rand(-8, 8));
+    // 맞은 공격마다 넘어지는 모양이 달라요
+    const hl = Math.hypot(imp.x, imp.z) || 1, dx = imp.x / hl, dz = imp.z / hl, kd = this.rKind;
+    if (kd === 'fly') bodies[0].angularVelocity.set(dz * 16, rand(-2, 2), -dx * 16);          // 뒤로 공중제비
+    else if (kd === 'head') bodies[0].angularVelocity.set(dz * 7, 0, -dx * 7);                // 뻣뻣하게 뒤로 쿵
+    else if (kd === 'slap') bodies[0].angularVelocity.set(rand(-1, 1), (Math.random() < 0.5 ? -1 : 1) * 24, rand(-1, 1)); // 팽이처럼 빙글
+    else if (kd === 'butt') bodies[0].angularVelocity.set(rand(-3, 3), rand(-12, 12), rand(-3, 3));  // 팝콘처럼 튀어오름
+    else bodies[0].angularVelocity.set(rand(-8, 8), rand(-6, 6), rand(-8, 8));
+    this.rKind = null;
     const T = bodies[0], cons = [];
     const link = (j, a, b) => { const c = new CANNON.PointToPointConstraint(T, new CANNON.Vec3(...a), bodies[j], new CANNON.Vec3(...b)); g.world.addConstraint(c); cons.push(c); };
     link(1, [0, 0.34, 0], [0, -0.22, 0]);
@@ -1683,9 +1728,16 @@ class ChairGame {
     }
     if (best) {
       const seated = (best.local ? best.seat : best.remoteSeat) >= 0;
-      const imp = { x: -f.x * (seated ? 6 : 5), y: seated ? 4 : 2.5, z: -f.z * (seated ? 6 : 5) };
-      this.sendHit(best.id, { k: 'hit', target: best.id, by: me.id, kind: seated ? 'pull' : 'yank', imp });
-      SFX.pop(); return;
+      if (seated) {
+        const imp = { x: -f.x * 6, y: 4, z: -f.z * 6 };
+        this.sendHit(best.id, { k: 'hit', target: best.id, by: me.id, kind: 'pull', imp });
+        SFX.pop(); return;
+      }
+      // 서 있는 사람한테는 싸대기
+      me.atk = { k: 'slap', t: 0.32, dur: 0.32 }; me.grabT = 0;
+      const imp = { x: -f.z * 5.5 + f.x * 1.5, y: 3, z: f.x * 5.5 + f.z * 1.5 };
+      this.sendHit(best.id, { k: 'hit', target: best.id, by: me.id, kind: 'slap', imp });
+      SFX.slap(); this.shake = 0.15; return;
     }
     if (this.phase !== 'scramble') return;
     let bc = null, cd = 1.2;
@@ -1694,6 +1746,45 @@ class ChairGame {
       const d = Math.hypot(c.mesh.position.x - pt.x, c.mesh.position.z - pt.z); if (d < cd) { cd = d; bc = c; }
     }
     if (bc) this.toHost({ k: 'grab', id: me.id, ch: bc.id });
+  }
+  dashHit(me, A) {
+    const f = me.fwd(), pt = me.torso.clone().addScaledVector(f, A.k === 'head' ? 0.45 : 0.6);
+    for (const o of this.others(me)) {
+      if (A.hit.has(o.id) || o.isDown() || o.seatConfirmed()) continue;
+      if (Math.hypot(o.torso.x - pt.x, o.torso.z - pt.z) > 0.95 || Math.abs(o.torso.y - pt.y) > 1.3) continue;
+      A.hit.add(o.id);
+      const fly = A.k === 'fly';
+      const imp = fly ? { x: f.x * 13, y: 9, z: f.z * 13 } : { x: f.x * 9.5, y: 4.5, z: f.z * 9.5 };
+      this.sendHit(o.id, { k: 'hit', target: o.id, by: me.id, kind: A.k, imp });
+      const s = o.local ? o.seat : o.remoteSeat;
+      if (s >= 0) this.toHost({ k: 'ckick', ch: s, by: me.id, imp: { x: f.x * 8, y: 4, z: f.z * 8 } });
+      if (fly) { SFX.kick(); SFX.kick(); this.shake = 0.4; }
+      else { SFX.bonk(); this.shake = 0.3; if (me.body) { me.body.velocity.set(-f.x * 3, 4, -f.z * 3); A.t = Math.min(A.t, 0.12); } }
+    }
+    if (this.phase !== 'scramble' || A.k !== 'fly') return;
+    for (const c of this.chairs.values()) {
+      if (c.gone || c.conf >= 100 || c.occ || A.hit.has('c' + c.id)) continue;
+      if (Math.hypot(c.mesh.position.x - pt.x, c.mesh.position.z - pt.z) < 0.9 && Math.abs(c.mesh.position.y - pt.y) < 1.2) {
+        A.hit.add('c' + c.id); this.toHost({ k: 'ckick', ch: c.id, by: me.id, imp: { x: f.x * 12, y: 6, z: f.z * 12 } }); SFX.kick();
+      }
+    }
+  }
+  buttSlam(me) {
+    const p = me.body.position, R = 1.7;
+    SFX.thud(); this.shake = 0.5;
+    for (const o of this.others(me)) {
+      if (o.isDown() || o.seatConfirmed()) continue;
+      const dx = o.torso.x - p.x, dz = o.torso.z - p.z, d = Math.hypot(dx, dz);
+      if (d > R || Math.abs(o.torso.y - p.y) > 1.6) continue;
+      const k = 1 - d / R * 0.5, l = d || 1;
+      const imp = { x: dx / l * 3.5 * k, y: 9 * k, z: dz / l * 3.5 * k };
+      this.sendHit(o.id, { k: 'hit', target: o.id, by: me.id, kind: 'butt', imp });
+    }
+    for (const c of this.chairs.values()) {
+      if (c.gone || c.conf >= 100) continue;
+      const dx = c.mesh.position.x - p.x, dz = c.mesh.position.z - p.z, d = Math.hypot(dx, dz);
+      if (d < R) { const l = d || 1; this.toHost({ k: 'ckick', ch: c.id, by: me.id, imp: { x: dx / l * 3, y: 7, z: dz / l * 3 } }); }
+    }
   }
   trySit(me) {
     if (me.carry >= 0 || me.seat >= 0 || me.sitLock > 0) return;
@@ -1734,7 +1825,7 @@ class ChairGame {
       case 'hit': {
         const c = this.chars.get(d.target);
         if (c && c.local) {
-          const dur = { kick: 2.0, chair: 2.4, pull: 1.1, yank: 1.0, cushion: 1.0, zap: 1.2, slip: 1.6 }[d.kind] || 1.5;
+          const dur = { kick: 2.0, chair: 2.4, pull: 1.1, yank: 1.0, slap: 1.1, fly: 2.4, head: 1.8, butt: 1.5, cushion: 1.0, zap: 1.2, slip: 1.6 }[d.kind] || 1.5;
           c.knock(d.imp, dur, d.kind, d.by);
         }
         return;
@@ -1786,13 +1877,15 @@ class ChairGame {
     const txt = {
       kick: `${bn}님이 ${vn}님을 걷어찼어요`, chair: `${bn}님이 의자로 ${vn}님을 날렸어요`,
       pull: `${bn}님이 ${vn}님을 의자에서 끌어냈어요`, yank: `${bn}님이 ${vn}님을 잡아당겼어요`,
+      slap: `${bn}님이 ${vn}님에게 싸대기! 짝!`, fly: `${bn}님의 날아차기에 ${vn}님이 날아갔어요`,
+      head: `${bn}님이 ${vn}님에게 박치기! 쿵!`, butt: `${bn}님의 엉덩이 찍기에 ${vn}님이 튕겨나갔어요`,
       cushion: `관중 ${bn}님의 쿠션 공격!`, slip: `${vn}님이 바나나를 밟았어요`,
       zap: `${vn}님 찌릿! 의자 근처에서 서성이면 안 돼요`, fall: `${vn}님이 무대 밖으로 떨어졌어요`,
     }[o.kind];
     if (txt) toast(txt);
     if (o.kind !== 'fall') SFX.ouch();
     if (this.stats[o.id]) this.stats[o.id].down++;
-    if (o.by && this.stats[o.by]) { if (o.kind === 'kick') this.stats[o.by].kick++; if (o.kind === 'chair') this.stats[o.by].chair++; }
+    if (o.by && this.stats[o.by]) { if (['kick', 'fly', 'head', 'slap', 'butt'].includes(o.kind)) this.stats[o.by].kick++; if (o.kind === 'chair') this.stats[o.by].chair++; }
     if ((this.phase === 'scramble' || this.phase === 'music') && o.mag > 6 && (!this.bestHit || o.mag >= this.bestHit.mag)) this.bestHit = { t: this.time, id: o.id, mag: o.mag, by: o.by, kind: o.kind };
   }
 
@@ -2077,6 +2170,8 @@ class ChairGame {
       return inp;
     }
     b.act -= dt;
+    if (b.airAtk) { b.airT -= dt; if (b.airT <= 0) { inp[b.airAtk] = true; b.airAtk = null; } }
+    const airGo = () => { inp.jump = true; b.airAtk = ['kick', 'grab', 'sit'][Math.floor(Math.random() * 3)]; b.airT = rand(0.15, 0.3); };
     const R = (this.ringR || 2) + 1.4;
     if (this.phase === 'music' || this.phase === 'intro') {
       b.ang += dt * 0.55; go(Math.cos(b.ang) * R, Math.sin(b.ang) * R);
@@ -2084,7 +2179,7 @@ class ChairGame {
       if (Math.random() < 0.003) inp.jump = true;
       if (b.act <= 0 && Math.random() < 0.02) {
         const f = c.fwd();
-        for (const o of this.others(c)) if (o.torso.distanceTo(c.torso.clone().addScaledVector(f, 0.7)) < 0.9) { inp.kick = true; b.act = 1.5; }
+        for (const o of this.others(c)) if (o.torso.distanceTo(c.torso.clone().addScaledVector(f, 0.7)) < 0.9) { if (Math.random() < 0.35) airGo(); else inp.kick = true; b.act = 1.5; }
       }
     } else if (this.phase === 'scramble') {
       if (c.seat >= 0) return inp;
@@ -2100,7 +2195,7 @@ class ChairGame {
       const l = go(best.body.position.x, best.body.position.z);
       if (l < 1.2) {
         if (!best.occ) inp.sit = true;
-        else if (b.act <= 0) { if (Math.random() < 0.55) inp.kick = true; else inp.grab = true; b.act = rand(0.5, 1.0); }
+        else if (b.act <= 0) { const r = Math.random(); if (r < 0.3) airGo(); else if (r < 0.65) inp.kick = true; else inp.grab = true; b.act = rand(0.5, 1.0); }
       }
       if (c.carry >= 0) inp.grab = true;
     } else { b.ang += dt * 0.3; go(Math.cos(b.ang) * 4, Math.sin(b.ang) * 4, 0.3); }
@@ -2244,6 +2339,21 @@ class ChairGame {
   }
 }
 
+ChairGame.prototype.help = function () {
+  const me = this.chars.get(myId);
+  if (me && me.spect) return { title: '의자 뺏기', role: '지금 역할: 관중 (탈락했어요)', rows: [
+    ['<kbd>WASD</kbd>', '관중석에서 이동'], ['<kbd>클릭</kbd> / <kbd>Q</kbd>', '쿠션 던지기 (맞으면 넘어져요)'], ['<kbd>우클릭</kbd> / <kbd>F</kbd>', '바나나 껍질 던지기 (밟으면 미끄러져요)']],
+    tip: '남은 사람들을 마음껏 방해하세요.' };
+  return { title: '의자 뺏기', role: '지금 역할: 선수', rows: [
+    ['<kbd>WASD</kbd>', '이동'], ['<kbd>Space</kbd>', '점프'],
+    ['<kbd>E</kbd>', '의자에 앉기 / 일어나기 (음악 나올 때 앉으면 찌릿!)'],
+    ['<kbd>클릭</kbd> / <kbd>Q</kbd>', '서 있는 사람한테 <b>싸대기</b>, 앉은 사람은 끌어내리기, 빈 의자는 잡기 · 들고 있으면 던지기'],
+    ['<kbd>우클릭</kbd> / <kbd>F</kbd>', '<b>발차기</b> (사람, 의자 둘 다 날아가요)'],
+    ['점프 중 <kbd>F</kbd>', '<b>날아차기</b>: 앞으로 쭉 날아가서 크게 날려요'],
+    ['점프 중 <kbd>Q</kbd>', '<b>박치기</b>: 몸통 다이빙, 맞은 사람은 뒤로 쿵'],
+    ['점프 중 <kbd>E</kbd>', '<b>엉덩이 찍기</b>: 수직 낙하, 주변 사람과 의자가 다 튀어올라요']],
+    tip: '자리가 확정된(초록) 사람은 못 건드려요. Tab에서 손을 떼면 닫혀요.' };
+};
 ChairGame.prototype.onSkin = function (id) { const c = this.chars.get(id); if (c) c.av.apply(skinOf(id), c.color); };
 
 // 탈락 알림 (방장 → 모두)
@@ -2253,436 +2363,7 @@ ChairGame.prototype.onData = function (from, d) {
   return _origOnData.call(this, from, d);
 };
 
-/* =============== 단체 줄넘기 지옥 =============== */
-// 줄은 x축 방향으로 놓이고, 양 끝(±L/2)에서 두 명이 돌려요. 줄 각도 th가 π일 때 바닥을 지나가요.
-const ROPE = { h0: 1.05, zoneX: 2.4, zoneZ: 0.75 };
-const ROPE_EVENTS = { double: '줄 두 개', long: '늘어나는 줄', tramp: '트램펄린' };
 const TAU = Math.PI * 2;
-const KEYS_HTML = () => $('#keys').dataset.orig || ($('#keys').dataset.orig = $('#keys').innerHTML);
-
-class RopeGame extends ChairGame {
-  preInit() {
-    this.introDur = 6;
-    const ids = this.roster.map((r) => r.id);
-    const order = shuffle(ids), pairs = [];
-    for (let i = 0; i < order.length; i += 2) pairs.push([order[i], order[i + 1] ?? order[0]]);
-    this.rp = { th: 0, om: 0, thHost: null, L: 8, Rm: 1.05, wob: 0, stopT: 0, turners: [], pairs, hold: {}, stops: {}, omA: 0, omB: 0, base: 0, nr: pairs.length };
-    this.sc = {};
-    for (const r of this.roster) this.sc[r.id] = { pts: 0, jumps: 0, trips: 0, shoves: 0, name: r.name };
-    this.pend = []; this.shoveBy = {}; this.holdSent = null; this.holdT = 0;
-    KEYS_HTML();
-  }
-  constructor(roster, opts, late) {
-    super(roster, opts, late);
-    this.kind = 'rope';
-  }
-  get jumpV() { return this.event === 'tramp' && (this.phase === 'jump' || this.phase === 'ready') ? 9.6 : 6.4; }
-  isTurner(id) { return this.rp.turners.includes(id); }
-  anchor(id) {
-    const i = this.rp.turners.indexOf(id), L = this.rp.L;
-    return i === 0 ? { x: -L / 2 - 0.45, h: Math.PI / 2 } : { x: L / 2 + 0.45, h: -Math.PI / 2 };
-  }
-  destroy() { super.destroy(); $('#keys').innerHTML = KEYS_HTML(); gameEl.classList.remove('turner', 'rope'); }
-
-  // ---- 그리기 준비 ----
-  setupRender() {
-    super.setupRender();
-    this.ropeMat = [new THREE.MeshStandardMaterial({ color: 0xff4f8b, roughness: 0.5 }), new THREE.MeshStandardMaterial({ color: 0xffd23f, roughness: 0.5 })];
-    this.ropeMesh = [null, null];
-    this.zone = new THREE.Mesh(new THREE.PlaneGeometry(ROPE.zoneX * 2, ROPE.zoneZ * 2), new THREE.MeshBasicMaterial({ color: 0x33d69f, transparent: true, opacity: 0.22, depthWrite: false }));
-    this.zone.rotation.x = -Math.PI / 2; this.zone.position.y = 0.012; this.zone.visible = false; this.scene.add(this.zone);
-    this.pads = [0, 1].map(() => {
-      const m = new THREE.Mesh(new THREE.CircleGeometry(0.55, 28), new THREE.MeshBasicMaterial({ color: 0xffd23f, transparent: true, opacity: 0.5, depthWrite: false }));
-      m.rotation.x = -Math.PI / 2; m.position.y = 0.013; m.visible = false; this.scene.add(m); return m;
-    });
-  }
-  ropeAt(u, th) {
-    const rp = this.rp, r = 0.15 + (rp.Rm - 0.15) * Math.sin(Math.PI * u);
-    const wav = rp.wob * Math.sin(u * TAU + this.time * 9) * Math.sin(Math.PI * u);
-    return { y: Math.max(0.03, ROPE.h0 + r * Math.cos(th) + wav), z: r * Math.sin(th) + wav * 0.5 };
-  }
-  ropeCount() { return this.event === 'double' && (this.phase === 'jump' || this.phase === 'ready') ? 2 : 1; }
-  ropeTh(k, th = this.rp.th) { return k === 0 ? th : -th + Math.PI; }
-  beforeDraw() {
-    const rp = this.rp, show = ['ready', 'jump', 'result'].includes(this.phase) && rp.turners.length;
-    for (let k = 0; k < 2; k++) {
-      if (this.ropeMesh[k]) { this.scene.remove(this.ropeMesh[k]); this.ropeMesh[k].geometry.dispose(); this.ropeMesh[k] = null; }
-      if (!show || k >= this.ropeCount()) continue;
-      const pts = [], th = this.ropeTh(k);
-      for (let i = 0; i <= 24; i++) { const u = i / 24, p = this.ropeAt(u, th); pts.push(new V3(-rp.L / 2 + u * rp.L, p.y, p.z)); }
-      const m = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 48, 0.04, 6), this.ropeMat[k]);
-      m.castShadow = true; this.scene.add(m); this.ropeMesh[k] = m;
-    }
-    this.zone.visible = this.phase === 'ready' || this.phase === 'jump';
-    this.pads.forEach((p, i) => { p.visible = !!show; if (show) p.position.x = (i ? 1 : -1) * (rp.L / 2 + 0.45); });
-  }
-  armPose(c, i) {
-    if (!this.isTurner(c.id) || !['ready', 'jump', 'result'].includes(this.phase)) return null;
-    const side = i ? 1 : -1;
-    if (i === 1 || this.ropeCount() === 2) {
-      const th = this.ropeTh(i === 1 ? 0 : 1);
-      return [-1.1 - Math.sin(th) * 0.55, side * (0.25 + Math.cos(th) * 0.25)];
-    }
-    return null;
-  }
-  camTarget(me) {
-    if (!me || me.spect) return null;
-    return { look: new V3(0, 0.7, 0), want: isTouch ? new V3(0, 5.6, 8.4) : new V3(0, 7, 10.5) };
-  }
-  hudChips(me) {
-    const rp = this.rp, c = [];
-    if (this.round) c.push(`<span class="chip">라운드 ${this.round}/${rp.nr}</span>`);
-    if (this.phase === 'jump') { c.push(`<span class="chip">남은 사람 ${this.alive.length}명</span>`); c.push(`<span class="chip">${Math.max(0, Math.ceil(this.tl))}초</span>`); }
-    if (this.event !== 'none' && ROPE_EVENTS[this.event]) c.push(`<span class="chip ev">${ROPE_EVENTS[this.event]}</span>`);
-    if (this.isTurner(myId) && this.phase === 'jump') c.push(`<span class="chip">확 멈추기 ${rp.stops[myId] ?? 0}번 남음</span>`);
-    if (this.sc[myId]) c.push(`<span class="chip">내 점수 ${this.sc[myId].pts}</span>`);
-    return c;
-  }
-
-  // ---- 조작 ----
-  filterInput(c, inp) {
-    if (!this.isTurner(c.id) || c.rag || c.spect) return inp;
-    const a = this.anchor(c.id);
-    c.body.position.set(a.x, 0.33, 0); c.body.velocity.set(0, 0, 0); c.heading = a.h;
-    return { x: 0, z: 0, jump: false, kick: false, grab: false, sit: inp.sit };
-  }
-  doKick(me) {
-    if (this.isTurner(me.id)) return;
-    const f = me.fwd(), pt = me.torso.clone().addScaledVector(f, 0.6);
-    for (const o of this.others(me)) {
-      if (this.isTurner(o.id) || o.isDown()) continue;
-      if (o.torso.distanceTo(pt) < 0.9) { this.sendHit(o.id, { k: 'hit', target: o.id, by: me.id, kind: 'shove', imp: { x: f.x * 4.5, y: 3, z: f.z * 4.5 } }); SFX.kick(); }
-    }
-  }
-  doGrab() {}
-  trySit(me) {
-    if (!this.isTurner(me.id) || this.phase !== 'jump') return;
-    this.toHost({ k: 'stop', id: me.id });
-  }
-
-  // ---- 매 프레임: 줄 돌리기, 걸림 판정 ----
-  afterChars(dt) {
-    const rp = this.rp, host = isHost();
-    const prev = rp.th;
-    if (this.phase === 'jump' || this.phase === 'ready') {
-      rp.th += rp.om * dt;
-      if (!host && rp.thHost != null) {
-        rp.thHost += rp.om * dt;
-        let d = rp.thHost - rp.th; d = Math.atan2(Math.sin(d), Math.cos(d));
-        rp.th += Math.abs(d) > 0.8 ? d : d * Math.min(1, dt * 6);
-      }
-    }
-    if (this.phase === 'jump') {
-      // 줄이 바닥을 지날 때 소리 + 방장은 넘은 횟수 기록
-      const crossed = (a, b, at) => Math.floor((a - at) / TAU) !== Math.floor((b - at) / TAU);
-      let hits = 0;
-      if (crossed(prev, rp.th, Math.PI)) hits++;
-      if (this.ropeCount() === 2 && crossed(prev, rp.th, 0)) hits++;
-      for (let i = 0; i < hits; i++) {
-        tone(85, 0.09, 'sine', 0.35, 0.6); kNoise(0, 0.05, 0.12, 2400, 'bandpass');
-        if (host) this.pend.push({ t: this.time + 0.35, ids: this.alive.slice() });
-      }
-      // 내 캐릭터(와 방장이면 봇)가 줄에 걸렸는지
-      for (const c of this.chars.values()) {
-        if (!c.local || c.spect || c.outT != null || this.isTurner(c.id) || !this.alive.includes(c.id)) continue;
-        for (let k = 0; k < this.ropeCount(); k++) {
-          const hit = this.ropeHit(c, this.ropeTh(k, prev), this.ropeTh(k, rp.th));
-          if (hit) { this.trip(c, hit.dir); break; }
-        }
-        // 줄 밖으로 나가면 감전
-        if (c.outT == null && !c.rag) {
-          const p = c.body.position;
-          if (Math.abs(p.x) > ROPE.zoneX || Math.abs(p.z) > ROPE.zoneZ) {
-            c.zapT += dt;
-            if (c.zapT > 0.9) { c.zapT = 0; c.knock({ x: -Math.sign(p.x) * 3, y: 5, z: -Math.sign(p.z) * 3 }, 0.9, 'zap', ''); SFX.zap(); }
-          } else c.zapT = Math.max(0, c.zapT - dt);
-        }
-      }
-    }
-    // 탈락 처리 (넘어진 뒤 관중석으로)
-    for (const c of this.chars.values()) {
-      if (!c.local || c.outT == null) continue;
-      c.outT -= dt;
-      if (c.outT <= 0) { c.outT = null; c.spect = true; this.respawn(c, false); }
-    }
-    // 내가 줄 돌리는 사람이면 꾹 누르기 상태 보내기
-    if (this.isTurner(myId) && this.phase === 'jump') {
-      const hold = input.keys.has(' ') || !!input.mouseHeld || !!input.touchHold;
-      this.holdT -= dt;
-      if (hold !== this.holdSent || this.holdT <= 0) { this.holdSent = hold; this.holdT = 0.4; this.toHost({ k: 'turn', id: myId, hold }); }
-    }
-    // 방장: 넘은 횟수 점수
-    if (host) {
-      while (this.pend.length && this.pend[0].t <= this.time) {
-        const p = this.pend.shift();
-        for (const id of p.ids) if (this.alive.includes(id) && this.sc[id]) { this.sc[id].pts++; this.sc[id].jumps++; }
-      }
-    }
-  }
-  ropeHit(c, th0, th1) {
-    const rp = this.rp;
-    let x, z, y0, y1;
-    if (c.rag) {
-      const P = c.parts; x = P[0].p.x; z = P[0].p.z;
-      y0 = Math.min(...P.map((p) => p.p.y)) - 0.12; y1 = Math.max(...P.map((p) => p.p.y)) + 0.12;
-    } else { x = c.body.position.x; z = c.body.position.z; y0 = c.body.position.y - 0.32; y1 = y0 + 1.4; }
-    const u = (x + rp.L / 2) / rp.L;
-    if (u <= 0.03 || u >= 0.97 || Math.abs(z) > rp.Rm + 0.5) return null;
-    for (let s = 1; s <= 5; s++) {
-      const th = th0 + (th1 - th0) * (s / 5), p = this.ropeAt(u, th);
-      if (Math.abs(p.z - z) < 0.26 && p.y > y0 - 0.05 && p.y < y1) return { dir: Math.cos(th) < 0 ? -1 : 1 };
-    }
-    return null;
-  }
-  trip(c, dir) {
-    const sb = this.shoveBy[c.id];
-    const by = sb && this.time - sb.t < 2.5 ? sb.by : '';
-    c.invuln = 0; c.outT = 2.4;
-    c.knock({ x: rand(-1, 1), y: 5.5, z: dir * 5.5 }, 2.2, 'rope', by);
-    this.toHost({ k: 'trip', id: c.id, by });
-  }
-
-  // ---- 메시지 ----
-  onData(from, d) {
-    const host = isHost();
-    if (d.k === 'hit') {
-      if (this.isTurner(d.target)) return;
-      const c = this.chars.get(d.target);
-      if (c && c.local) {
-        if (d.kind === 'shove') this.shoveBy[c.id] = { by: d.by, t: this.time };
-        const dur = { shove: 0.7, cushion: 1.0, zap: 0.9, slip: 1.4 }[d.kind] || 1.2;
-        c.knock(d.imp, dur, d.kind, d.by);
-      }
-      return;
-    }
-    if (host) {
-      const rp = this.rp;
-      if (d.k === 'turn') { if (this.isTurner(d.id) && (d.id === from || from === myId)) rp.hold[d.id] = !!d.hold; return; }
-      if (d.k === 'stop') {
-        if (!this.isTurner(d.id) || (d.id !== from && !(from === myId && d.id.startsWith('bot_')))) return;
-        if ((rp.stops[d.id] ?? 0) > 0 && rp.stopT <= 0 && this.phase === 'jump') { rp.stops[d.id]--; rp.stopT = 1.0; net.bcast(this.worldMsg()); }
-        return;
-      }
-      if (d.k === 'trip') {
-        if (this.phase !== 'jump' || !this.alive.includes(d.id)) return;
-        this.alive = this.alive.filter((a) => a !== d.id);
-        for (const t of rp.turners) if (this.sc[t]) { this.sc[t].pts += 5; this.sc[t].trips++; }
-        if (d.by && d.by !== d.id && this.sc[d.by]) { this.sc[d.by].pts += 3; this.sc[d.by].shoves++; }
-        net.bcast(this.worldMsg());
-        return;
-      }
-    }
-    return super.onData(from, d);
-  }
-  onOuch(o) {
-    const vic = this.chars.get(o.id), by = this.chars.get(o.by);
-    const vn = vic ? vic.name : '누군가', bn = by ? by.name : '';
-    const txt = {
-      rope: bn ? `${bn}님이 밀어서 ${vn}님이 줄에 걸렸어요!` : `${vn}님이 줄에 걸렸어요!`,
-      shove: `${bn}님이 ${vn}님을 밀쳤어요`, cushion: `관중 ${bn}님의 쿠션 공격!`, slip: `${vn}님이 바나나를 밟았어요`,
-      zap: `${vn}님 찌릿! 초록 칸 밖으로 나가면 안 돼요`, fall: `${vn}님이 무대 밖으로 떨어졌어요`,
-    }[o.kind];
-    if (txt) toast(txt);
-    if (o.kind !== 'fall') SFX.ouch();
-    if (this.phase === 'jump' && o.kind === 'rope' && (!this.bestHit || o.mag >= this.bestHit.mag)) this.bestHit = { t: this.time, id: o.id, mag: Math.max(o.mag, 7), by: o.by, kind: o.kind };
-  }
-  onRoster() {
-    super.onRoster();
-    if (isHost()) { const ids = activeIds(); this.alive = this.alive.filter((a) => a.startsWith('bot_') || ids.has(a)); }
-  }
-
-  // ---- 방장 진행 ----
-  worldMsg() {
-    const rp = this.rp;
-    const pr = [...this.props.values()].map((p) => {
-      const b = p.body.position, q = p.body.quaternion;
-      return [p.id, p.type, Math.round(b.x * 100), Math.round(b.y * 100), Math.round(b.z * 100), Math.round(q.x * 1000), Math.round(q.y * 1000), Math.round(q.z * 1000), Math.round(q.w * 1000)];
-    });
-    return { k: 'w', ph: this.phase, tl: Math.round(this.tl * 100) / 100, rd: this.round, al: this.alive, ev: this.event,
-      tu: rp.turners, th: Math.round(rp.th * 1000) / 1000, om: Math.round(rp.om * 1000) / 1000, L: rp.L, Rm: rp.Rm, wob: rp.wob, st: rp.stops, nr: rp.nr, sc: this.sc, pr };
-  }
-  applyWorld(d) {
-    const prev = this.phase, rp = this.rp;
-    this.tl = d.tl; this.round = d.rd; this.alive = d.al; this.event = d.ev; this.sc = d.sc;
-    rp.turners = d.tu; rp.L = d.L; rp.Rm = d.Rm; rp.wob = d.wob; rp.stops = d.st; rp.nr = d.nr;
-    if (rp.om > 0.3 && d.om < 0.05 && d.ph === 'jump') SFX.scratch();
-    rp.om = d.om; rp.thHost = d.th + d.om * 0.05;
-    if (prev !== d.ph && (d.ph === 'ready' || d.ph === 'intro')) rp.th = d.th;
-    const a = 1 - Math.exp(-0.05 * 14);
-    const ps = new Set();
-    for (const arr of d.pr) {
-      const [id, type, x, y, z, qx, qy, qz, qw] = arr; ps.add(id);
-      let p = this.props.get(id); if (!p) p = this.makePropMesh(id, type);
-      p.tp.set(x / 100, y / 100, z / 100); p.tq.set(qx / 1000, qy / 1000, qz / 1000, qw / 1000).normalize();
-      if (!p.init) { p.mesh.position.copy(p.tp); p.init = true; }
-    }
-    for (const p of [...this.props.values()]) if (!ps.has(p.id)) this.removeProp(p);
-    this.phase = d.ph;
-    if (d.ph !== prev) this.onPhase(d.ph, prev);
-  }
-  setPhase(ph, dur) {
-    const prev = this.phase, rp = this.rp;
-    this.phase = ph; this.tl = dur;
-    if (ph === 'ready') {
-      this.round++;
-      const present = new Set([...activeIds(), ...this.roster.filter((r) => r.bot).map((r) => r.id)]);
-      let pair = (rp.pairs[this.round - 1] || []).filter((id) => present.has(id));
-      const others = shuffle([...present].filter((id) => !pair.includes(id)));
-      while (pair.length < 2 && others.length) pair.push(others.shift());
-      rp.turners = pair;
-      this.alive = [...present].filter((id) => !pair.includes(id));
-      rp.th = -Math.PI / 2; rp.om = 0; rp.omA = rp.omB = 0; rp.stopT = 0; rp.hold = {}; rp.L = 8; rp.Rm = 1.05; rp.wob = 0;
-      rp.stops = {}; for (const t of pair) rp.stops[t] = 2;
-      this.event = 'none';
-      if (this.opts.events && Math.random() < 0.6) this.event = ['double', 'long', 'tramp'][Math.floor(Math.random() * 3)];
-      this.pend = []; this.botTurn = {};
-    }
-    if (ph === 'jump') { rp.base = TAU * 0.68; rp.omA = rp.omB = rp.base; rp.om = rp.base; }
-    if (ph === 'result' && prev === 'jump') {
-      for (const id of this.alive) if (this.sc[id]) this.sc[id].pts += 10;
-    }
-    if (ph === 'result' || ph === 'end') rp.om = 0;
-    this.onPhase(ph, prev);
-    net.bcast(this.worldMsg());
-  }
-  hostTick(dt) {
-    this.tl -= dt;
-    const ph = this.phase, rp = this.rp;
-    if (ph === 'intro' && this.tl <= 0) this.setPhase('ready', 3.5);
-    else if (ph === 'ready' && this.tl <= 0) this.setPhase('jump', 60);
-    else if (ph === 'jump') {
-      rp.base += dt * 0.04;
-      rp.turners.forEach((id, i) => {
-        const hold = id.startsWith('bot_') ? this.botTurnHold(id, dt) : !!rp.hold[id];
-        const key = i ? 'omB' : 'omA';
-        if (hold) rp[key] = Math.min(TAU * 1.4, rp[key] + dt * 3.0);
-        else rp[key] += (rp.base - rp[key]) * Math.min(1, dt * 0.9);
-      });
-      if (rp.turners.length < 2) rp.omB = rp.omA;
-      rp.wob = Math.min(0.35, Math.abs(rp.omA - rp.omB) * 0.07);
-      if (rp.stopT > 0) { rp.stopT -= dt; rp.om = 0; } else rp.om = (rp.omA + rp.omB) / 2;
-      if (this.event === 'long') { const k = clamp((60 - this.tl) / 60, 0, 1); rp.L = 8 + k * 3; rp.Rm = 1.05 + k * 0.55; }
-      if (this.alive.length === 0 || this.tl <= 0) this.setPhase('result', this.bestHit ? 7 : 5);
-    } else if (ph === 'result' && this.tl <= 0) {
-      if (this.round >= rp.nr) this.setPhase('end', 14); else this.setPhase('ready', 3.5);
-    } else if (ph === 'end' && this.tl <= 0) { endGameAll(); return; }
-    // 관중 소품 (쿠션, 바나나)
-    for (const p of [...this.props.values()]) {
-      p.life -= dt;
-      if (p.life <= 0 || p.body.position.y < -6) { this.removeProp(p); continue; }
-      if (p.type === 'c' && p.body.velocity.length() > 3) {
-        for (const o of this.chars.values()) {
-          if (o.spect || p.hitSet.has(o.id) || o.isDown() || this.isTurner(o.id)) continue;
-          if (o.torso.distanceTo(new V3(p.body.position.x, p.body.position.y, p.body.position.z)) < 0.7) {
-            p.hitSet.add(o.id); const v = p.body.velocity;
-            this.sendHit(o.id, { k: 'hit', target: o.id, by: p.by, kind: 'cushion', imp: { x: v.x * 0.4, y: 3, z: v.z * 0.4 } });
-          }
-        }
-      }
-    }
-    this.worldT -= dt;
-    if (this.worldT <= 0) { this.worldT = 1 / 12; net.bcast(this.worldMsg()); }
-  }
-  botTurnHold(id, dt) {
-    const b = this.botTurn[id] || (this.botTurn[id] = { hold: false, t: rand(1, 3), stopAt: Math.random() < 0.6 ? rand(8, 40) : 999 });
-    b.t -= dt;
-    if (b.t <= 0) { b.hold = !b.hold; b.t = b.hold ? rand(0.4, 1.5) : rand(0.8, 2.5); }
-    if (60 - this.tl > b.stopAt) { b.stopAt = 999; this.onData(myId, { k: 'stop', id }); }
-    return b.hold;
-  }
-  record(dt) {
-    if (this.phase !== 'jump') return;
-    this.recT -= dt; if (this.recT > 0) return; this.recT = 1 / 30;
-    const f = { t: this.time, c: new Map(), ch: new Map() };
-    for (const c of this.chars.values()) f.c.set(c.id, c.parts.map((p) => ({ p: p.p.clone(), q: p.q.clone() })));
-    this.frames.push(f);
-    while (this.frames.length && this.frames[0].t < this.time - 20) this.frames.shift();
-  }
-  onPhase(ph, prev) {
-    const rp = this.rp, me = this.chars.get(myId);
-    const amTurner = this.isTurner(myId);
-    gameEl.classList.toggle('turner', amTurner && (ph === 'ready' || ph === 'jump'));
-    if (ph === 'intro') {
-      this.setBanner('단체 줄넘기 지옥!');
-      toast('라운드마다 2명이 줄을 돌리고, 나머지는 줄을 넘어요.');
-      toast('줄에 걸리면 탈락! 옆 사람을 밀칠 수도 있어요.');
-    }
-    if (ph === 'ready') {
-      this.bestHit = null; this.frames = [];
-      const n = this.alive.length;
-      for (const c of this.chars.values()) {
-        if (!c.local) continue;
-        c.outT = null; c.zapT = 0;
-        if (this.isTurner(c.id)) { c.spect = false; const a = this.anchor(c.id); c.teleport(a.x, 0.6, 0, a.h); continue; }
-        const i = this.alive.indexOf(c.id);
-        if (i < 0) { if (!c.spect) { c.spect = true; this.respawn(c, false); } continue; }
-        c.spect = false;
-        const x = n === 1 ? 0 : -1.9 + (i * 3.8) / (n - 1);
-        c.teleport(x, 0.6, (i % 2 ? 0.12 : -0.12), 0);
-        if (this.bot[c.id]) this.bot[c.id].home = x; else if (c.bot) this.bot[c.id] = { home: x };
-      }
-      if (amTurner) this.setBanner('줄을 돌려요! 꾹 누르면 빨라져요');
-      else if (me && !me.spect) this.setBanner('초록 칸 안에서 줄을 넘어요!');
-      else this.setBanner('관중석에서 방해해요!');
-      $('#keys').innerHTML = amTurner
-        ? '<kbd>Space</kbd> 또는 <kbd>클릭</kbd> 꾹: 줄 빠르게 &nbsp; <kbd>E</kbd> 확 멈추기 (라운드당 2번)'
-        : me && me.spect ? '<kbd>WASD</kbd> 이동 &nbsp; <kbd>클릭</kbd> 쿠션 던지기 &nbsp; <kbd>우클릭</kbd> 바나나 던지기'
-        : '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Space</kbd> 점프 &nbsp; <kbd>우클릭</kbd> 또는 <kbd>F</kbd> 밀치기';
-      if (this.event !== 'none') toast(`이번 라운드 이벤트: ${ROPE_EVENTS[this.event]}`);
-    }
-    if (ph === 'jump') { this.setBanner('점프!'); music.start(118 + this.round * 6); }
-    if (ph === 'result') {
-      music.stop();
-      const names = this.alive.map((id) => (this.chars.get(id) || {}).name || '?');
-      this.setBanner(names.length ? `끝까지 버틴 사람: ${names.join(', ')}` : '전원 걸렸어요!');
-      gameEl.classList.remove('turner');
-      this.startReplay();
-      if (this.replay) $('#replayTag').textContent = `다시보기: ${(this.chars.get(this.replay.id) || {}).name || ''}님이 걸린 순간`;
-    }
-    if (ph === 'end') {
-      music.stop(); SFX.fanfare(); gameEl.classList.remove('turner');
-      const st = Object.entries(this.sc).sort((a, b) => b[1].pts - a[1].pts);
-      const w = st[0];
-      this.setBanner(w ? `${w[1].name} 우승!` : '게임 끝!');
-      const top = (k) => st.reduce((a, b) => (b[1][k] > (a ? a[1][k] : 0) ? b : a), null);
-      const aw = [];
-      const j = top('jumps'), t = top('trips'), s = top('shoves');
-      if (j) aw.push(`<li><b>점프왕</b>${esc(j[1].name)} (${j[1].jumps}번 넘음)</li>`);
-      if (t) aw.push(`<li><b>줄 돌리기 장인</b>${esc(t[1].name)} (${t[1].trips}명 걸리게 함)</li>`);
-      if (s) aw.push(`<li><b>밀치기왕</b>${esc(s[1].name)} (${s[1].shoves}번 성공)</li>`);
-      aw.push(...st.map(([, v], i) => `<li>${i + 1}. ${esc(v.name)} · ${v.pts}점</li>`));
-      $('#endTitle').textContent = w ? `${w[1].name} 우승!` : '게임 끝!';
-      $('#awards').innerHTML = aw.join('');
-      $('#endWait').textContent = isHost() ? '14초 뒤 자동으로 대기실로 돌아가요.' : '잠시 뒤 대기실로 돌아가요.';
-      document.querySelectorAll('.hostonly').forEach((el) => el.classList.toggle('hidden', !isHost()));
-      $('#endOv').classList.remove('hidden');
-    }
-  }
-
-  // ---- 봇 ----
-  botInput(c, dt) {
-    if (c.spect) return super.botInput(c, dt);
-    const inp = { x: 0, z: 0, jump: false, kick: false, grab: false, sit: false };
-    if (this.isTurner(c.id)) return inp;
-    const b = this.bot[c.id] || (this.bot[c.id] = {});
-    if (b.err == null) Object.assign(b, { err: rand(-0.05, 0.05), skill: rand(0.88, 0.97), shoveT: rand(5, 12), home: b.home ?? 0 });
-    const p = c.body.position, hx = b.home + Math.sin(this.time * 0.7 + b.err * 50) * 0.3;
-    const dx = hx - p.x, dz = -p.z;
-    if (Math.hypot(dx, dz) > 0.15) { inp.x = clamp(dx, -1, 1) * 0.6; inp.z = clamp(dz, -1, 1) * 0.6; }
-    const rp = this.rp;
-    if (this.phase === 'jump' && rp.om > 0.5) {
-      const air = (2 * this.jumpV) / 22;
-      const tt = (target) => (((target - rp.th) % TAU) + TAU) % TAU / rp.om;
-      let t = tt(Math.PI); if (this.ropeCount() === 2) t = Math.min(t, tt(0));
-      const want = air * 0.42 + b.err;
-      if (!b.jumped && t < want && c.grounded) { if (Math.random() < b.skill) inp.jump = true; b.jumped = true; }
-      if (t > want + 0.15) b.jumped = false;
-      b.shoveT -= dt;
-      if (b.shoveT <= 0) { b.shoveT = rand(6, 14); c.heading = Math.random() < 0.5 ? Math.PI / 2 : -Math.PI / 2; inp.kick = true; }
-    }
-    return inp;
-  }
-}
 
 /* =============== 엄마한테 안 들키기 라면 =============== */
 // 집 구조: 위층 줄 [3번 부엌][안방][2번 부엌], 가운데 [복도][거실][다용도실], 아래 [안전지대][1번 부엌][식탁방]
@@ -2746,6 +2427,14 @@ class RamenGame {
   }
   rosterInfo() { return this.roster; }
   isMom(id) { return this.moms.includes(id); }
+  help() {
+    if (this.isMom(myId)) return { title: '엄마 몰래 라면 끓이기', role: `지금 역할: ${this.moms.indexOf(myId) ? '아빠' : '엄마'}`, rows: [
+      ['<kbd>WASD</kbd>', '이동'], ['<kbd>Shift</kbd>', '뛰기'], ['<kbd>F</kbd>', '방 불 켜기 (3초)'], ['몸으로 닿기', '아이 잡기'], ['빨간 파동', '아이들이 소리를 낸 곳']],
+      tip: '안전지대에는 못 들어가요.' };
+    return { title: '엄마 몰래 라면 끓이기', role: '지금 역할: 배고픈 아이', rows: [
+      ['<kbd>WASD</kbd>', '이동'], ['<kbd>Shift</kbd>', '뛰기 (소리가 나서 들켜요)'], ['<kbd>E</kbd> / <kbd>클릭</kbd>', '행동 (냄비 꺼내기, 물 받기, 불 켜기, 라면 넣기, 담기)'],
+      ['순서', '냄비 → 물 → 가스레인지 → 라면 → 끓이기 → 그릇']], tip: '냄비 들고 잡히면 처음부터 다시예요. 안전지대에선 안 잡혀요.' };
+  }
   me() { return this.ents.get(myId); }
   present() { return new Set([...activeIds(), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
 
@@ -3114,8 +2803,8 @@ class RamenGame {
     const mom = this.isMom(myId);
     this.el.light.classList.toggle('hidden', !mom);
     this.el.keys.innerHTML = mom
-      ? '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Shift</kbd> 뛰기 &nbsp; <kbd>F</kbd> 불 켜기 &nbsp; 아이한테 닿으면 잡아요'
-      : '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Shift</kbd> 뛰기(소리 나요) &nbsp; <kbd>E</kbd> 또는 <kbd>클릭</kbd> 행동';
+      ? '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Shift</kbd> 뛰기 &nbsp; <kbd>F</kbd> 불 켜기 &nbsp; 아이한테 닿으면 잡아요 &nbsp; <kbd>Tab</kbd> 조작법'
+      : '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Shift</kbd> 뛰기(소리 나요) &nbsp; <kbd>E</kbd> 또는 <kbd>클릭</kbd> 행동 &nbsp; <kbd>Tab</kbd> 조작법';
     if (ph === 'intro') {
       this.setCostumes();
       for (const e of this.ents.values()) if (e.local) this.spawn(e);
@@ -3499,25 +3188,43 @@ class RamenGame {
 
 /* =============== 비둘기 결혼식 습격 =============== */
 // 신랑신부는 대본대로 움직이고(구경만), 하객은 웃으며 앉아만 있어요. 비둘기만 날뛰어요.
-const PG_NEST = { x: -11, y: 7.2, z: -3 };
-const PG_T = { groom: 12, bride: 34, vows: 58, ring: 92, ringEnd: 118, cake: 122, bouquet: 158, toss: 176, photo: 190, flash: 212, end: 222 };
+// 실내 예식장: x -10~10, z -12(단상 쪽)~14(뒷문), 천장 높이 7.2. 뒷문 밖은 마당이에요.
+const PG_NEST = { x: -9.0, y: 4.6, z: 2.5 };
+const PG_T = { groom: 12, bride: 34, vows: 58, ring: 92, ringEnd: 118, cake: 122, bouquet: 158, toss: 176, photo: 190, flash: 212, end: 224 };
+const PG_HALL = { x: 9.7, z0: -11.7, door: 14, ceil: 6.8 };
+const PG_CHAND = [[-4, -2], [4, -2], [-4, 7], [4, 7]];
+const PG_CLAPS = [[12.5, 19], [34.5, 41], [118.5, 123], [150, 154], [215, 223]];
+const PG_PLACE = { chand: ['샹들리에 위', 8], nest: ['둥지', 6], table: ['테이블 위', 4], stage: ['단상 위', 3], seat: ['다른 의자', 1], floor: ['바닥', 1] };
+// 무엇이든 떨어지면 올라앉는 곳 (가장 높은 면부터)
+function pgSurface(x, z, y, reach = 0.05) {
+  let best = { top: 0, kind: 'floor' };
+  const c = (top, kind) => { if (top <= y + reach && top > best.top) best = { top, kind }; };
+  for (const [cx, cz] of PG_CHAND) if (Math.hypot(x - cx, z - cz) < 0.95) c(4.95, 'chand');
+  if (Math.hypot(x - PG_NEST.x, z - PG_NEST.z) < 1.0) c(PG_NEST.y, 'nest');
+  if (x < -8.6 && Math.abs(z - PG_NEST.z) < 1.3) c(PG_NEST.y - 0.1, 'nest');
+  if (Math.abs(x) < 6 && z < -9.2 && z > -12) c(0.4, 'stage');
+  if (Math.abs(x - 8) < 0.6 && Math.abs(z - 1.5) < 3.5) c(0.92, 'table');
+  if (Math.hypot(x - 4, z + 7.6) < 0.75) c(0.92, 'table');
+  return best;
+}
+// 모두가 같은 하객 배치를 보도록 고정된 난수
+function seeded(seed) { return () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 const PG_ITEMS = (() => {
   const a = [{ id: 'wig', n: '신랑 가발', pts: 5, need: 1 }, { id: 'ring', n: '결혼반지', pts: 8, need: 1 }, { id: 'bq', n: '부케', pts: 10, need: 1 }, { id: 'cake', n: '케이크 통째로', pts: 15, need: 3 }];
   for (let i = 0; i < 6; i++) a.push({ id: 'sl' + i, n: '케이크 한 조각', pts: 3, need: 1 });
   for (let i = 0; i < 12; i++) a.push({ id: 'f' + i, n: ['닭다리', '초밥', '포도'][i % 3], pts: 1, need: 1 });
   return a;
 })();
-const MC = {
-  wig: ['신랑님… 어… 머리가… 바람이 잘 통하시겠습니다. 네.', '신랑님 이마에서 빛이 나서… 조명은 끄겠습니다.', '머리카락이 하늘을 납니다. 자유로워 보이시네요… 네.'],
-  ring: ['반지가… 날아갔네요. 비둘기분께서 받으시는 건가요? 축하드립니다…?', '반지는 비둘기분께서 보관하시는 걸로… 네. 안전하겠죠.'],
-  bq: ['부케는 비둘기분께서 받으셨습니다! 다음 결혼은 비둘기분… 어… 날짜 잡으시면 연락 주세요.', '부케가 하늘로… 신부님 꽃가루 걱정은 없으시겠네요.'],
-  cake: ['케이크가… 떠오릅니다. 하늘에서 드시려나 봅니다.', '웨딩 케이크가 비행 중입니다. 기장님께 박수… 네, 마음속으로.'],
-  sl: ['케이크 한 조각을 비둘기분께서 시식하고 계십니다. 맛 평가 부탁드립니다.', '케이크가 한 조각씩… 어… 하객분들보다 먼저 드시네요.'],
-  f: ['뷔페 음식은 비둘기분들께서 먼저 시식해 주시는 걸로…', '음식이 하나씩 사라지고 있습니다. 소식하시는 하객분들께는 다행입니다.'],
-  creamC: ['신부님 달달해 보이시는데요. 맛 좋은지 여쭈어도 되겠습니까?', '신랑님 생크림 팩 하셨네요. 피부가 촉촉해 보이십니다.', '두 분 얼굴이… 케이크랑 깔맞춤이시네요. 센스 있으십니다.'],
-  creamG: ['하객분께 케이크 서비스가 나갔습니다! 직접 배달이네요.', '하객분 머리 위로 디저트가… 네, 맛있게 드세요.'],
-  poopC: ['신랑님의 아름다운 새똥 컬렉션… 어… 아름답습니다.', '신부님 면사포에 장식이… 하나 더 생겼네요. 네.', '두 분께 축복이… 위에서 계속 내려오고 있습니다.', '예로부터 새똥은 행운이라고… 했던 것 같습니다. 아마도요.'],
-  poopG: ['하객분들 머리에 하얀 꽃이… 피었네요.', '하객석이 점점 하얘지고 있습니다. 눈 오는 결혼식이네요. 네.', '하객분들 끝까지 웃고 계십니다. 정말… 대단하십니다.'],
+// 사회자 목소리 (브라우저 음성 읽기)
+const tts = {
+  ok: typeof window !== 'undefined' && 'speechSynthesis' in window,
+  voice() { const vs = speechSynthesis.getVoices().filter((v) => /^ko/i.test(v.lang)); return vs.find((v) => /google|yuna|sora|heami|sunhi|injoon/i.test(v.name)) || vs[0] || null; },
+  say(text, pitch = 1) {
+    if (!this.ok) return;
+    try { const u = new SpeechSynthesisUtterance(text), v = this.voice(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'ko-KR'; u.rate = 0.95; u.pitch = pitch; u.volume = 0.9; speechSynthesis.speak(u); } catch (e) {}
+  },
+  stop() { if (this.ok) try { speechSynthesis.cancel(); } catch (e) {} },
+  warm() { if (!this.ok || this.warmed) return; this.warmed = true; try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); speechSynthesis.getVoices(); } catch (e) {} },
 };
 const qY = (y) => new Q().setFromAxisAngle(UP, y);
 // 사람 캐릭터 자세 잡기 (서기, 걷기, 앉기, 팔 자세)
@@ -3591,7 +3298,7 @@ class PigeonGame {
   constructor(roster, opts, late) {
     this.kind = 'pigeon'; this.roster = roster.slice(); this.opts = opts || {}; this.late = late; this.dead = false;
     this.ph = null; this.tl = 0; this.t = 0; this.round = 0; this.nr = this.opts.rounds || 2; this.couple = [];
-    this.sc = {}; for (const r of roster) this.sc[r.id] = { pts: 0, thief: 0, poops: 0, team: 0, dmg: 0, name: r.name };
+    this.sc = {}; for (const r of roster) this.sc[r.id] = { pts: 0, thief: 0, poops: 0, team: 0, dmg: 0, kid: 0, name: r.name };
     this.chaos = 0; this.pigs = new Map(); this.time = 0; this.sendT = 0; this.wT = 0;
     this.camYaw = 0; this.camPitch = 0.25; this.bot = {}; this.mcQ = []; this.mcCd = {}; this.mcIdx = {}; this.said = {};
     this.drops = []; this.photo = null;
@@ -3606,6 +3313,15 @@ class PigeonGame {
   }
   rosterInfo() { return this.roster; }
   present() { return new Set([...activeIds(), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
+  help() {
+    const r = this.role();
+    if (r !== 'pigeon') return { title: '비둘기 결혼식', role: `지금 역할: ${r === 'groom' ? '신랑' : '신부'}`, rows: [['마우스', '고개 돌려서 구경하기 (화면을 한 번 클릭하면 마우스로 둘러봐요)'], ['조작', '없어요. 결혼식은 순서대로 진행돼요.']], tip: '마지막에 기념 사진을 찍어요.' };
+    return { title: '비둘기 결혼식', role: '지금 역할: 비둘기', rows: [
+      ['<kbd>WASD</kbd>', '날아가기 (카메라 방향 기준)'], ['<kbd>Space</kbd>', '날갯짓 (누르고 있으면 계속 올라가요)'], ['<kbd>Shift</kbd>', '급강하'],
+      ['<kbd>E</kbd> / <kbd>클릭</kbd>', '물기 · 놓기 (하객도 물 수 있어요)'], ['<kbd>F</kbd>', '새똥'], ['마우스', '둘러보기'],
+      ['하객 내려놓기', `${Object.values(PG_PLACE).map(([w, p]) => `${w} ${p}점`).join(', ')}`],
+      ['둥지로 가져가기', '가발 5, 반지 8, 부케 10, 케이크 통째로 15 (3마리 필요)']], tip: '문이 열리기 전에는 밖에서 기다려요.' };
+  }
   role(id = myId) { const i = this.couple.indexOf(id); return i === 0 ? 'groom' : i === 1 ? 'bride' : 'pigeon'; }
   nameOf(id) { return (this.roster.find((r) => r.id === id) || net.players.find((p) => p.id === id) || { name: '?' }).name; }
 
@@ -3650,10 +3366,11 @@ class PigeonGame {
     const r = this.renderer = new THREE.WebGLRenderer({ canvas: this.cv, antialias: !isTouch });
     r.setPixelRatio(Math.min(window.devicePixelRatio, isTouch ? 1.5 : 2));
     const s = this.scene = new THREE.Scene();
-    s.background = new THREE.Color(0xa5d8ff); s.fog = new THREE.Fog(0xa5d8ff, 35, 70);
+    s.background = new THREE.Color(0xa5d8ff);
     this.cam = new THREE.PerspectiveCamera(60, 1, 0.05, 120);
-    s.add(new THREE.HemisphereLight(0xffffff, 0x8fbf6f, 1.6));
-    const sun = new THREE.DirectionalLight(0xfff4e0, 1.8); sun.position.set(8, 16, 10); s.add(sun);
+    s.add(new THREE.HemisphereLight(0xfff8ee, 0xd9c7b0, 1.9));
+    const sun = new THREE.DirectionalLight(0xfff1dc, 1.1); sun.position.set(4, 12, 6); s.add(sun);
+    const warm = new THREE.PointLight(0xffd8a0, 1.2, 30, 1.2); warm.position.set(0, 6, 0); s.add(warm);
   }
   resize() {
     const w = gameEl.clientWidth, h = gameEl.clientHeight;
@@ -3664,36 +3381,80 @@ class PigeonGame {
     window.removeEventListener('resize', this.onResize); document.removeEventListener('mousemove', this.onMouse);
     if (document.pointerLockElement) document.exitPointerLock();
     for (const p of this.people || []) p.av.dispose();
+    tts.stop(); clearTimeout(this.subT);
     this.renderer.dispose(); this.wrap.remove(); gameEl.classList.remove('pigeon');
   }
 
   // ---- 결혼식장 ----
   buildVenue() {
     const s = this.scene, add = (geo, mat, x, y, z, ry = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.y = ry; s.add(m); return m; };
-    const grass = add(new THREE.PlaneGeometry(80, 80), M(0x8ce99a), 0, 0, 0); grass.rotation.x = -Math.PI / 2;
-    const aisle = add(new THREE.PlaneGeometry(1.6, 22), M(0xffffff), 0, 0.01, 2); aisle.rotation.x = -Math.PI / 2;
-    // 아치와 꽃
-    for (const x of [-1.8, 1.8]) add(new THREE.CylinderGeometry(0.1, 0.1, 3), M(0xffffff), x, 1.5, -10.2);
-    const arch = add(new THREE.TorusGeometry(1.8, 0.1, 8, 24, Math.PI), M(0xffffff), 0, 3, -10.2);
-    for (let i = 0; i < 18; i++) { const a = (i / 17) * Math.PI; add(new THREE.SphereGeometry(0.16, 8, 6), M(i % 3 ? 0xffc9de : 0xffffff), Math.cos(a) * 1.8, 3 + Math.sin(a) * 1.8, -10.2); }
-    // 하객 의자
+    const H = 7.2, D = PG_HALL.door;
+    // 마당 (문 밖)
+    const yard = add(new THREE.PlaneGeometry(40, 16), M(0x8ce99a), 0, -0.01, D + 8); yard.rotation.x = -Math.PI / 2;
+    const path = add(new THREE.PlaneGeometry(4, 16), M(0xdee2e6), 0, 0, D + 8); path.rotation.x = -Math.PI / 2;
+    // 바닥, 버진로드
+    const floor = add(new THREE.PlaneGeometry(20, 26), M(0xf3ece2, { roughness: 0.4 }), 0, 0, 1); floor.rotation.x = -Math.PI / 2;
+    const road = add(new THREE.PlaneGeometry(1.6, 22.6), M(0xd6336c, { roughness: 0.9 }), 0, 0.01, 2.5); road.rotation.x = -Math.PI / 2;
+    // 벽과 천장
+    const wall = M(0xfff4e6, { roughness: 0.9 }), trim = M(0xe8d5b5);
+    add(new THREE.BoxGeometry(20.6, H, 0.3), wall, 0, H / 2, -12.15);
+    for (const x of [-10.15, 10.15]) { add(new THREE.BoxGeometry(0.3, H, 26.6), wall, x, H / 2, 1); add(new THREE.BoxGeometry(0.32, 1.1, 26.6), trim, x, 0.55, 1); }
+    add(new THREE.BoxGeometry(8.3, H, 0.3), wall, -6.15, H / 2, D + 0.15); add(new THREE.BoxGeometry(8.3, H, 0.3), wall, 6.15, H / 2, D + 0.15);
+    add(new THREE.BoxGeometry(4, H - 3.6, 0.3), wall, 0, 3.6 + (H - 3.6) / 2, D + 0.15);
+    add(new THREE.BoxGeometry(20.6, 0.2, 26.6), M(0xfffaf3), 0, H + 0.1, 1);
+    // 바깥에서 보이는 정면 (분홍 벽, 금색 문틀)
+    const facade = M(0xf7c6d4, { roughness: 0.9 }), frame = M(0xffd23f, { metalness: 0.5, roughness: 0.4 });
+    add(new THREE.BoxGeometry(8.3, H, 0.06), facade, -6.15, H / 2, D + 0.33); add(new THREE.BoxGeometry(8.3, H, 0.06), facade, 6.15, H / 2, D + 0.33);
+    add(new THREE.BoxGeometry(4, H - 3.6, 0.06), facade, 0, 3.6 + (H - 3.6) / 2, D + 0.33);
+    for (const x of [-2.05, 2.05]) add(new THREE.BoxGeometry(0.14, 3.7, 0.12), frame, x, 1.85, D + 0.34);
+    add(new THREE.BoxGeometry(4.24, 0.14, 0.12), frame, 0, 3.67, D + 0.34);
+    for (const x of [-3.2, 3.2]) { add(new THREE.CylinderGeometry(0.3, 0.22, 0.6, 12), M(0xffffff), x, 0.3, D + 0.9); add(new THREE.SphereGeometry(0.42, 10, 8), M(0xffc9de), x, 0.85, D + 0.9); }
+    const sign = makeLabel('웨딩홀', '#d6336c'); sign.scale.set(2.6, 0.65, 1); sign.position.set(0, 4.4, D + 0.5); s.add(sign);
+    // 뒷문 (안쪽으로 열려요)
+    const doorMat = M(0xffffff), knob = M(0xffd23f, { metalness: 0.7, roughness: 0.3 });
+    this.doors = [-1, 1].map((sd) => {
+      const pv = new THREE.Group(); pv.position.set(sd * 2, 0, D); s.add(pv);
+      const pnl = new THREE.Mesh(new THREE.BoxGeometry(2, 3.6, 0.12), doorMat); pnl.position.set(-sd, 1.8, 0); pv.add(pnl);
+      const k = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), knob); k.position.set(-sd * 1.8, 1.6, 0.1); pv.add(k);
+      const k2 = k.clone(); k2.position.z = -0.1; pv.add(k2);
+      pv.userData.sd = sd; return pv;
+    });
+    this.doorOpen = 0;
+    // 단상, 꽃 장식
+    add(new THREE.BoxGeometry(12, 0.4, 2.8), M(0xffffff), 0, 0.2, -10.6);
+    add(new THREE.BoxGeometry(12.1, 0.06, 0.2), M(0xffc9de), 0, 0.41, -9.25);
+    for (const x of [-1.8, 1.8]) add(new THREE.CylinderGeometry(0.1, 0.1, 3), M(0xffffff), x, 1.9, -11.6);
+    add(new THREE.TorusGeometry(1.8, 0.1, 8, 24, Math.PI), M(0xffffff), 0, 3.4, -11.6);
+    for (let i = 0; i < 18; i++) { const a = (i / 17) * Math.PI; add(new THREE.SphereGeometry(0.17, 8, 6), M(i % 3 ? 0xffc9de : 0xffffff), Math.cos(a) * 1.8, 3.4 + Math.sin(a) * 1.8, -11.6); }
+    add(new THREE.BoxGeometry(0.8, 1.0, 0.45), M(0xc98a52), 0, 0.9, -10.25);
+    for (let z = -6; z <= 12; z += 3) for (const x of [-1.05, 1.05]) { add(new THREE.CylinderGeometry(0.04, 0.06, 1.0), M(0xffffff), x, 0.5, z); add(new THREE.SphereGeometry(0.2, 8, 6), M(z % 2 ? 0xffc9de : 0xffffff), x, 1.08, z); }
+    // 샹들리에
+    const gold = M(0xffd23f, { metalness: 0.6, roughness: 0.35 }), glow = new THREE.MeshBasicMaterial({ color: 0xfff3bf }), crys = M(0xe7f5ff, { metalness: 0.4, roughness: 0.05 });
+    for (const [cx, cz] of PG_CHAND) {
+      add(new THREE.CylinderGeometry(0.02, 0.02, H - 5.1), gold, cx, 5.1 + (H - 5.1) / 2, cz);
+      add(new THREE.CylinderGeometry(0.9, 0.55, 0.16, 18), gold, cx, 4.87, cz);
+      for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; add(new THREE.SphereGeometry(0.08, 6, 6), glow, cx + Math.cos(a) * 0.8, 5.0, cz + Math.sin(a) * 0.8); add(new THREE.OctahedronGeometry(0.06), crys, cx + Math.cos(a) * 0.7, 4.65, cz + Math.sin(a) * 0.7); }
+    }
+    // 하객 의자 (줄마다 양쪽 3개씩)
     this.seats = [];
+    const chairMat = M(0xffffff), bow = M(0xffc9de);
     for (let row = 0; row < 6; row++) for (const side of [-1, 1]) for (let c = 0; c < 3; c++) {
       const x = side * (1.6 + c * 1.1), z = -4.5 + row * 1.7;
-      add(new THREE.BoxGeometry(0.55, 0.06, 0.55), M(0xffffff), x, 0.45, z);
-      add(new THREE.BoxGeometry(0.55, 0.55, 0.05), M(0xffffff), x, 0.75, z + 0.27);
+      add(new THREE.BoxGeometry(0.55, 0.06, 0.55), chairMat, x, 0.45, z);
+      add(new THREE.BoxGeometry(0.55, 0.55, 0.05), chairMat, x, 0.75, z + 0.27);
+      add(new THREE.SphereGeometry(0.07, 6, 6), bow, x, 1.0, z + 0.3);
+      for (const [lx, lz] of [[-0.24, -0.24], [0.24, -0.24], [-0.24, 0.24], [0.24, 0.24]]) add(new THREE.BoxGeometry(0.04, 0.45, 0.04), chairMat, x + lx, 0.22, z + lz);
       this.seats.push({ x, z });
     }
     // 케이크 테이블, 뷔페
     add(new THREE.CylinderGeometry(0.75, 0.75, 0.9, 24), M(0xffffff), 4, 0.45, -7.6);
     add(new THREE.BoxGeometry(1.4, 0.9, 0.7), M(0xffffff), 6, 0.45, -6.2);
-    add(new THREE.BoxGeometry(1.2, 0.9, 7), M(0xffffff), 9, 0.45, 1.5);
+    add(new THREE.BoxGeometry(1.2, 0.9, 7), M(0xffffff), 8, 0.45, 1.5);
     // 사회자 단상
     add(new THREE.BoxGeometry(0.6, 1.0, 0.4), M(0x4c6ef5), -3.3, 0.5, -7.45);
-    // 나무와 둥지
-    add(new THREE.CylinderGeometry(0.35, 0.5, 7, 10), M(0x8b5a3c), PG_NEST.x, 3.5, PG_NEST.z);
-    for (const [dx, dy, dz, r] of [[0, 7.8, 0, 2], [1.2, 7, 0.6, 1.4], [-1.1, 7.2, -0.7, 1.5]]) add(new THREE.SphereGeometry(r, 12, 10), M(0x51cf66), PG_NEST.x + dx, dy + 0.5, PG_NEST.z + dz);
-    add(new THREE.TorusGeometry(0.75, 0.25, 8, 18), M(0x8b5a3c), PG_NEST.x, PG_NEST.y - 0.1, PG_NEST.z).rotation.x = Math.PI / 2;
+    // 벽 선반 위 둥지
+    add(new THREE.BoxGeometry(1.4, 0.2, 2.6), M(0xc98a52), -9.3, PG_NEST.y - 0.2, PG_NEST.z);
+    add(new THREE.TorusGeometry(0.75, 0.25, 8, 18), M(0x8b5a3c), PG_NEST.x, PG_NEST.y - 0.05, PG_NEST.z).rotation.x = Math.PI / 2;
     const nl = makeLabel('둥지', '#ffd23f'); nl.material.depthTest = false; nl.scale.set(1.6, 0.4, 1); nl.position.set(PG_NEST.x, PG_NEST.y + 1.1, PG_NEST.z); s.add(nl);
     // 사람들: 신랑, 신부, 주례, 사회자, 하객
     this.people = [];
@@ -3704,19 +3465,22 @@ class PigeonGame {
     pgCostume.groom(this.off.av);
     const mic = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.02, 0.18), M(0x212529)); mic.position.set(0, -0.2, 0.05); this.mc.av.meshes[3].add(mic);
     const guestCols = ['#ff7a59', '#ffd23f', '#33d69f', '#4aa8f0', '#a678ff', '#ff4f8b', '#8b5a3c', '#ffffff', '#ffb3c9', '#9be7ff'];
-    const seatIdx = shuffle(this.seats.map((_, i) => i)).slice(0, 18);
-    this.guests = seatIdx.map((si, i) => {
-      const sk = emptySkin(); const pick = (k) => ITEMS[k][Math.floor(Math.random() * ITEMS[k].length)][0];
-      if (Math.random() < 0.5) sk.hat = pick('hat'); if (Math.random() < 0.4) sk.face = pick('face');
-      const p = person('g' + i, '하객', guestCols[i % guestCols.length], sk); p.seat = this.seats[si];
+    const rnd = seeded(20261110);
+    const order = this.seats.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    this.guests = order.slice(0, 18).map((si, i) => {
+      const sk = emptySkin(); const pick = (k) => ITEMS[k][Math.floor(rnd() * ITEMS[k].length)][0];
+      if (rnd() < 0.5) sk.hat = pick('hat'); if (rnd() < 0.4) sk.face = pick('face');
+      const p = person('g' + i, '하객', guestCols[i % guestCols.length], sk); p.seat = this.seats[si]; p.gi = i;
       return p;
     });
-    // 훔칠 물건
+    // 훔칠 물건 + 물고 날아갈 수 있는 하객
     this.items = new Map();
     for (const it of PG_ITEMS) { const m = pgItemMesh(it.id); s.add(m); this.items.set(it.id, { ...it, mesh: m, st: 'home', car: [], x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, tx: 0, ty: 0, tz: 0 }); }
+    for (const g of this.guests) { const it = { id: 'gu' + g.gi, n: '하객', pts: 6, need: 1, guest: g, mesh: new THREE.Group(), st: 'home', car: [], x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, tx: 0, ty: 0, tz: 0 }; g.item = it; this.items.set(it.id, it); }
     this.nestRing = add(new THREE.RingGeometry(1.0, 1.15, 32), new THREE.MeshBasicMaterial({ color: 0xffd23f, transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthTest: false }), PG_NEST.x, PG_NEST.y + 0.05, PG_NEST.z);
     this.nestRing.rotation.x = -Math.PI / 2; this.nestRing.renderOrder = 5;
-    this.camPhoto = new THREE.PerspectiveCamera(58, 4 / 3, 0.1, 80); this.camPhoto.position.set(0, 2.8, -11.8); this.camPhoto.lookAt(0, 0.9, 1);
+    this.camPhoto = new THREE.PerspectiveCamera(62, 4 / 3, 0.1, 80); this.camPhoto.position.set(0, 2.6, -11.2); this.camPhoto.lookAt(0, 2.0, 3);
   }
   setCouple() {
     // 신랑신부: 그 사람이 색칠한 그대로 + 턱시도/드레스
@@ -3735,7 +3499,8 @@ class PigeonGame {
     for (const it of this.items.values()) { it.st = 'home'; it.car = []; it.mesh.visible = true; }
     for (const d of this.drops) this.scene.remove(d.m); this.drops = [];
     for (const g of this.groundSplats || []) this.scene.remove(g); this.groundSplats = [];
-    this.chaos = 0; this.photo = null; this.mcQ = []; this.said = {};
+    this.chaos = 0; this.photo = null; this.mcQ = []; this.said = {}; this.doorOpen = 0; this.doorBang = false;
+    tts.stop();
   }
 
   // ---- 대본: 시간 t에 따라 신랑신부가 어디서 뭘 하는지 ----
@@ -3744,8 +3509,8 @@ class PigeonGame {
     const walk = (t0, t1, z0, z1) => { const k = clamp((t - t0) / (t1 - t0), 0, 1); return { z: z0 + (z1 - z0) * k, moving: t > t0 && t < t1 }; };
     const o = { x: L, z: 13, y: 0, yaw: Math.PI, walk: 0, ph: t * 5, arms: null };
     const start = who === 'groom' ? PG_T.groom : PG_T.bride;
-    if (t < start) { o.z = 14; return o; }
-    if (t < PG_T.ring) { const w = walk(start, start + 18, 13, -8.2); o.z = w.z; o.walk = w.moving ? 0.6 : 0; if (who === 'bride') o.arms = [null, [-0.9, 0.2]]; if (!w.moving) { o.nod = Math.sin(t * 0.7) * 0.05; } return o; }
+    if (t < start) { o.z = 15.6; return o; }
+    if (t < PG_T.ring) { const w = walk(start, start + 18, 15.6, -8.2); o.z = w.z; o.walk = w.moving ? 0.6 : 0; if (who === 'bride') o.arms = [null, [-0.9, 0.2]]; if (!w.moving) { o.nod = Math.sin(t * 0.7) * 0.05; } return o; }
     if (t < PG_T.cake) {
       o.z = -8.2; o.yaw = who === 'groom' ? -Math.PI / 2 : Math.PI / 2;
       if (who === 'groom' && t > 100 && t < 108) o.arms = [null, [-1.4, 0.1]];
@@ -3770,6 +3535,7 @@ class PigeonGame {
     return o;
   }
   homePos(it, t) {
+    if (it.guest) return [it.guest.seat.x, 1.1, it.guest.seat.z];
     const head = (p) => p.av.meshes[1].position, hand = (p, i) => p.av.meshes[2 + i].position;
     if (it.id === 'wig') { const h = head(this.groom); return [h.x, h.y + 0.04, h.z]; }
     if (it.id === 'ring') { const h = t < 108 ? hand(this.groom, 1) : hand(this.bride, 0); return [h.x, h.y - 0.15, h.z]; }
@@ -3780,6 +3546,7 @@ class PigeonGame {
   }
   available(it, t) {
     if (this.ph !== 'wed') return false;
+    if (it.guest) return t >= PG_T.groom;
     if (it.id === 'wig') return t >= PG_T.groom;
     if (it.id === 'ring') return it.st !== 'home' || (t >= PG_T.ring && t < PG_T.ringEnd);
     if (it.id === 'bq') return t >= PG_T.bride;
@@ -3818,31 +3585,24 @@ class PigeonGame {
   }
   hostScript() {
     const t = this.t, g = this.groom.name, b = this.bride.name, it = (id) => this.items.get(id);
-    const lost = (id) => it(id).st !== 'home';
-    const at = (k, sec, f) => { if (t >= sec && !this.said[k]) { this.said[k] = 1; const s = typeof f === 'function' ? f() : f; if (s) this.say(s, k.startsWith('off') ? '주례' : '사회자'); } };
+    const at = (k, sec, line, who) => { if (t >= sec && !this.said[k]) { this.said[k] = 1; this.say(line, who || '사회자'); } };
     at('a', 1, `지금부터 신랑 ${g} 군과 신부 ${b} 양의 결혼식을 시작하겠습니다.`);
-    at('b', 6, '하객 여러분께서는… 어… 이미 다 앉아 계시네요. 표정이 아주 밝으십니다.');
-    at('c', PG_T.groom, '신랑 입장! 박수로 맞아주세요… 박수… 네, 마음속으로 쳐주시는 걸로 알겠습니다.');
-    at('d', 31, () => (lost('wig') ? '신랑님 오늘 정말 늠름하십니다. 이마가… 어… 시원하시네요.' : '신랑님 오늘 정말 늠름하십니다. 머리숱도… 어… 풍성하시네요.'));
-    at('e', PG_T.bride, '이어서 신부 입장이 있겠습니다!');
-    at('f', 53, () => (lost('bq') ? '신부님 정말 아름답습니다. 부케는… 비둘기분이 들고 계시네요. 네.' : '신부님 정말 아름답습니다. 부케도… 아직 있네요. 다행입니다.'));
-    at('g', PG_T.vows, '주례 선생님의 말씀이 있겠습니다.');
-    at('off1', 62, '에… 결혼이란… 서로를… 에… 아끼고…');
-    at('off2', 72, '비둘기처럼… 어… 다정하게… 저기 저 비둘기들처럼… 에…');
-    at('off3', 84, '에… 이상입니다.');
-    at('h', PG_T.ring, '다음은 반지 교환이 있겠습니다.');
-    at('i', 100, () => (lost('ring') ? '신랑님께서 신부님 손에… 반지가… 없네요. 마음으로 끼워드리겠습니다.' : '신랑님께서 신부님 손에 반지를… 끼워… 드리고 계십니다.'));
-    at('j', PG_T.ringEnd, '두 분의 사랑이 반지처럼 영원하길 바랍니다. 반지가 있다면요.');
-    at('k', PG_T.cake, () => (lost('cake') ? '다음은 케이크 커팅… 케이크가… 이미 떠나셨네요. 빈 접시를 자르겠습니다.' : '다음은 케이크 커팅입니다! 두 분 케이크 앞으로 이동해 주세요.'));
-    at('l', 135, '두 분의 첫 공동 작업입니다. 칼을 같이 잡아주세요.');
-    at('m', 150, '케이크 맛있어 보이네요. 남아 있다면 하객분들께도 나눠드리겠습니다.');
-    at('n', PG_T.bouquet, '이제 부케 던지기 순서입니다!');
-    at('o', 172, () => (it('bq').st !== 'home' ? '부케 없이… 하나, 둘, 셋! 신부님 손을 시원하게 던지셨습니다.' : '하나… 둘… 셋!'));
-    at('p', PG_T.photo, '마지막으로 단체 사진 촬영이 있겠습니다. 다들 앞을 봐주세요.');
-    at('q', 203, '자 다들 웃으세요~ 이미 웃고 계시네요. 표정이 하나같이… 어… 똑같으십니다.');
-    at('r', 209, '하나, 둘…');
-    at('s', PG_T.flash, '찰칵!');
-    at('t', PG_T.flash + 4, () => (this.chaos < 30 ? '아주 평범하고 아름다운 결혼식이었습니다. 비둘기분들 오늘 좀 조용하셨네요.' : this.chaos < 70 ? '다소… 활기찬 결혼식이었습니다. 두 분 축하드립니다…?' : '역사에 남을 결혼식이었습니다. 어… 두 분 정말… 축하드립니다. 네.'));
+    at('c', PG_T.groom, '먼저 신랑 입장이 있겠습니다. 큰 박수로 맞이해 주시기 바랍니다.');
+    at('e', PG_T.bride, '이어서 신부 입장이 있겠습니다. 하객 여러분께서는 박수로 맞이해 주십시오.');
+    at('g', PG_T.vows, '다음은 주례 선생님의 주례사가 있겠습니다.');
+    at('off1', 64, '오늘 두 사람은 많은 분들 앞에서 부부가 되기로 약속했습니다.', '주례');
+    at('off2', 74, '앞으로 서로를 아끼고 존중하며 평생 함께하시기 바랍니다.', '주례');
+    at('off3', 84, '이상으로 주례사를 마치겠습니다.', '주례');
+    at('h', PG_T.ring, '신랑 신부의 예물 교환이 있겠습니다.');
+    at('j', PG_T.ringEnd, '두 분께 축하의 박수 부탁드립니다.');
+    at('k', PG_T.cake, '다음은 케이크 커팅 순서입니다. 신랑 신부께서는 앞으로 나와 주시기 바랍니다.');
+    at('l', 134, '두 분께서는 함께 칼을 잡아 주시기 바랍니다.');
+    at('m', 150, '축하의 박수 부탁드립니다.');
+    at('n', PG_T.bouquet, '신부의 부케 던지기가 있겠습니다.');
+    at('o', 172, '하나, 둘, 셋.');
+    at('p', PG_T.photo, '마지막으로 기념 촬영이 있겠습니다. 하객 여러분께서는 앞으로 나와 주시기 바랍니다.');
+    at('q', 206, '모두 앞을 봐 주세요. 하나, 둘, 셋.');
+    at('t', PG_T.flash + 3, `이것으로 신랑 ${g} 군과 신부 ${b} 양의 결혼식을 모두 마치겠습니다. 감사합니다.`);
     // 부케 던지기: 아무도 안 채갔으면 하객 쪽으로 날아가요
     const bq = it('bq');
     if (t >= PG_T.toss && !this.said.toss) {
@@ -3851,16 +3611,11 @@ class PigeonGame {
     }
   }
   say(s, who = '사회자') { const d = { k: 'mc', s, who }; net.bcast(d); this.showSub(d); }
-  adlib(kind) {
-    if (this.ph !== 'wed' || (this.mcCd[kind] || 0) > this.time) return;
-    this.mcCd[kind] = this.time + 7;
-    const arr = MC[kind]; if (!arr) return;
-    const i = (this.mcIdx[kind] = ((this.mcIdx[kind] ?? -1) + 1) % arr.length);
-    this.say(arr[i]);
-  }
+  doorsOpen() { return this.ph === 'wed' ? this.t >= PG_T.groom : this.ph === 'result' || this.ph === 'end'; }
+  clapping(t) { return this.ph === 'wed' && PG_CLAPS.some(([a, b]) => t >= a && t < b); }
   addChaos(v) { this.chaos = Math.min(100, this.chaos + v); }
   hostItems(dt) {
-    const t = this.t;
+    const t = this.t, D = PG_HALL.door;
     for (const it of this.items.values()) {
       if (it.st === 'nest' || it.st === 'gone') continue;
       it.car = it.car.filter((id) => this.pigs.has(id));
@@ -3869,6 +3624,7 @@ class PigeonGame {
         if (it.car.length >= it.need) it.st = 'carry';
         else if (it.car.length === 0 && it.st === 'grip') it.st = 'home';
       }
+      if (it.st === 'ground' && it.car.length >= it.need) it.st = 'carry';
       if (it.st === 'carry') {
         if (it.car.length < it.need) { if (it.car.length === 0 || it.need > 1) { it.st = 'air'; it.vx = it.vz = 0; it.vy = 0; it.dropBy = it.lastCar; } }
         else {
@@ -3878,36 +3634,61 @@ class PigeonGame {
         }
       }
       if (it.st === 'air') {
+        const oy = it.y, inside = it.z < D;
         it.vy -= 12 * dt; it.x += it.vx * dt; it.y += it.vy * dt; it.z += it.vz * dt;
+        if (inside) { it.x = clamp(it.x, -9.8, 9.8); it.z = clamp(it.z, -11.8, D - 0.1); it.y = Math.min(it.y, 7); }
         // 떨어지다가 사람 머리에 맞으면 (케이크 범벅)
         if (it.vy < 0 && (it.id === 'cake' || it.id.startsWith('sl') || it.id === 'bq')) {
           for (const p of this.people) {
             const h = p.av.meshes[1].position;
             if (Math.hypot(h.x - it.x, h.z - it.z) < 0.5 && it.y < h.y + 0.35 && it.y > h.y - 0.3) {
-              if (it.id === 'bq') { if (it.thrown && p.id.startsWith('g')) { it.st = 'lap'; it.x = h.x; it.y = h.y - 0.45; it.z = h.z + 0.2; this.say('부케는… 하객분께서 받으셨습니다! 끝까지 웃고 계시네요.'); } break; }
+              if (it.id === 'bq') { if (it.thrown && p.id.startsWith('g')) { it.st = 'lap'; it.x = h.x; it.y = h.y - 0.45; it.z = h.z + 0.2; } break; }
               this.splat(p, 'cream');
               const by = (it.dropBy || [])[0];
               if (by && this.sc[by]) { this.sc[by].pts += 2; this.sc[by].thief += 2; }
               this.addChaos(p === this.groom || p === this.bride ? 8 : 3);
-              this.adlib(p === this.groom || p === this.bride ? 'creamC' : 'creamG');
               if (it.id === 'cake') { it.st = 'gone'; this.addChaos(10); } else { it.st = 'ground'; it.y = 0.05; }
               break;
             }
           }
         }
         if (it.st === 'air') {
-          const floor = Math.abs(it.x - 9) < 0.6 && Math.abs(it.z - 1.5) < 3.5 ? 0.92 : Math.hypot(it.x - 4, it.z + 7.6) < 0.75 ? 0.92 : 0.05;
-          if (it.y <= floor) { it.y = floor; it.st = 'ground'; if (it.id === 'cake') { it.st = 'gone'; this.addChaos(12); this.say('케이크가… 바닥에서 쉬고 계십니다. 네.'); } }
+          // 하객은 몸이 걸치기만 해도 샹들리에·테이블에 올라앉아요
+          const off = it.guest ? 0.63 : 0, sf = pgSurface(it.x, it.z, oy - off, it.guest ? 0.9 : 0.05);
+          if (it.y - off <= sf.top) {
+            it.y = sf.top + off; it.st = 'ground'; it.vx = it.vz = 0;
+            if (it.guest) this.guestLand(it, sf.kind);
+            else if (it.id === 'cake') { it.st = 'gone'; this.addChaos(12); }
+          }
         }
       }
     }
   }
+  guestLand(it, kind) {
+    const g = it.guest, by = (it.dropBy || [])[0];
+    if (kind === 'nest') { it.car = it.dropBy || []; this.deliver(it); return; }
+    if (kind === 'floor') {
+      const st = this.seats.find((q) => Math.hypot(q.x - it.x, q.z - it.z) < 0.45);
+      if (st) { kind = 'seat'; it.x = st.x; it.z = st.z; it.y = 1.1; if (st === g.seat) return; }
+    }
+    if (Math.hypot(it.x - g.seat.x, it.z - g.seat.z) < 1.0 && kind === 'floor') return;
+    const [where, pts] = PG_PLACE[kind] || PG_PLACE.floor;
+    if (by && this.sc[by]) { this.sc[by].pts += pts; this.sc[by].kid++; }
+    this.addChaos(pts * 0.9);
+    const d = { k: 'gland', by: by || '', where, pts }; net.bcast(d); this.onGland(d);
+  }
+  onGland(d) {
+    const who = d.by ? this.nameOf(d.by) : '누군가';
+    if (d.pts >= 3) toast(`${who}님이 하객을 ${d.where}에 올려놨어요 +${d.pts}`);
+    tone(220, 0.12, 'sine', 0.08, 0.6);
+  }
   deliver(it) {
-    it.st = 'nest'; it.car.forEach((id) => { const s = this.sc[id]; if (s) { s.pts += it.pts; s.thief += it.pts; if (it.need > 1) s.team++; } });
+    it.st = 'nest';
+    it.car.forEach((id) => { const s = this.sc[id]; if (s) { s.pts += it.pts; if (it.guest) s.kid++; else s.thief += it.pts; if (it.need > 1) s.team++; } });
     it.car = [];
-    const k = it.id.startsWith('sl') ? 'sl' : it.id.startsWith('f') ? 'f' : it.id;
-    this.addChaos({ wig: 15, ring: 15, bq: 12, cake: 20, sl: 3, f: 1 }[k] || 1);
-    this.adlib(k); net.bcast({ k: 'deliv', id: it.id }); this.onDeliver(it.id);
+    const k = it.guest ? 'gu' : it.id.startsWith('sl') ? 'sl' : it.id.startsWith('f') ? 'f' : it.id;
+    this.addChaos({ wig: 15, ring: 15, bq: 12, cake: 20, sl: 3, f: 1, gu: 8 }[k] || 1);
+    net.bcast({ k: 'deliv', id: it.id }); this.onDeliver(it.id);
   }
   splat(p, kind, off) {
     off = off || [rand(-0.12, 0.12), 0.22 + Math.random() * 0.05, rand(-0.12, 0.12)];
@@ -3924,13 +3705,12 @@ class PigeonGame {
       const s = this.sc[by]; const cpl = hit === this.groom || hit === this.bride;
       if (s) { s.pts += cpl ? 2 : 1; s.poops++; }
       this.addChaos(cpl ? 2 : 0.6);
-      this.adlib(cpl ? 'poopC' : 'poopG');
     }
   }
   hostGrab(by, id, drop) {
     const it = this.items.get(id), pg = this.pigs.get(by);
     if (!it || !pg || this.ph !== 'wed') return;
-    if (drop) { it.car = it.car.filter((x) => x !== by); if (!it.car.length && it.st === 'carry') { it.st = 'air'; it.vx = it.vy = it.vz = 0; it.dropBy = [by]; } return; }
+    if (drop) { it.car = it.car.filter((x) => x !== by); if (!it.car.length && it.st === 'carry') { const pg2 = this.pigs.get(by); it.st = 'air'; it.vx = pg2 ? pg2.vx * 0.5 : 0; it.vz = pg2 ? pg2.vz * 0.5 : 0; it.vy = 0; it.dropBy = [by]; } return; }
     if (!this.available(it, this.t) || it.st === 'nest' || it.st === 'gone' || it.car.includes(by)) return;
     for (const o of this.items.values()) if (o.car.includes(by)) return;
     if (Math.hypot(pg.x - it.x, pg.y - it.y, pg.z - it.z) > 2.0) return;
@@ -3940,7 +3720,7 @@ class PigeonGame {
     if (it.need > 1 && it.st === 'home') it.st = 'grip';
     if (it.need === 1) { it.st = 'carry'; if (it.id === 'wig' && !this.said.wigOff) { this.said.wigOff = 1; } }
     if (it.st === 'carry' || it.car.length >= it.need) {
-      if (['wig', 'ring', 'bq', 'cake'].includes(it.id) && !it.announced) { it.announced = 1; this.addChaos(5); this.adlib(it.id); }
+      if (['wig', 'ring', 'bq', 'cake'].includes(it.id) && !it.announced) { it.announced = 1; this.addChaos(5); }
     }
   }
 
@@ -3951,7 +3731,7 @@ class PigeonGame {
     const m = makePigeon(r.color); this.scene.add(m);
     const sk = skinOf(r.id); if (sk && sk.hat) m.userData.hat.add(itemMesh('hat', sk.hat));
     const label = makeLabel(r.name, r.color); label.scale.set(1.1, 0.28, 1); this.scene.add(label);
-    const p = { id: r.id, name: r.name, bot: !!r.bot, local, m, label, x: rand(-14, -8), y: 0, z: rand(10, 15), yaw: 0, vx: 0, vy: 0, vz: 0, gd: true, flap: 0, dive: 0, tx: 0, ty: 0, tz: 0, tyaw: 0 };
+    const p = { id: r.id, name: r.name, bot: !!r.bot, local, m, label, x: rand(-4, 4), y: 0, z: rand(16, 20), yaw: Math.PI, vx: 0, vy: 0, vz: 0, gd: true, flap: 0, dive: 0, tx: 0, ty: 0, tz: 0, tyaw: 0 };
     this.pigs.set(r.id, p); return p;
   }
   onSkin(id) {
@@ -3988,6 +3768,7 @@ class PigeonGame {
       case 'splat': if (from === net.hostId && !host) this.onSplat(d); return;
       case 'poopfx': if (from === net.hostId && !host) this.onPoop(d); return;
       case 'deliv': if (from === net.hostId && !host) this.onDeliver(d.id); return;
+      case 'gland': if (from === net.hostId && !host) this.onGland(d); return;
     }
     if (!host) return;
     const who = d.by && d.by.startsWith('bot_') && from === myId ? d.by : from;
@@ -3997,8 +3778,8 @@ class PigeonGame {
   showSub(d) {
     this.el.who.textContent = d.who || '사회자'; this.el.line.textContent = d.s;
     this.el.sub.classList.remove('hidden', 'pop'); void this.el.sub.offsetWidth; this.el.sub.classList.add('pop');
-    clearTimeout(this.subT); this.subT = setTimeout(() => this.el.sub.classList.add('hidden'), 4200);
-    tone(600 + Math.random() * 200, 0.04, 'triangle', 0.05);
+    clearTimeout(this.subT); this.subT = setTimeout(() => this.el.sub.classList.add('hidden'), Math.max(4200, d.s.length * 180));
+    tts.say(d.s, d.who === '주례' ? 0.75 : 1);
   }
   onSplat(d) {
     const p = this.people.find((x) => x.id === d.who); if (!p || p.decals > 9) return;
@@ -4022,7 +3803,7 @@ class PigeonGame {
   }
   onDeliver(id) {
     const it = this.items.get(id); SFX.lock();
-    toast(`둥지에 ${it ? it.n : '물건'} 도착!`);
+    toast(it && it.guest ? '하객 한 분이 둥지로 납치됐어요!' : `둥지에 ${it ? it.n : '물건'} 도착!`);
   }
 
   // ---- 단계 화면 ----
@@ -4030,21 +3811,22 @@ class PigeonGame {
     const role = this.role();
     gameEl.classList.toggle('couple', role !== 'pigeon' && (ph === 'wed' || ph === 'intro'));
     this.el.keys.innerHTML = role === 'pigeon'
-      ? '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Space</kbd> 날갯짓 &nbsp; <kbd>Shift</kbd> 급강하 &nbsp; <kbd>E</kbd>/<kbd>클릭</kbd> 물기·놓기 &nbsp; <kbd>F</kbd> 새똥'
+      ? '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Space</kbd> 날갯짓 &nbsp; <kbd>Shift</kbd> 급강하 &nbsp; <kbd>E</kbd>/<kbd>클릭</kbd> 물기·놓기 &nbsp; <kbd>F</kbd> 새똥 &nbsp; <kbd>Tab</kbd> 조작법'
       : '마우스로 고개를 돌려 구경하세요. 조작은 없어요.';
     if (ph === 'intro') {
       this.setCouple(); this.resetRound();
       const me = this.pigs.get(myId);
-      for (const p of this.pigs.values()) if (p.local) { p.x = rand(-14, -9); p.y = 0; p.z = rand(9, 15); p.vx = p.vy = p.vz = 0; }
+      for (const p of this.pigs.values()) if (p.local) { p.x = rand(-4, 4); p.y = 0; p.z = rand(16, 20); p.vx = p.vy = p.vz = 0; p.yaw = Math.PI; }
       this.camYaw = 0; this.camPitch = 0.25;
       const g = this.groom.name, b = this.bride.name;
       this.panel(role === 'pigeon'
         ? `<h2>당신은 비둘기예요</h2><p>라운드 ${this.round}/${this.nr} · 신랑 ${esc(g)}, 신부 ${esc(b)}의 결혼식</p>
-           <p>가발, 반지, 부케, 케이크, 뷔페 음식을 물어서 나무 위 <b>둥지</b>로 가져가요. 케이크 통째로는 비둘기 3마리가 같이 물어야 떠요.</p>
-           <p>새똥으로 하객과 신랑신부를 꾸며줘도 돼요. 아무도 막지 않아요.</p>`
+           <p>예식장 뒷문 밖에서 기다리다가 <b>문이 열리면</b> 쳐들어가요.</p>
+           <p><b>하객</b>을 물고 날아가서 샹들리에, 단상, 테이블 위 아무 데나 내려놓아요. 높고 황당한 곳일수록 점수가 커요.</p>
+           <p>가발, 반지, 부케, 케이크는 벽 선반 위 <b>둥지</b>로. 새똥도 마음껏. 결혼식은 무슨 일이 있어도 계속돼요.</p>`
         : `<h2>당신은 ${role === 'groom' ? '신랑' : '신부'}예요</h2><p>라운드 ${this.round}/${this.nr}</p>
-           <p>결혼식은 알아서 진행돼요. 조작은 없어요. 고개를 돌려서 비둘기들이 결혼식을 망치는 걸 평화롭게 구경하세요.</p>
-           <p>마지막에 단체 사진을 찍어요.</p>`);
+           <p>결혼식은 순서대로 알아서 진행돼요. 조작은 없어요. 고개를 돌려서 비둘기들이 예식장을 엉망으로 만드는 걸 조용히 구경하세요.</p>
+           <p>마지막에 기념 촬영을 해요.</p>`);
       music.stop();
     }
     if (ph === 'wed') { this.hidePanel(); if (!isTouch && document.pointerLockElement !== this.cv) this.el.lock.classList.remove('hidden'); }
@@ -4062,6 +3844,8 @@ class PigeonGame {
       const st = Object.entries(this.sc), top = (f) => st.reduce((a, b) => (f(b[1]) > (a ? f(a[1]) : 0) ? b : a), null);
       const win = st.slice().sort((a, b) => b[1].pts - a[1].pts)[0], aw = [];
       const a1 = top((s) => s.thief), a2 = top((s) => s.poops), a3 = top((s) => s.team), a4 = top((s) => s.dmg);
+      const a5 = top((s) => s.kid);
+      if (a5) aw.push(`<li><b>하객 납치왕</b>${esc(a5[1].name)} (${a5[1].kid}명 옮김)</li>`);
       if (a1) aw.push(`<li><b>도둑왕</b>${esc(a1[1].name)} (${a1[1].thief}점어치 훔침)</li>`);
       if (a2) aw.push(`<li><b>새똥 명사수</b>${esc(a2[1].name)} (${a2[1].poops}번 명중)</li>`);
       if (a3) aw.push(`<li><b>팀워크상</b>${esc(a3[1].name)} (케이크 통째로 ${a3[1].team}번)</li>`);
@@ -4095,25 +3879,38 @@ class PigeonGame {
     const b = this.bot[p.id] || (this.bot[p.id] = { t: 0, poopT: rand(3, 6) });
     const out = { x: 0, z: 0, flap: false, dive: false, grab: false, poop: false };
     if (this.ph !== 'wed') return out;
+    const D = PG_HALL.door;
     const mine = [...this.items.values()].find((i) => i.car.includes(p.id));
     let tx, ty, tz;
-    if (mine && mine.st === 'carry') { tx = PG_NEST.x; ty = PG_NEST.y + 0.6; tz = PG_NEST.z; }
+    if (!this.doorsOpen()) { tx = Math.sin(this.time * 0.4 + p.x) * 3; ty = 1.2; tz = D + 2.5; }
+    else if (mine && mine.st === 'carry' && mine.guest) {
+      // 하객은 황당한 곳에 내려놓기
+      if (!b.drop) { const c = PG_CHAND[Math.floor(Math.random() * PG_CHAND.length)]; b.drop = [[c[0], 6.3, c[1]], [c[0], 6.3, c[1]], [rand(-4, 4), 2.2, -10.5], [8, 2.6, rand(-1, 4)], [PG_NEST.x, PG_NEST.y + 1.2, PG_NEST.z]][Math.floor(Math.random() * 5)]; }
+      [tx, ty, tz] = b.drop;
+      if (Math.hypot(tx - p.x, tz - p.z) < 0.45 && Math.abs(p.y - ty) < 0.9) { out.grab = true; b.drop = null; b.goal = null; }
+    } else if (mine && mine.st === 'carry') { tx = PG_NEST.x; ty = PG_NEST.y + 0.6; tz = PG_NEST.z; }
     else if (mine) { tx = mine.x; ty = mine.y + 0.4; tz = mine.z; }
     else {
+      b.drop = null;
       if (!b.goal || !this.available(b.goal, this.t) || ['nest', 'gone', 'lap'].includes(b.goal.st) || (b.goal.need === 1 && b.goal.car.length) || b.t <= 0) {
         b.t = rand(8, 16);
         const cand = [...this.items.values()].filter((i) => this.available(i, this.t) && !['nest', 'gone', 'lap'].includes(i.st) && i.car.length < i.need);
-        const pref = cand.filter((i) => i.need > 1 || ['wig', 'ring', 'bq'].includes(i.id));
-        const pool = pref.length && Math.random() < 0.7 ? pref : cand;
+        const guests = cand.filter((i) => i.guest), pref = cand.filter((i) => i.need > 1 || ['wig', 'ring', 'bq'].includes(i.id));
+        const r = Math.random(), pool = guests.length && r < 0.55 ? guests : pref.length && r < 0.8 ? pref : cand;
         b.goal = pool[Math.floor(Math.random() * pool.length)] || null;
       }
       b.t -= dt;
       if (b.goal) { tx = b.goal.x; ty = b.goal.y + 0.35; tz = b.goal.z; if (Math.hypot(tx - p.x, ty - 0.35 - p.y, tz - p.z) < 1.2) out.grab = true; }
       else { tx = Math.sin(this.time * 0.3 + p.x) * 5; ty = 4; tz = 2; }
     }
+    // 안팎을 오갈 땐 문으로
+    if ((p.z < D) !== (tz < D) && this.doorsOpen()) {
+      const near = Math.hypot(p.x, p.z - D) < 1.3 && p.y < 3;
+      tx = 0; ty = 1.5; tz = near ? (p.z < D ? D + 1.5 : D - 1.5) : (p.z < D ? D - 0.9 : D + 0.9);
+    }
     const dx = tx - p.x, dz = tz - p.z, d = Math.hypot(dx, dz);
     if (d > 0.3) { out.x = dx / d; out.z = dz / d; }
-    const want = d > 4 ? Math.max(ty, 3.5) : ty;
+    const want = d > 4 ? clamp(Math.max(ty, 3), 0, p.z < D ? 6.2 : 8) : ty;
     if (p.y < want - 0.2 && p.vy < 2) out.flap = true;
     if (p.y > want + 1.2 && d < 2) out.dive = true;
     // 사람 위를 지날 때 가끔 새똥
@@ -4149,8 +3946,9 @@ class PigeonGame {
           else { const n = this.nearItem(me); if (n) net.toHost({ k: 'grab', id: n.id }); }
         }
         if (poop && (this.poopCd || 0) <= 0) { this.poopCd = 1.1; net.toHost({ k: 'poop', x: me.x, y: me.y + 0.1, z: me.z }); }
-        const n = carrying ? null : this.nearItem(me);
-        const txt = carrying ? (carrying.st === 'grip' ? `${carrying.n} 붙잡는 중 (${carrying.car.length}/${carrying.need}마리)` : `${carrying.n} 물고 있어요 · 둥지로!`) : n ? `${isTouch ? '' : '<kbd>E</kbd> '}${n.n} 물기 (${n.pts}점${n.need > 1 ? `, ${n.need}마리 필요` : ''})` : '';
+        const n = carrying ? null : this.nearItem(me), kE = isTouch ? '' : '<kbd>E</kbd> ';
+        const wait = !this.doorsOpen() ? `문이 열릴 때까지 기다려요 (${Math.max(0, Math.ceil(PG_T.groom - this.t))}초)` : '';
+        const txt = wait || (carrying ? (carrying.st === 'grip' ? `${carrying.n} 붙잡는 중 (${carrying.car.length}/${carrying.need}마리)` : carrying.guest ? `하객을 물고 있어요 · ${kE}아무 데나 내려놓기 (샹들리에 위가 최고점)` : `${carrying.n} 물고 있어요 · 둥지로!`) : n ? (n.guest ? `${kE}하객 물기` : `${kE}${n.n} 물기 (${n.pts}점${n.need > 1 ? `, ${n.need}마리 필요` : ''})`) : '');
         this.el.prompt.classList.toggle('hidden', !txt); if (txt && this.el.prompt.innerHTML !== txt) this.el.prompt.innerHTML = txt;
       } else this.el.prompt.classList.add('hidden');
     } else this.el.prompt.classList.add('hidden');
@@ -4182,21 +3980,29 @@ class PigeonGame {
   }
   fly(p, inp, dt) {
     p.flapCd = Math.max(0, (p.flapCd || 0) - dt); p.flapA = Math.max(0, (p.flapA || 0) - dt);
-    const air = p.y > 0.02;
-    const sp = air ? (p.dive > 0 ? 11 : 7) : 2.4;
+    const D = PG_HALL.door, oy = p.y, oz = p.z;
+    const fl0 = pgSurface(p.x, p.z, oy).top, air = p.y > fl0 + 0.02;
+    const heavy = [...this.items.values()].some((i) => i.guest && i.car.includes(p.id));
+    const sp = (air ? (p.dive > 0 ? 11 : 7) : 2.4) * (heavy ? 0.75 : 1);
     const k = 1 - Math.exp(-dt * (air ? 3 : 10));
     p.vx += (inp.x * sp - p.vx) * k; p.vz += (inp.z * sp - p.vz) * k;
-    if (inp.flap) { p.vy = Math.min(p.vy + 4.4, 6.5); p.flapCd = 0.2; p.flapA = 0.3; tone(160 + Math.random() * 40, 0.05, 'triangle', 0.05); }
+    if (inp.flap) { p.vy = Math.min(p.vy + (heavy ? 3.6 : 4.4), 6.5); p.flapCd = 0.2; p.flapA = 0.3; tone(160 + Math.random() * 40, 0.05, 'triangle', 0.03); }
     if (inp.dive && air) { p.dive = 0.6; p.vy = -9; }
     p.dive = Math.max(0, p.dive - dt);
     p.vy -= (air && Math.hypot(p.vx, p.vz) > 2 && p.dive <= 0 ? 5.5 : 10) * dt;
     if (p.vy < -12) p.vy = -12;
     p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
-    // 둥지 위에 앉기
-    if (Math.hypot(p.x - PG_NEST.x, p.z - PG_NEST.z) < 1 && p.y < PG_NEST.y && p.y > PG_NEST.y - 0.5 && p.vy <= 0) { p.y = PG_NEST.y; p.vy = 0; }
-    if (p.y <= 0) { p.y = 0; p.vy = 0; }
-    p.y = Math.min(p.y, 16); p.x = clamp(p.x, -28, 28); p.z = clamp(p.z, -24, 24);
-    p.gd = p.y <= 0.02 || p.y === PG_NEST.y;
+    // 뒷문: 열려 있을 때 문 구멍으로만 드나들 수 있어요
+    const inDoor = this.doorsOpen() && Math.abs(p.x) < 1.75 && p.y < 3.35;
+    if ((oz < D) !== (p.z < D) && !inDoor) { p.z = oz < D ? D - 0.16 : D + 0.16; p.vz = 0; }
+    if (p.z < D) {
+      p.x = clamp(p.x, -PG_HALL.x, PG_HALL.x); p.z = Math.max(p.z, PG_HALL.z0);
+      if (p.y > PG_HALL.ceil) { p.y = PG_HALL.ceil; p.vy = Math.min(p.vy, 0); }
+    } else { p.x = clamp(p.x, -9.7, 9.7); p.z = Math.min(p.z, 26); p.y = Math.min(p.y, 12); }
+    // 바닥, 테이블, 샹들리에, 둥지 위에 앉기
+    const fl = pgSurface(p.x, p.z, oy).top;
+    if (p.y <= fl && p.vy <= 0) { p.y = fl; p.vy = 0; }
+    p.gd = p.y <= fl + 0.02;
     if (Math.hypot(p.vx, p.vz) > 0.3) { let d = Math.atan2(p.vx, p.vz) - p.yaw; d = Math.atan2(Math.sin(d), Math.cos(d)); p.yaw += d * Math.min(1, dt * 8); }
     // 케이크 통째로 붙잡고 있으면 서로 떨어지지 않게
     const it = [...this.items.values()].find((i) => i.car.includes(p.id) && i.need > 1);
@@ -4209,13 +4015,31 @@ class PigeonGame {
       poseHuman(p.av, o); p.av.setHurt(p.hurt > 0);
       if (who === 'groom' && p.cos) p.cos.wig.visible = this.items.get('wig').st === 'home';
     }
-    poseHuman(this.off.av, { x: t >= PG_T.photo ? -2.6 : 0, y: 0, z: t >= PG_T.photo ? -9.0 : -9.7, yaw: 0, nod: Math.sin(this.time * 2) * 0.08, arms: t > 60 && t < 90 ? [[-0.6 + Math.sin(this.time * 3) * 0.3, 0.2], null] : null });
+    poseHuman(this.off.av, { x: t >= PG_T.photo ? -2.6 : 0, y: 0.4, z: t >= PG_T.photo ? -9.6 : -9.7, yaw: 0, nod: Math.sin(this.time * 2) * 0.08, arms: t > 60 && t < 90 ? [[-0.6 + Math.sin(this.time * 3) * 0.3, 0.2], null] : null });
     poseHuman(this.mc.av, { x: -3.3, y: 0, z: -7.95, yaw: 0.6, arms: [null, [-1.6, 0.1]], nod: Math.sin(this.time * 4) * 0.05 });
-    for (const g of this.guests) { g.hurt = Math.max(0, g.hurt - 0.016); poseHuman(g.av, { x: g.seat.x, y: 0, z: g.seat.z, yaw: Math.PI, sit: true, arms: [[-0.7, 0.1], [-0.7, 0.1]], nod: Math.sin(this.time * 0.8 + g.seat.x) * 0.03 }); g.av.setHurt(false); }
+    const clap = this.clapping(t), cr = -0.1 + Math.sin(this.time * 19) * 0.22;
+    for (const g of this.guests) {
+      g.hurt = Math.max(0, g.hurt - 0.016);
+      const it = g.item, st = it.st, x = it.rx ?? it.x, y = it.ry ?? it.y, z = it.rz ?? it.z;
+      const nod = Math.sin(this.time * 0.8 + g.gi) * 0.03;
+      const arms = clap ? [[-1.25, cr], [-1.25, cr]] : null;
+      if (st === 'home') poseHuman(g.av, { x: g.seat.x, y: 0, z: g.seat.z, yaw: Math.PI, sit: true, arms: arms || [[-0.7, 0.1], [-0.7, 0.1]], nod });
+      else if (st === 'carry' || st === 'grip') poseHuman(g.av, { x, y: y - 1.15, z, yaw: Math.PI, arms: arms || [[0.1, 0.25], [0.1, 0.25]], walk: 0.25, ph: this.time * 3 + g.gi, roll: Math.sin(this.time * 2.3 + g.gi) * 0.12, nod });
+      else if (st === 'air') poseHuman(g.av, { x, y: y - 1.1, z, yaw: Math.PI, arms: [[-2.9, 0.3], [-2.9, 0.3]], nod });
+      else poseHuman(g.av, { x, y: y - 1.1, z, yaw: Math.PI, sit: true, arms: arms || [[-0.7, 0.1], [-0.7, 0.1]], nod });
+      g.av.setHurt(false);
+    }
+    if (clap && Math.random() < 0.3) kNoise(Math.random() * 0.05, 0.03, 0.05, rand(1800, 3200), 'bandpass');
   }
   render(dt) {
     const t = this.ph === 'wed' ? this.t : this.ph === 'result' || this.ph === 'end' ? PG_T.end : 0;
     this.posePeople(t);
+    // 뒷문이 벌컥 열려요
+    const dOpen = this.doorsOpen() ? 1 : 0;
+    if (dOpen && !this.doorBang && this.ph === 'wed') { this.doorBang = true; tone(80, 0.3, 'sine', 0.3, 0.6); kNoise(0, 0.2, 0.15, 400, 'lowpass'); }
+    if (!dOpen) this.doorBang = false;
+    this.doorOpen += (dOpen - this.doorOpen) * Math.min(1, dt * (dOpen ? 7 : 3));
+    for (const dr of this.doors) dr.rotation.y = -dr.userData.sd * 1.55 * this.doorOpen;
     const a = 1 - Math.exp(-dt * 12);
     // 비둘기
     for (const p of this.pigs.values()) {
@@ -4238,8 +4062,8 @@ class PigeonGame {
       if (it.car.length === 1 && it.car[0] === myId) { const me = this.pigs.get(myId); x = me.x + Math.sin(me.yaw) * 0.35; y = me.y + 0.25; z = me.z + Math.cos(me.yaw) * 0.35; }
       const vis = it.st !== 'gone' && !(it.id === 'wig' && it.st === 'home') && !(it.id === 'ring' && it.st === 'home' && (t < PG_T.ring - 4));
       it.mesh.visible = vis && !(it.st === 'nest' && it.need > 1 && false);
-      if (it.st === 'nest') { const k = PG_ITEMS.findIndex((q) => q.id === it.id); x = PG_NEST.x + Math.cos(k) * 0.4; y = PG_NEST.y + 0.05; z = PG_NEST.z + Math.sin(k) * 0.4; }
-      it.mesh.position.set(x, y, z);
+      if (it.st === 'nest') { const k = it.guest ? 30 + it.guest.gi * 1.7 : PG_ITEMS.findIndex((q) => q.id === it.id); const r = it.guest ? 0.25 : 0.4; x = PG_NEST.x + Math.cos(k) * r; y = PG_NEST.y + (it.guest ? 0.63 : 0.05); z = PG_NEST.z + Math.sin(k) * r; }
+      it.mesh.position.set(x, y, z); it.rx = x; it.ry = y; it.rz = z;
       if (it.id === 'ring' && vis) it.mesh.rotation.y += dt * 3;
       if (it.id === 'cake' && it.st !== 'home' && it.st !== 'grip') it.mesh.rotation.z = it.st === 'ground' ? 1.2 : Math.sin(this.time * 6) * 0.1;
     }
@@ -4264,11 +4088,14 @@ class PigeonGame {
     const off = new V3(Math.sin(this.camYaw) * cp * dist, Math.sin(this.camPitch) * dist + 0.4, Math.cos(this.camYaw) * cp * dist);
     if (role !== 'pigeon') off.add(new V3(Math.cos(this.camYaw) * 0.45, 0, -Math.sin(this.camYaw) * 0.45));
     this.cam.position.copy(focus).add(off); if (this.cam.position.y < 0.2) this.cam.position.y = 0.2;
+    const cp2 = this.cam.position, D = PG_HALL.door;
+    if (focus.z < D) { cp2.x = clamp(cp2.x, -9.85, 9.85); cp2.z = clamp(cp2.z, -11.85, D - 0.12); cp2.y = clamp(cp2.y, 0.2, 7.05); }
+    else cp2.z = Math.max(cp2.z, D + 0.4);
     this.cam.lookAt(focus.x + (role !== 'pigeon' ? Math.cos(this.camYaw) * 0.45 : 0), focus.y, focus.z + (role !== 'pigeon' ? -Math.sin(this.camYaw) * 0.45 : 0));
     this.nestRing.material.opacity = 0.5 + Math.abs(Math.sin(this.time * 3)) * 0.4;
     // 위쪽 정보
     this.el.bar.style.width = this.chaos + '%'; this.el.pct.textContent = Math.round(this.chaos) + '%';
-    const step = !this.ph || this.ph === 'intro' ? '곧 시작' : this.ph !== 'wed' ? '끝' : t < PG_T.groom ? '하객 입장' : t < PG_T.vows ? '신랑 신부 입장' : t < PG_T.ring ? '주례 말씀' : t < PG_T.cake ? '반지 교환' : t < PG_T.bouquet ? '케이크 커팅' : t < PG_T.photo ? '부케 던지기' : '단체 사진';
+    const step = !this.ph || this.ph === 'intro' ? '곧 시작' : this.ph !== 'wed' ? '끝' : t < PG_T.groom ? '개식' : t < PG_T.vows ? '신랑 신부 입장' : t < PG_T.ring ? '주례 말씀' : t < PG_T.cake ? '반지 교환' : t < PG_T.bouquet ? '케이크 커팅' : t < PG_T.photo ? '부케 던지기' : '단체 사진';
     const chips = [`<span class="chip">라운드 ${this.round || 1}/${this.nr}</span>`, `<span class="chip ev">${step}</span>`, `<span class="chip">${role === 'pigeon' ? '비둘기' : role === 'groom' ? '신랑' : '신부'}</span>`];
     if (this.sc[myId] && role === 'pigeon') chips.push(`<span class="chip">내 점수 ${this.sc[myId].pts}</span>`);
     const html = chips.join(''); if (html !== this.chipsHTML) { this.el.chips.innerHTML = html; this.chipsHTML = html; }
@@ -4389,7 +4216,23 @@ const CARDS = {
   lyric: { ico: '✏️', name: '가사 바꿔치기', fx: '누군가 가사를 바꿨어요!', dur: 3 },
   tamb: { ico: '🥁', name: '탬버린 폭주', fx: '탬버린 폭주!', dur: 6 },
   flip: { ico: '🌀', name: '화면 뒤집기', fx: '화면이 뒤집혔어요!', dur: 5 },
+  genre: { ico: '🎸', name: '장르 변경', fx: '반주 장르가 바뀌었어요!', dur: 9 },
 };
+const GENRES = { trot: '반주가 갑자기 트로트로 바뀌었어요! 쿵짝쿵짝', metal: '반주가 갑자기 메탈로 바뀌었어요! 🤘' };
+let DIST = null;
+function distTone(freq, dur, gain, when) {
+  if (!AC) return;
+  if (!DIST) {
+    const ws = AC.createWaveShaper(), n = 1024, c = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const x = i * 2 / n - 1; c[i] = Math.tanh(x * 9); }
+    ws.curve = c; const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3200;
+    const g = AC.createGain(); g.gain.value = 0.22; ws.connect(lp); lp.connect(g); g.connect(master); DIST = ws;
+  }
+  const t = AC.currentTime + when;
+  const o = AC.createOscillator(), g = AC.createGain(); o.type = 'sawtooth'; o.frequency.value = freq;
+  g.gain.setValueAtTime(gain * sfxVol(), t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(DIST); o.start(t); o.stop(t + dur + 0.02);
+}
 const BOT_LYRICS = ['배고파서 노래 못 하겠다', '의자 내놔', '라면 먹고 싶다', '이 노래 누가 골랐어', '나는 사실 고양이다', '박자 놓쳤다 망했다'];
 const aNow = () => (AC ? AC.currentTime : performance.now() / 1000);
 let NOISE = null;
@@ -4417,14 +4260,14 @@ class KaraokeGame {
 
     const w = this.wrap = document.createElement('div'); w.id = 'kara';
     w.innerHTML = `<canvas></canvas>
-      <div class="k-tools"><span class="mic hidden" id="kMic"></span></div>
+      <div class="k-tools"><span class="mic hidden" id="kMic"></span><span class="mic on hidden" id="kLive">🔊 생목소리로 듣는 중</span></div>
       <div class="tray hidden" id="kTray"></div>
       <div class="lyric-in hidden" id="kLyric"><input class="field" maxlength="20" placeholder="바꿀 가사 (20자까지)"><button class="btn small pop">바꾸기</button><button class="btn small plain">취소</button></div>
       <div class="k-hint" id="kHint"></div>
       <div class="overlay hidden" id="kOv"><div class="panel" id="kPanel"></div></div>`;
     gameEl.appendChild(w);
     this.cv = w.querySelector('canvas'); this.cx = this.cv.getContext('2d');
-    this.el = { mic: w.querySelector('#kMic'), tray: w.querySelector('#kTray'), lyr: w.querySelector('#kLyric'), hint: w.querySelector('#kHint'), ov: w.querySelector('#kOv'), panel: w.querySelector('#kPanel') };
+    this.el = { live: w.querySelector('#kLive'), mic: w.querySelector('#kMic'), tray: w.querySelector('#kTray'), lyr: w.querySelector('#kLyric'), hint: w.querySelector('#kHint'), ov: w.querySelector('#kOv'), panel: w.querySelector('#kPanel') };
     const li = this.el.lyr.querySelector('input');
     const [okB, noB] = this.el.lyr.querySelectorAll('button');
     okB.onclick = () => { const t = li.value.trim(); if (t) { this.useCard('lyric', t); } this.closeLyric(); };
@@ -4441,6 +4284,19 @@ class KaraokeGame {
     this.sched = setInterval(() => this.schedule(), 25);
     if (isHost() && !late) { this.order = shuffle(roster.map((r) => r.id)); this.setPhase('intro', 5); }
   }
+  help() {
+    if (this.singer === myId) return { title: '노래방 망치기', role: '지금 역할: 노래하는 사람', rows: [
+      ['마이크', '노란 막대 높이에 맞춰 부르면 점수가 올라요 (옥타브는 상관없어요)'],
+      ['손가락 모드', '마이크가 없으면 화면을 누른 채 위아래로 움직여 음을 내요'],
+      ['방송', '내 목소리와 반주가 방 사람 모두에게 실시간으로 들려요'],
+      ['끝나고', '어떤 방해를 누가 했는지 골라서 맞히면 +20점']], tip: '이어폰을 끼면 음정이 훨씬 잘 잡혀요.' };
+    return { title: '노래방 망치기', role: '지금 역할: 방해꾼', rows: [
+      ['카드 클릭', '방해 카드 쓰기 (한 사람당 2장)'],
+      [`${CARDS.key.ico} ${CARDS.key.name}`, '반주가 3키 올라가요'], [`${CARDS.tempo.ico} ${CARDS.tempo.name}`, '박자가 빨라져요'],
+      [`${CARDS.genre.ico} ${CARDS.genre.name}`, '반주가 트로트나 메탈로 바뀌어요'], [`${CARDS.lyric.ico} ${CARDS.lyric.name}`, '다음 줄 가사를 내가 쓴 말로 바꿔요'],
+      [`${CARDS.tamb.ico} ${CARDS.tamb.name}`, '탬버린이 미친 듯이 울려요'], [`${CARDS.flip.ico} ${CARDS.flip.name}`, '노래하는 사람 화면이 뒤집혀요']],
+      tip: '들키지 않으면 +20점, 들키면 -10점이에요.' };
+  }
   isBot(id) { return !!id && id.startsWith('bot_'); }
   nameOf(id) { return (this.scores[id] || net.players.find((p) => p.id === id) || { name: '?' }).name; }
   colorOf(id) { return (this.scores[id] || net.players.find((p) => p.id === id) || { color: '#fff' }).color; }
@@ -4448,7 +4304,7 @@ class KaraokeGame {
   rosterInfo() { return this.roster; }
   destroy() {
     this.dead = true; cancelAnimationFrame(this.raf); clearInterval(this.sched);
-    this.voiceStop();
+    this.voiceStop(); this.rtcStop();
     if (this.mic) { this.mic.st.getTracks().forEach((t) => t.stop()); this.mic = null; }
     this.wrap.remove(); gameEl.classList.remove('kara');
   }
@@ -4519,8 +4375,9 @@ class KaraokeGame {
     const cs = this.cards[by]; if (!cs) return;
     const i = cs.indexOf(type); if (i < 0) return;
     cs.splice(i, 1);
-    const t = type === 'lyric' ? String(text || '').replace(/[<>]/g, '').slice(0, 20) : '';
-    this.sabs.push({ type, by, text: t });
+    let t = type === 'lyric' ? String(text || '').replace(/[<>]/g, '').slice(0, 20) : '';
+    if (type === 'genre') { const cur = this.genreNow(); t = cur === 'trot' ? 'metal' : cur === 'metal' ? 'trot' : (Math.random() < 0.5 ? 'trot' : 'metal'); }
+    this.sabs.push({ type, by, text: type === 'genre' ? '' : t });
     const fx = { k: 'sabfx', type, text: t };
     net.bcast(fx); this.applyFx(type, t);
     net.bcast(this.stateMsg());
@@ -4557,13 +4414,14 @@ class KaraokeGame {
         return;
       }
       case 'sabfx': if (!host && from === net.hostId) this.applyFx(d.type, d.text); return;
+      case 'rtc': this.rtcMsg(from, d); return;
       case 'ks': {
         const okFrom = from === this.singer || (this.isBot(this.singer) && from === net.hostId);
         if (!okFrom || this.ph !== 'sing' || this.singer === myId) return;
         this.trail.push({ b: d.b, m: d.m, h: d.h });
         this.shownAcc = d.a; this.lastKs = performance.now();
         if (Math.abs(d.b - this.beat()) > 0.4) this.setBeat(d.b);
-        if (d.syn) this.voiceSet(d.m); else this.voiceSet(null);
+        if (d.syn && !this.rtcLive()) this.voiceSet(d.m); else this.voiceSet(null);
         return;
       }
     }
@@ -4588,7 +4446,7 @@ class KaraokeGame {
 
   // ---- 단계 화면 ----
   enter(ph, prev) {
-    if (prev === 'sing' && ph !== 'sing') { this.voiceStop(); this.song = null; }
+    if (prev === 'sing' && ph !== 'sing') { this.voiceStop(); this.rtcStop(); this.song = null; }
     this.closeLyric();
     this.el.hint.textContent = '';
     const me = this.singer === myId;
@@ -4597,7 +4455,7 @@ class KaraokeGame {
       this.panel(`<h2>노래방 망치기</h2>
         <p>한 명씩 돌아가며 마이크로 노래해요. 음정이 맞을수록 점수가 올라가요.</p>
         <p>나머지는 방해 카드 2장으로 몰래 노래를 망쳐요. 노래가 끝나면 부른 사람이 범인을 맞혀요.</p>
-        <p>노래하는 사람은 <b>이어폰</b>을 끼면 음정이 훨씬 잘 잡혀요.</p>
+        <p>부르는 노래는 방 사람 모두에게 실시간으로 들려요. 노래하는 사람은 <b>이어폰</b>을 끼면 음정이 훨씬 잘 잡혀요.</p>
         <h3>부르는 순서</h3><div class="order">${this.order.map((id) => `<span><i class="blob" style="--c:${this.colorOf(id)}"></i>${esc(this.nameOf(id))}</span>`).join('')}</div>`);
     } else if (ph === 'pick') {
       this.trail = [];
@@ -4616,6 +4474,7 @@ class KaraokeGame {
       this.buildEvents(); this.trail = []; this.fxList = []; this.swaps = {};
       this.hitT = 0; this.totT = 0; this.acc = 0; this.shownAcc = 0; this.ni = 0; this.doneSent = false; this.mHist = [];
       this.botErr = rand(0.2, 0.9);
+      if (me && !this.isBot(myId)) this.rtcStart();
       if (me) this.el.hint.textContent = this.finger ? '화면을 누른 채 위아래로 움직여서 음을 내요' : '노란 막대에 맞춰 불러요. 옥타브는 상관없어요.';
     } else if (ph === 'guess') {
       const subs = this.sabsPub || this.sabs;
@@ -4683,7 +4542,8 @@ class KaraokeGame {
   applyFx(type, text) {
     if (this.ph !== 'sing' || !this.song) return;
     const now = performance.now() / 1000;
-    this.fxList.push({ type, end: now + CARDS[type].dur });
+    this.fxList.push({ type, end: now + CARDS[type].dur, g: type === 'genre' ? text : undefined });
+    if (type === 'genre') { this.flashMsg = GENRES[text] || CARDS.genre.fx; this.flashT = 2.2; SFX.pop(); return; }
     if (type === 'lyric') {
       const b = this.beat(), L = this.song.lines;
       const cur = this.curLine(b);
@@ -4696,6 +4556,7 @@ class KaraokeGame {
   }
   fxCount(type) { return this.fxList.filter((f) => f.type === type).length; }
   keyShift() { return this.fxCount('key') * 3; }
+  genreNow() { const g = this.fxList.filter((f) => f.type === 'genre'); return g.length ? g[g.length - 1].g : null; }
 
   // ---- 반주 ----
   buildEvents() {
@@ -4707,7 +4568,7 @@ class KaraokeGame {
       const p = b % bpb, ch = chordNotes(chordAt(b).name);
       if (p === 0 || (bpb === 4 && p === 2)) { ev.push({ b, t: 'kick' }); ev.push({ b, t: 'bass', n: ch.root + (p === 2 ? 7 : 0) }); }
       if (bpb === 4 && (p === 1 || p === 3)) ev.push({ b, t: 'snare' });
-      ev.push({ b, t: 'hat' }); ev.push({ b: b + 0.5, t: 'hat', soft: 1 });
+      ev.push({ b, t: 'hat', p, ch }); ev.push({ b: b + 0.5, t: 'hat', soft: 1, p, ch });
       if (bpb === 3 ? p > 0 : (p === 1 || p === 3)) ev.push({ b, t: 'chord', ns: ch.notes });
       if (bpb === 4 && (p === 0 || p === 2)) ev.push({ b: b + 0.5, t: 'chord', ns: ch.notes, soft: 1 });
     }
@@ -4717,10 +4578,28 @@ class KaraokeGame {
   schedule() {
     if (this.ph !== 'sing' || !this.song || !AC) return;
     const now = this.beat(), bpsR = this.bps * this.rate, ahead = now + 0.15 * bpsR, k = this.keyShift();
+    const quiet = this.rtcLive(), gen = this.genreNow(), bpb = this.song.bpb;
     while (this.evi < this.evs.length && this.evs[this.evi].b < ahead) {
       const e = this.evs[this.evi++];
-      if (e.b < now - 0.15) continue;
+      if (e.b < now - 0.15 || quiet) continue;
       const w = Math.max(0, (e.b - now) / bpsR), spb = 1 / bpsR;
+      if (gen && e.t !== 'click') {
+        if (e.t !== 'hat') continue;
+        const r = e.ch.root + k, off = !!e.soft, p = e.p;
+        if (gen === 'trot') {
+          // 쿵짝쿵짝: 정박엔 베이스(근음/5도 번갈아), 엇박엔 짝 + 화음
+          if (!off) { tone(110, 0.14, 'sine', 0.4, 0.4, w); tone(mtof(r + (p % 2 ? 7 : 0)), 0.4 * spb, 'triangle', 0.32, 1, w); }
+          else { kNoise(w, 0.08, 0.16, 2600, 'bandpass'); for (const n of e.ch.notes) tone(mtof(n + k + 12), 0.3 * spb, 'square', 0.022, 1, w); }
+          if (!off && p === 0) tone(mtof(e.ch.notes[e.ch.notes.length - 1] + k + 12), 0.9 * spb, 'sawtooth', 0.03, 1.02, w);
+        } else {
+          // 메탈: 투베이스 + 디스토션 파워코드 + 크래시
+          tone(70, 0.09, 'sine', 0.5, 0.5, w);
+          distTone(mtof(r - 12), 0.42 * spb, 0.5, w); distTone(mtof(r - 5), 0.42 * spb, 0.35, w);
+          if (!off && (bpb === 4 ? p % 2 === 1 : p === 1)) kNoise(w, 0.18, 0.32, 1500, 'bandpass');
+          if (!off && p === 0) kNoise(w, 0.9, 0.12, 5000, 'highpass');
+        }
+        continue;
+      }
       if (e.t === 'click') tone(e.acc ? 1760 : 1320, 0.06, 'square', 0.12, 1, w);
       else if (e.t === 'kick') tone(110, 0.18, 'sine', 0.45, 0.35, w);
       else if (e.t === 'snare') kNoise(w, 0.12, 0.2, 1800, 'bandpass');
@@ -4728,7 +4607,7 @@ class KaraokeGame {
       else if (e.t === 'bass') tone(mtof(e.n + k), 0.8 * spb, 'triangle', 0.3, 1, w);
       else if (e.t === 'chord') for (const n of e.ns) tone(mtof(n + k), 0.45 * spb, 'triangle', e.soft ? 0.035 : 0.055, 1, w);
     }
-    if (this.fxCount('tamb')) {
+    if (this.fxCount('tamb') && !quiet) {
       if (this.tambB < now - 0.2) this.tambB = Math.ceil(now * 4) / 4;
       while (this.tambB < ahead) { const w = Math.max(0, (this.tambB - now) / bpsR); kNoise(w, 0.07, 0.22, 6500, 'highpass'); tone(rand(2400, 3200), 0.03, 'square', 0.03, 1, w); this.tambB += 0.25; }
     }
@@ -4746,6 +4625,88 @@ class KaraokeGame {
     if (m == null) this.voice.g.gain.setTargetAtTime(0, t, 0.03);
     else { this.voice.o.frequency.setTargetAtTime(mtof(m), t, 0.02); this.voice.g.gain.setTargetAtTime(0.08 * sfxVol(), t, 0.03); }
   }
+  // ---- 부르는 노래를 다른 사람에게 실시간 전송 (WebRTC) ----
+  // 부르는 사람: 반주+목소리를 섞어서 보내요. 듣는 사람: 연결되면 내 반주는 끄고 그걸 들어요.
+  rtcLive() { return !!(this.rx && this.rx.live); }
+  rtcStart() {
+    this.rtcStop();
+    if (!AC || !master || typeof RTCPeerConnection === 'undefined' || !AC.createMediaStreamDestination) return;
+    const out = AC.createMediaStreamDestination();
+    master.connect(out);
+    this.tx = { out, micG: null, pcs: {}, s: this.turn };
+    this.rtcMic();
+    for (const id of this.present()) if (id !== myId && !this.isBot(id)) this.rtcOffer(id);
+  }
+  rtcMic() {
+    const tx = this.tx; if (!tx || tx.micG || !this.mic) return;
+    tx.micG = AC.createGain(); tx.micG.gain.value = 1.8;
+    this.mic.src.connect(tx.micG); tx.micG.connect(tx.out);
+  }
+  rtcPc(id, s) {
+    const pc = new RTCPeerConnection({ iceServers: [{ urls: ['stun:stun.cloudflare.com:3478', 'stun:stun.l.google.com:19302'] }] });
+    pc.onicecandidate = (e) => { if (e.candidate) net.to(id, { k: 'rtc', t: 'ice', s, c: e.candidate.toJSON() }); };
+    return pc;
+  }
+  async rtcOffer(id) {
+    const tx = this.tx; if (!tx) return;
+    try {
+      const pc = this.rtcPc(id, tx.s); tx.pcs[id] = pc;
+      for (const tr of tx.out.stream.getAudioTracks()) pc.addTrack(tr, tx.out.stream);
+      const o = await pc.createOffer(); await pc.setLocalDescription(o);
+      if (this.tx === tx) net.to(id, { k: 'rtc', t: 'offer', s: tx.s, sdp: pc.localDescription.sdp });
+    } catch (e) {}
+  }
+  async rtcMsg(from, d) {
+    if (this.dead || typeof RTCPeerConnection === 'undefined') return;
+    if (d.t === 'offer') {
+      if (typeof d.sdp !== 'string' || d.s < this.turn || from === myId) return;
+      this.rxStop();
+      let pc; try { pc = this.rtcPc(from, d.s); } catch (e) { return; }
+      const rx = this.rx = { pc, s: d.s, from, live: false, q: [], audio: null };
+      const check = () => {
+        if (this.rx !== rx) return;
+        const st = pc.iceConnectionState;
+        rx.live = !!rx.audio && (st === 'connected' || st === 'completed');
+        if (rx.live) { this.voiceStop(); if (rx.audio.paused) rx.audio.play().catch(() => {}); }
+      };
+      pc.ontrack = (e) => {
+        const a = rx.audio || (rx.audio = new Audio());
+        a.autoplay = true; a.playsInline = true;
+        a.srcObject = (e.streams && e.streams[0]) || new MediaStream([e.track]);
+        a.play().catch(() => {}); check();
+      };
+      pc.oniceconnectionstatechange = check;
+      try {
+        await pc.setRemoteDescription({ type: 'offer', sdp: d.sdp });
+        for (const c of rx.q) await pc.addIceCandidate(c).catch(() => {});
+        rx.q = null;
+        const ans = await pc.createAnswer(); await pc.setLocalDescription(ans);
+        if (this.rx === rx) net.to(from, { k: 'rtc', t: 'answer', s: d.s, sdp: pc.localDescription.sdp });
+      } catch (e) {}
+    } else if (d.t === 'answer') {
+      const pc = this.tx && this.tx.s === d.s && this.tx.pcs[from];
+      if (pc && typeof d.sdp === 'string') { try { await pc.setRemoteDescription({ type: 'answer', sdp: d.sdp }); } catch (e) {} }
+    } else if (d.t === 'ice' && d.c) {
+      if (this.tx && this.tx.s === d.s && this.tx.pcs[from]) { this.tx.pcs[from].addIceCandidate(d.c).catch(() => {}); return; }
+      const rx = this.rx;
+      if (rx && rx.s === d.s && rx.from === from) { if (rx.q) rx.q.push(d.c); else rx.pc.addIceCandidate(d.c).catch(() => {}); }
+    }
+  }
+  rxStop() {
+    const rx = this.rx; if (!rx) return; this.rx = null;
+    try { rx.pc.close(); } catch (e) {}
+    if (rx.audio) { try { rx.audio.pause(); } catch (e) {} rx.audio.srcObject = null; }
+  }
+  rtcStop() {
+    const tx = this.tx;
+    if (tx) {
+      this.tx = null;
+      for (const pc of Object.values(tx.pcs)) { try { pc.close(); } catch (e) {} }
+      try { master.disconnect(tx.out); } catch (e) {}
+      if (tx.micG) { try { tx.micG.disconnect(); } catch (e) {} try { this.mic && this.mic.src.disconnect(tx.micG); } catch (e) {} }
+    }
+    this.rxStop();
+  }
   voiceStop() { if (this.voice) { try { this.voice.o.stop(); } catch (e) {} this.voice = null; } }
 
   // ---- 마이크 ----
@@ -4757,7 +4718,8 @@ class KaraokeGame {
       if (this.dead) { st.getTracks().forEach((t) => t.stop()); return; }
       audioUnlock();
       const src = AC.createMediaStreamSource(st), an = AC.createAnalyser(); an.fftSize = 2048; src.connect(an);
-      this.mic = { st, an, buf: new Float32Array(2048) }; this.finger = false;
+      this.mic = { st, src, an, buf: new Float32Array(2048) }; this.finger = false;
+      this.rtcMic();
     } catch (e) { this.finger = true; }
     this.updateMic();
   }
@@ -4847,6 +4809,8 @@ class KaraokeGame {
       const b = this.beat();
       while (this.trail.length && this.trail[0].b < b - 5) this.trail.shift();
     }
+    const lv = this.ph === 'sing' && this.rtcLive();
+    if (lv !== this.lvShown) { this.lvShown = lv; this.el.live.classList.toggle('hidden', !lv); }
     this.flashT = Math.max(0, this.flashT - dt);
     this.draw();
   }
