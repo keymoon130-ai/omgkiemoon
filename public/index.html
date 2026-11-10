@@ -158,6 +158,23 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 .tbtns .b-sit{background:var(--mint)}
 .rotate{position:absolute;inset:0;display:none;place-items:center;background:var(--sky);z-index:20;font-family:"Jua",sans-serif;font-size:26px;text-align:center;padding:30px}
 @media (orientation:portrait){ .is-touch .rotate.want{display:grid} }
+/* 꾸미기 */
+.skin-panel{grid-column:1/-1}
+.skin-ed{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:22px;align-items:start}
+.skin-view{display:flex;flex-direction:column;gap:8px}
+#skinCv{width:100%;aspect-ratio:3/4;border:3px solid var(--ink);border-radius:var(--r-mid);background:linear-gradient(#eef7ff,#cfe9ff);touch-action:none;cursor:crosshair}
+.skin-rot{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted)}
+.skin-tools{display:flex;flex-direction:column;gap:10px}
+.skin-tools .lbl{margin:4px 0 0}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:inherit;font-weight:700;font-size:14px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);padding:7px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--sun)}
+.pal .sw{width:30px;height:30px}
+.items{display:flex;flex-wrap:wrap;gap:10px}
+.items label,.ropts label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:14px}
+.items select,.ropts select{font:inherit;border:2px solid var(--ink);border-radius:10px;padding:6px 8px;background:var(--soft)}
+.ropts{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+@media (max-width:820px){ .skin-ed{grid-template-columns:1fr} .skin-view{max-width:300px;margin:0 auto;width:100%} }
 /* 줄넘기 */
 .rbtns{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:18px;gap:16px;align-items:flex-end}
 .is-touch .rbtns{display:none}
@@ -223,6 +240,43 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
   .title span.squish{animation:none}
   .banner.bump,.feed div{animation:none}
 }
+/* 라면 */
+#game.ramen{background:#05060c}
+#game.ramen .keys,#game.ramen .tbtns,#game.ramen .rbtns,#game.ramen .hud-top,#game.ramen .rotate,#game.ramen .replay-tag{display:none!important}
+#game.ramen .feed{top:auto;bottom:70px}
+#ramen{position:absolute;inset:0;pointer-events:none}
+#ramen canvas{display:block;width:100%;height:100%;pointer-events:auto}
+.is-touch #ramen canvas{pointer-events:none}
+#ramen .r-look,#ramen .r-btns button,#ramen .overlay{pointer-events:auto}
+.r-cross{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:rgba(255,255,255,.7)}
+.r-top{position:absolute;top:12px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 70px}
+.r-pot{background:var(--sun)}
+.r-prompt{position:absolute;left:50%;top:calc(50% + 30px);transform:translateX(-50%);background:rgba(255,255,255,.95);border:3px solid var(--ink);border-radius:999px;padding:8px 16px;font-weight:700;white-space:nowrap}
+.r-prompt kbd,.r-keys kbd{font-family:inherit;font-weight:700;border:2px solid var(--ink);border-radius:6px;padding:0 5px;background:var(--soft)}
+.r-mini{position:absolute;left:50%;top:60%;transform:translateX(-50%);width:min(420px,84vw);background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:12px 16px;text-align:center;box-shadow:4px 4px 0 var(--ink)}
+.r-mini-t{font-family:"Jua",sans-serif;font-size:22px;margin-bottom:8px}
+.r-mini small{display:block;margin-top:6px;color:var(--muted);font-weight:600}
+.r-bar{position:relative;height:28px;border:3px solid var(--ink);border-radius:999px;background:var(--soft);overflow:hidden}
+.r-zone{position:absolute;top:0;bottom:0;background:var(--mint)}
+.r-needle{position:absolute;top:0;bottom:0;width:6px;margin-left:-3px;background:var(--pop)}
+.r-hurt{position:absolute;inset:0;box-shadow:inset 0 0 160px 50px rgba(224,49,49,.8);display:flex;align-items:center;justify-content:center;gap:40px;font-size:64px;color:var(--sun);text-shadow:3px 3px 0 var(--ink)}
+.r-hurt span{display:inline-block;animation:rspin .9s linear infinite}
+@keyframes rspin{to{transform:rotate(360deg)}}
+.r-hand{position:absolute;left:50%;bottom:-70%;transform:translateX(-50%);font-size:min(70vw,380px);line-height:1}
+.r-hand.go{animation:rgrab .7s ease-out}
+@keyframes rgrab{0%{bottom:-70%}40%{bottom:-12%}100%{bottom:-70%}}
+.r-lock{position:absolute;left:50%;top:38%;transform:translateX(-50%);background:rgba(255,255,255,.92);border:3px solid var(--ink);border-radius:14px;padding:10px 16px;font-weight:700}
+.r-keys{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.88);border:2px solid var(--ink);border-radius:12px;padding:6px 12px;font-size:13px;line-height:1.8}
+.r-look{position:absolute;right:0;top:0;width:55%;height:100%}
+.is-touch .r-keys{display:none}
+.r-btns{position:absolute;right:max(14px,env(safe-area-inset-right));bottom:18px;gap:12px;align-items:flex-end}
+.is-touch #ramen .r-btns{display:flex}
+.r-btns button{border:3px solid var(--ink);border-radius:50%;font-family:"Jua",sans-serif;box-shadow:3px 3px 0 var(--ink);line-height:1.15;font-size:17px}
+.r-btns button.down{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.r-b-act{width:100px;height:100px;background:var(--mint);font-size:20px}
+.r-b-run{width:74px;height:74px;background:var(--sun)}
+.r-b-light{width:74px;height:74px;background:var(--pop);color:#fff}
+#ramen .overlay .panel{max-height:88vh;overflow:auto}
 </style>
 </head>
 <body>
@@ -282,18 +336,46 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
           <button class="btn small plain" id="botMinus" aria-label="봇 빼기">빼기</button>
           <button class="btn small" id="botPlus" aria-label="봇 추가">추가</button>
         </div>
-        <div class="mine">
-          <span class="lbl">내 캐릭터 색</span>
-          <div class="swatches" id="swLobby"></div>
-        </div>
       </div>
       <div class="panel">
         <h2>게임 고르기</h2>
         <ul class="tickets" id="pickList"></ul>
+        <div class="ropts hidden" id="ramenOpts">
+          <label>엄마 팀 <select id="momMode"><option value="1">엄마 혼자</option><option value="2">엄마 + 아빠 (4명 이상)</option></select></label>
+          <label>라운드 <select id="rRounds"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+        </div>
         <label class="toggle"><input type="checkbox" id="evToggle" checked> <span id="evText">라운드마다 랜덤 이벤트 (얼음 바닥, 도망가는 의자, 바람)</span></label>
         <div class="start-area">
           <button class="btn pop hostonly" id="startBtn">게임 시작</button>
           <span class="wait" id="waitMsg"></span>
+        </div>
+      </div>
+      <div class="panel skin-panel">
+        <h2>내 캐릭터 꾸미기</h2>
+        <div class="skin-ed">
+          <div class="skin-view">
+            <canvas id="skinCv" aria-label="캐릭터 미리보기. 캐릭터 위를 끌면 칠해지고, 바깥을 끌면 돌아가요."></canvas>
+            <div class="skin-rot"><button class="btn small plain" id="rotL" aria-label="왼쪽으로 돌리기">◀</button><span>캐릭터 바깥을 끌어도 돌아가요</span><button class="btn small plain" id="rotR" aria-label="오른쪽으로 돌리기">▶</button></div>
+          </div>
+          <div class="skin-tools">
+            <div class="seg" id="toolSeg" role="group" aria-label="도구">
+              <button data-v="brush" aria-pressed="true">붓</button><button data-v="erase" aria-pressed="false">지우개</button><button data-v="fill" aria-pressed="false">부위 채우기</button>
+            </div>
+            <div class="seg" id="sizeSeg" role="group" aria-label="붓 굵기">
+              <button data-v="0" aria-pressed="false">가늘게</button><button data-v="1" aria-pressed="true">보통</button><button data-v="2" aria-pressed="false">굵게</button>
+            </div>
+            <span class="lbl">물감</span>
+            <div class="swatches pal" id="palRow"></div>
+            <div class="seg"><button id="undoBtn">되돌리기</button><button id="clearBtn">전부 지우기</button></div>
+            <span class="lbl">바탕색</span>
+            <div class="swatches" id="swLobby"></div>
+            <span class="lbl">아이템</span>
+            <div class="items">
+              <label>모자 <select id="itHat"></select></label>
+              <label>얼굴 <select id="itFace"></select></label>
+              <label>등 <select id="itBack"></select></label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -469,7 +551,7 @@ const titleEl = $('#title');
 const GAMES = [
   { id: 'chair', ico: '🪑', bg: '#ffd23f', name: '의자 뺏기', desc: '발로 차고 던지고 끌어내리는 의자 뺏기', ppl: '2~8명', live: true },
   { id: 'rope', ico: '🪢', bg: '#33d69f', name: '단체 줄넘기 지옥', desc: '줄 돌리는 사람도 플레이어', ppl: '3~8명', live: true },
-  { id: 'ramen', ico: '🍜', bg: '#ff7a59', name: '엄마한테 안 들키기 라면', desc: '새벽 3시, 소리 내면 끝', ppl: '3~6명' },
+  { id: 'ramen', ico: '🍜', bg: '#ff7a59', name: '엄마한테 안 들키기 라면', desc: '새벽 3시, 1인칭으로 몰래 라면 끓이기', ppl: '3~8명', live: true },
   { id: 'karaoke', ico: '🎤', bg: '#a678ff', name: '노래방 망치기', desc: '마이크로 음정 맞추고, 남은 사람은 몰래 방해', ppl: '2~8명', live: true },
   { id: 'pigeon', ico: '🐦', bg: '#4aa8f0', name: '비둘기 결혼식 습격', desc: '케이크 훔치고 부케 낚아채기', ppl: '2~8명' },
 ];
@@ -486,6 +568,7 @@ function renderSwatches(el) {
     profile.color = b.dataset.c; store.set('omg_color', profile.color);
     renderSwatches($('#swMain')); renderSwatches($('#swLobby'));
     if (net.ws) net.raw({ t: 'profile', name: profile.name, color: profile.color });
+    if (typeof skinEd !== 'undefined') skinEd.refresh();
   });
 }
 renderSwatches($('#swMain')); renderSwatches($('#swLobby'));
@@ -575,7 +658,7 @@ $('#copyBtn').onclick = async () => {
   setTimeout(() => $('#copyBtn').textContent = '초대 링크 복사', 1500);
 };
 
-let lobbyState = { game: 'chair', events: true, bots: [] };
+let lobbyState = { game: 'chair', events: true, bots: [], momMode: '1', rRounds: '3' };
 let firstRoster = true;
 
 function onRoster(m) {
@@ -586,7 +669,8 @@ function onRoster(m) {
     firstRoster = true;
     if (!game) show('lobby');
     if (!isHost()) net.toHost({ k: 'hello' });
-  }
+    shareSkin();
+  } else for (const p of m.players) if (!prevIds.has(p.id) && p.id !== myId) shareSkin(p.id);
   if (isHost()) {
     if (!wasHost && game) { endGameAll(); toast('방장이 나가서 대기실로 돌아왔어요.'); }
     const joined = m.players.some((p) => !prevIds.has(p.id) && p.id !== myId);
@@ -603,10 +687,17 @@ function onData(from, d) {
       net.to(from, { k: 'lobby', ...lobbyState });
       if (game) net.to(from, { k: 'sync', game: game.kind, roster: game.rosterInfo(), opts: game.opts });
       return;
-    case 'lobby':
+    case 'skin':
+      if (d.id !== from || !d.s) return;
+      skins.set(d.id, decodeSkin(d.s));
+      if (game && game.onSkin) game.onSkin(d.id);
+      return;
+    case 'lobby': {
       if (from !== net.hostId) return;
-      lobbyState = { game: d.game, events: d.events, bots: d.bots || [] };
+      const { k, ...rest } = d;
+      lobbyState = { ...lobbyState, ...rest, bots: d.bots || [] };
       renderLobby(); return;
+    }
     case 'start':
       if (from !== net.hostId) return;
       startGame(d.roster, d.opts, false, d.game); return;
@@ -638,12 +729,16 @@ function renderLobby() {
   });
   $('#evToggle').closest('label').classList.toggle('hidden', !EV_TEXT[lobbyState.game]);
   if (EV_TEXT[lobbyState.game]) $('#evText').textContent = EV_TEXT[lobbyState.game];
-  const minP = lobbyState.game === 'rope' ? 3 : 2;
+  const minP = lobbyState.game === 'rope' || lobbyState.game === 'ramen' ? 3 : 2;
   $('#evToggle').checked = !!lobbyState.events;
+  $('#ramenOpts').classList.toggle('hidden', lobbyState.game !== 'ramen');
+  $('#momMode').value = lobbyState.momMode || '1'; $('#rRounds').value = lobbyState.rRounds || '3';
+  $('#momMode').disabled = $('#rRounds').disabled = !host;
+  skinEd.start();
   $('#evToggle').disabled = !host;
   $('#startBtn').disabled = total < minP;
   $('#waitMsg').textContent = host
-    ? (total < minP ? (minP === 3 ? '줄넘기는 3명부터 할 수 있어요. 친구를 부르거나 봇을 추가해 주세요.' : '친구를 부르거나 봇을 추가하면 시작할 수 있어요.') : '')
+    ? (total < minP ? (minP === 3 ? '이 게임은 3명부터 할 수 있어요. 친구를 부르거나 봇을 추가해 주세요.' : '친구를 부르거나 봇을 추가하면 시작할 수 있어요.') : '')
     : '방장이 시작하길 기다리는 중이에요.';
   $('#botPlus').disabled = total >= 8; $('#botMinus').disabled = lobbyState.bots.length === 0;
 }
@@ -653,18 +748,21 @@ $('#botPlus').onclick = () => {
   if (!isHost() || net.players.length + lobbyState.bots.length >= 8) return;
   const used = new Set(lobbyState.bots.map((b) => b.name));
   const name = BOT_NAMES.find((n) => !used.has(n)) || '봇';
-  lobbyState.bots.push({ id: 'bot_' + Math.random().toString(36).slice(2, 7), name, color: COLORS[(lobbyState.bots.length * 3 + 2) % COLORS.length] });
+  const pick = (k) => ITEMS[k][Math.floor(Math.random() * ITEMS[k].length)][0];
+  lobbyState.bots.push({ id: 'bot_' + Math.random().toString(36).slice(2, 7), name, color: COLORS[(lobbyState.bots.length * 3 + 2) % COLORS.length], items: { hat: pick('hat'), face: pick('face'), back: Math.random() < 0.5 ? pick('back') : '' } });
   hostLobbyChanged();
 };
 $('#botMinus').onclick = () => { if (isHost()) { lobbyState.bots.pop(); hostLobbyChanged(); } };
+$('#momMode').onchange = (e) => { if (isHost()) { lobbyState.momMode = e.target.value; hostLobbyChanged(); } };
+$('#rRounds').onchange = (e) => { if (isHost()) { lobbyState.rRounds = e.target.value; hostLobbyChanged(); } };
 $('#evToggle').onchange = (e) => { if (isHost()) { lobbyState.events = e.target.checked; hostLobbyChanged(); } };
 $('#startBtn').onclick = () => {
   if (!isHost()) return;
   const roster = net.players.map((p) => ({ id: p.id, name: p.name, color: p.color, bot: false }))
     .concat(lobbyState.bots.map((b) => ({ ...b, bot: true })));
-  if (roster.length < (lobbyState.game === 'rope' ? 3 : 2)) return;
+  if (roster.length < (lobbyState.game === 'rope' || lobbyState.game === 'ramen' ? 3 : 2)) return;
   if (!roster.some((r) => !r.bot)) return;
-  const opts = { events: lobbyState.events };
+  const opts = { events: lobbyState.events, momMode: +lobbyState.momMode || 1, rounds: +lobbyState.rRounds || 3 };
   net.bcast({ k: 'start', game: lobbyState.game, roster, opts });
   startGame(roster, opts, false, lobbyState.game);
 };
@@ -685,7 +783,7 @@ function startGame(roster, opts, late, kind) {
   show('game');
   gameEl.classList.toggle('kara', kind === 'karaoke');
   gameEl.classList.toggle('rope', kind === 'rope'); gameEl.classList.remove('turner');
-  game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : kind === 'rope' ? new RopeGame(roster, opts, late) : new ChairGame(roster, opts, late);
+  game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : kind === 'rope' ? new RopeGame(roster, opts, late) : kind === 'ramen' ? new RamenGame(roster, opts, late) : new ChairGame(roster, opts, late);
 }
 function stopGame() {
   if (game) { game.destroy(); game = null; }
@@ -802,6 +900,240 @@ function makeLabel(text, color) {
   s.scale.set(1.6, 0.4, 1); s.renderOrder = 10; return s;
 }
 
+/* =============== 캐릭터 꾸미기 (색칠 + 아이템) =============== */
+// 몸 전체가 64x64 그림 한 장을 나눠 써요. 칸마다 0(바탕색) 또는 팔레트 1~15번 색이 들어가요.
+const PALETTE = ['#1b2350', '#ffffff', '#ff4f8b', '#ff7a59', '#ffd23f', '#33d69f', '#4aa8f0', '#a678ff', '#8b5a3c', '#ffb3c9', '#9be7ff', '#2f9e44', '#e03131', '#868e96', '#000000'];
+const ATLAS = 64;
+// 부위별 그림 영역 [x, y, 너비, 높이]: 몸통, 머리, 왼팔, 오른팔, 왼다리, 오른다리
+const REGIONS = [[0, 0, 32, 32], [32, 0, 32, 32], [0, 32, 16, 32], [16, 32, 16, 32], [32, 32, 16, 32], [48, 32, 16, 32]];
+const ITEMS = {
+  hat: [['', '없음'], ['cap', '야구모자'], ['crown', '왕관'], ['party', '고깔모자'], ['beanie', '비니'], ['pot', '냄비']],
+  face: [['', '없음'], ['glasses', '동그란 안경'], ['sun', '선글라스'], ['mus', '콧수염'], ['blush', '볼터치']],
+  back: [['', '없음'], ['cape', '망토'], ['wings', '날개'], ['shell', '거북이 등껍질']],
+};
+const emptySkin = () => ({ cells: new Uint8Array(ATLAS * ATLAS), hat: '', face: '', back: '' });
+function encodeSkin(sk) {
+  let s = '';
+  for (let i = 0; i < sk.cells.length; i += 2) s += String.fromCharCode((sk.cells[i] << 4) | sk.cells[i + 1]);
+  return { p: btoa(s), h: sk.hat, f: sk.face, b: sk.back };
+}
+function decodeSkin(o) {
+  const sk = emptySkin();
+  if (!o) return sk;
+  try { const s = atob(o.p || ''); if (s.length === ATLAS * ATLAS / 2) for (let i = 0; i < s.length; i++) { const x = s.charCodeAt(i); sk.cells[i * 2] = x >> 4; sk.cells[i * 2 + 1] = x & 15; } } catch (e) {}
+  const ok = (k, v) => (ITEMS[k].some(([id]) => id === v) ? v : '');
+  sk.hat = ok('hat', o.h); sk.face = ok('face', o.f); sk.back = ok('back', o.b);
+  return sk;
+}
+let mySkin = decodeSkin(store.get('omg_skin', null));
+const skins = new Map();
+function skinOf(id) {
+  if (id === myId) return mySkin;
+  if (skins.has(id)) return skins.get(id);
+  const b = lobbyState.bots.find((x) => x.id === id);
+  if (b && b.items) return Object.assign(emptySkin(), b.items);
+  return null;
+}
+const hexRGB = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+function remapUV(geo, [rx, ry, rw, rh]) {
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < uv.count; i++) { const u = uv.getX(i), v = uv.getY(i); uv.setXY(i, (rx + u * rw) / ATLAS, 1 - (ry + (1 - v) * rh) / ATLAS); }
+  uv.needsUpdate = true; return geo;
+}
+const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.5, ...o });
+function itemMesh(kind, id) {
+  const g = new THREE.Group(), add = (geo, mat, x, y, z, rx = 0, ry = 0, rz = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.set(rx, ry, rz); m.castShadow = true; g.add(m); return m; };
+  const ink = new THREE.MeshBasicMaterial({ color: 0x1b2350 });
+  if (kind === 'hat') {
+    if (id === 'cap') { add(new THREE.SphereGeometry(0.262, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), M(0xe03131), 0, 0.03, 0); add(new THREE.BoxGeometry(0.3, 0.025, 0.18), M(0xe03131), 0, 0.05, 0.25); }
+    if (id === 'crown') {
+      add(new THREE.CylinderGeometry(0.17, 0.18, 0.12, 10, 1, true), M(0xffd23f, { metalness: 0.6, side: THREE.DoubleSide }), 0, 0.25, 0);
+      for (let i = 0; i < 5; i++) { const a = (i / 5) * Math.PI * 2; add(new THREE.ConeGeometry(0.035, 0.09, 6), M(0xffd23f, { metalness: 0.6 }), Math.cos(a) * 0.16, 0.35, Math.sin(a) * 0.16); }
+    }
+    if (id === 'party') { add(new THREE.ConeGeometry(0.12, 0.36, 16), M(0xff4f8b), 0.03, 0.4, 0, 0, 0, -0.15); add(new THREE.SphereGeometry(0.045, 8, 6), M(0xffd23f), 0.06, 0.58, 0); }
+    if (id === 'beanie') { add(new THREE.SphereGeometry(0.268, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), M(0x4aa8f0), 0, 0.02, 0); add(new THREE.SphereGeometry(0.065, 10, 8), M(0xffffff), 0, 0.3, 0); }
+    if (id === 'pot') { add(new THREE.CylinderGeometry(0.2, 0.18, 0.17, 18), M(0xadb5bd, { metalness: 0.7, roughness: 0.3 }), 0, 0.28, 0); add(new THREE.BoxGeometry(0.2, 0.03, 0.045), M(0x1b2350), 0.28, 0.32, 0); }
+  } else if (kind === 'face') {
+    if (id === 'glasses') { for (const s of [-1, 1]) add(new THREE.TorusGeometry(0.055, 0.012, 6, 16), ink, s * 0.085, 0.04, 0.235); add(new THREE.BoxGeometry(0.05, 0.012, 0.012), ink, 0, 0.045, 0.245); }
+    if (id === 'sun') { for (const s of [-1, 1]) add(new THREE.BoxGeometry(0.11, 0.07, 0.02), new THREE.MeshBasicMaterial({ color: 0x111111 }), s * 0.085, 0.04, 0.24); add(new THREE.BoxGeometry(0.3, 0.015, 0.015), ink, 0, 0.06, 0.24); }
+    if (id === 'mus') for (const s of [-1, 1]) add(new THREE.CapsuleGeometry(0.022, 0.07, 4, 8), M(0x5c3a1e), s * 0.045, -0.02, 0.245, 0, 0, s * 1.2);
+    if (id === 'blush') for (const s of [-1, 1]) { const m = add(new THREE.SphereGeometry(0.045, 10, 8), M(0xff8fab), s * 0.15, -0.03, 0.18); m.scale.z = 0.35; m.lookAt(s * 0.6, -0.1, 0.8); }
+  } else if (kind === 'back') {
+    if (id === 'cape') add(new THREE.BoxGeometry(0.42, 0.62, 0.02), M(0xe03131, { side: THREE.DoubleSide }), 0, -0.06, -0.26, 0.15);
+    if (id === 'wings') for (const s of [-1, 1]) { const m = add(new THREE.SphereGeometry(0.17, 12, 10), M(0xffffff), s * 0.2, 0.12, -0.24, 0, 0, s * 0.6); m.scale.set(0.35, 1, 0.15); }
+    if (id === 'shell') { const m = add(new THREE.SphereGeometry(0.27, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), M(0x2f9e44), 0, 0, -0.1, -Math.PI / 2); m.scale.set(1, 0.8, 1.2); }
+  }
+  return g;
+}
+function makeAvatar(color, skin) {
+  const cv = document.createElement('canvas'); cv.width = cv.height = ATLAS;
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+  tex.magFilter = tex.minFilter = THREE.NearestFilter; tex.generateMipmaps = false;
+  const mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.55 });
+  const geos = [
+    new THREE.CapsuleGeometry(0.25, 0.2, 6, 14), new THREE.SphereGeometry(0.25, 18, 14),
+    new THREE.CapsuleGeometry(0.075, 0.28, 4, 8), new THREE.CapsuleGeometry(0.075, 0.28, 4, 8),
+    new THREE.CapsuleGeometry(0.09, 0.22, 4, 8), new THREE.CapsuleGeometry(0.09, 0.22, 4, 8),
+  ].map((g, i) => remapUV(g, REGIONS[i]));
+  const meshes = geos.map((g) => new THREE.Mesh(g, mat));
+  meshes[0].scale.set(1, 1, 0.78);
+  const head = meshes[1], eye = new THREE.MeshBasicMaterial({ color: 0x1b2350 });
+  // 평소 얼굴
+  const normal = new THREE.Group(); head.add(normal);
+  const eg = new THREE.SphereGeometry(0.035, 8, 6);
+  for (const sx of [-0.085, 0.085]) { const e = new THREE.Mesh(eg, eye); e.position.set(sx, 0.04, 0.225); e.scale.set(1, 1.5, 0.6); normal.add(e); }
+  const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.012, 6, 12, Math.PI), eye);
+  mouth.position.set(0, -0.06, 0.235); mouth.rotation.z = Math.PI; normal.add(mouth);
+  // 아픈 얼굴: X 눈, 삐뚤삐뚤 입, 머리 위 혹
+  const hurt = new THREE.Group(); hurt.visible = false; head.add(hurt);
+  const xb = new THREE.BoxGeometry(0.075, 0.016, 0.012);
+  for (const sx of [-0.085, 0.085]) for (const r of [0.785, -0.785]) { const b = new THREE.Mesh(xb, eye); b.position.set(sx, 0.045, 0.235); b.rotation.z = r; hurt.add(b); }
+  const zb = new THREE.BoxGeometry(0.04, 0.012, 0.012);
+  [[-0.045, 0.35], [0, -0.35], [0.045, 0.35]].forEach(([x, r]) => { const b = new THREE.Mesh(zb, eye); b.position.set(x, -0.07, 0.24); b.rotation.z = r; hurt.add(b); });
+  const bump = new THREE.Mesh(new THREE.SphereGeometry(0.075, 10, 8), M(0xff5c5c)); bump.position.set(0.05, 0.25, 0.03); hurt.add(bump);
+  const slots = { hat: new THREE.Group(), face: new THREE.Group(), back: new THREE.Group() };
+  head.add(slots.hat); head.add(slots.face); meshes[0].add(slots.back);
+  const av = {
+    meshes, tex, mat, cv, cur: { hat: null, face: null, back: null },
+    apply(sk, col) {
+      sk = sk || emptySkin();
+      const g2 = cv.getContext('2d'), img = g2.createImageData(ATLAS, ATLAS);
+      const base = hexRGB(col), pal = PALETTE.map(hexRGB);
+      for (let y = 0; y < ATLAS; y++) for (let x = 0; x < ATLAS; x++) {
+        const i = y * ATLAS + x, v = sk.cells[i];
+        let c = v ? pal[v - 1] : base, f = !v && y >= 32 && x >= 32 ? 0.8 : 1;
+        img.data[i * 4] = c[0] * f; img.data[i * 4 + 1] = c[1] * f; img.data[i * 4 + 2] = c[2] * f; img.data[i * 4 + 3] = 255;
+      }
+      g2.putImageData(img, 0, 0); tex.needsUpdate = true;
+      for (const k of ['hat', 'face', 'back']) {
+        if (this.cur[k] === sk[k]) continue;
+        this.cur[k] = sk[k];
+        slots[k].clear(); if (sk[k]) slots[k].add(itemMesh(k, sk[k]));
+      }
+    },
+    setHurt(on) { normal.visible = !on; hurt.visible = on; slots.hat.visible = slots.face.visible = !on; },
+    dispose() { tex.dispose(); mat.dispose(); geos.forEach((g) => g.dispose()); },
+  };
+  av.apply(skin, color);
+  return av;
+}
+
+// 내 그림을 친구들에게 보내기
+let shareT = null;
+function shareSkin(to) {
+  if (!net.ws) return;
+  const d = { k: 'skin', id: myId, s: encodeSkin(mySkin) };
+  if (to) net.to(to, d); else net.bcast(d);
+}
+function skinChanged() {
+  store.set('omg_skin', encodeSkin(mySkin));
+  clearTimeout(shareT); shareT = setTimeout(() => shareSkin(), 600);
+  if (game && game.onSkin) game.onSkin(myId);
+}
+
+// 대기실 꾸미기 편집기
+const skinEd = {
+  ready: false, tool: 'brush', size: 1, color: 2, undo: [], yaw: 0.35, raf: null,
+  start() { if (!this.ready) this.init(); this.loop(); },
+  init() {
+    this.ready = true;
+    const cv = this.cv = $('#skinCv');
+    this.r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+    this.r.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    this.scene = new THREE.Scene();
+    this.cam = new THREE.PerspectiveCamera(30, 3 / 4, 0.1, 20); this.cam.position.set(0, 0.95, 3.5); this.cam.lookAt(0, 0.74, 0);
+    this.scene.add(new THREE.HemisphereLight(0xffffff, 0x8899bb, 1.7));
+    const d = new THREE.DirectionalLight(0xffffff, 1.5); d.position.set(2, 3, 3); this.scene.add(d);
+    const d2 = new THREE.DirectionalLight(0xffffff, 0.7); d2.position.set(-2, 1, -3); this.scene.add(d2);
+    this.root = new THREE.Group(); this.scene.add(this.root);
+    this.av = makeAvatar(profile.color, mySkin);
+    const m = this.av.meshes;
+    m[0].position.set(0, 0.75, 0); m[1].position.set(0, 1.31, 0);
+    for (let i = 0; i < 2; i++) {
+      const side = i ? 1 : -1, q = qe(0, 0, side * 0.35);
+      m[2 + i].quaternion.copy(q); m[2 + i].position.set(side * 0.33, 0.95, 0).add(new V3(0, -0.2, 0).applyQuaternion(q));
+      m[4 + i].position.set(side * 0.13, 0.23, 0);
+    }
+    m.forEach((x) => this.root.add(x));
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(0.5, 32), new THREE.MeshBasicMaterial({ color: 0x1b2350, transparent: true, opacity: 0.15 }));
+    disc.rotation.x = -Math.PI / 2; this.scene.add(disc);
+    this.ray = new THREE.Raycaster();
+    cv.addEventListener('pointerdown', (e) => {
+      try { cv.setPointerCapture(e.pointerId); } catch (er) {}
+      const hit = this.pick(e);
+      if (hit) { this.pushUndo(); this.painting = true; this.paint(hit); } else { this.rot = true; this.lx = e.clientX; }
+    });
+    cv.addEventListener('pointermove', (e) => {
+      if (this.painting) { const hit = this.pick(e); if (hit) this.paint(hit); }
+      else if (this.rot) { this.yaw += (e.clientX - this.lx) * 0.012; this.lx = e.clientX; }
+    });
+    const up = () => { if (this.painting) skinChanged(); this.painting = this.rot = false; };
+    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    $('#rotL').onclick = () => { this.yaw -= Math.PI / 4; };
+    $('#rotR').onclick = () => { this.yaw += Math.PI / 4; };
+    const seg = (id, key, conv) => $(id).querySelectorAll('button').forEach((b) => b.onclick = () => {
+      this[key] = conv(b.dataset.v); $(id).querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    });
+    seg('#toolSeg', 'tool', (v) => v); seg('#sizeSeg', 'size', (v) => +v);
+    this.renderPal();
+    $('#undoBtn').onclick = () => { const u = this.undo.pop(); if (u) { mySkin.cells.set(u); this.refresh(); skinChanged(); } };
+    $('#clearBtn').onclick = () => { this.pushUndo(); mySkin.cells.fill(0); this.refresh(); skinChanged(); };
+    for (const [k, id] of [['hat', '#itHat'], ['face', '#itFace'], ['back', '#itBack']]) {
+      const sel = $(id);
+      sel.innerHTML = ITEMS[k].map(([v, n]) => `<option value="${v}">${n}</option>`).join('');
+      sel.value = mySkin[k];
+      sel.onchange = () => { mySkin[k] = sel.value; this.refresh(); skinChanged(); };
+    }
+  },
+  renderPal() {
+    $('#palRow').innerHTML = PALETTE.map((c, i) => `<button class="sw" style="background:${c}" aria-label="물감 ${i + 1}" aria-pressed="${i === this.color}" data-i="${i}"></button>`).join('');
+    $('#palRow').querySelectorAll('.sw').forEach((b) => b.onclick = () => {
+      this.color = +b.dataset.i;
+      if (this.tool === 'erase') $('#toolSeg button[data-v="brush"]').click();
+      this.renderPal();
+    });
+  },
+  pushUndo() { this.undo.push(mySkin.cells.slice()); if (this.undo.length > 30) this.undo.shift(); },
+  pick(e) {
+    const r = this.cv.getBoundingClientRect();
+    this.ray.setFromCamera({ x: ((e.clientX - r.left) / r.width) * 2 - 1, y: -((e.clientY - r.top) / r.height) * 2 + 1 }, this.cam);
+    const h = this.ray.intersectObjects(this.av.meshes, false)[0];
+    return h ? { i: this.av.meshes.indexOf(h.object), uv: h.uv } : null;
+  },
+  paint(hit) {
+    const [rx, ry, rw, rh] = REGIONS[hit.i], c = mySkin.cells;
+    const px = Math.floor(hit.uv.x * ATLAS), py = Math.floor((1 - hit.uv.y) * ATLAS);
+    const v = this.tool === 'erase' ? 0 : this.color + 1;
+    if (this.tool === 'fill') { for (let y = ry; y < ry + rh; y++) for (let x = rx; x < rx + rw; x++) c[y * ATLAS + x] = v; }
+    else {
+      const r = [0, 1, 2][this.size];
+      for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+        if (dx * dx + dy * dy > r * r + 0.5) continue;
+        const x = rx + ((((px + dx - rx) % rw) + rw) % rw), y = clamp(py + dy, ry, ry + rh - 1);
+        c[y * ATLAS + x] = v;
+      }
+    }
+    this.refresh();
+  },
+  refresh() { if (this.ready) this.av.apply(mySkin, profile.color); },
+  loop() {
+    if (this.raf) return;
+    const f = () => {
+      this.raf = null;
+      if (!$('#lobby').classList.contains('on')) return;
+      const w = this.cv.clientWidth, h = this.cv.clientHeight;
+      if (w && h) {
+        const pr = this.r.getPixelRatio();
+        if (this.cv.width !== Math.round(w * pr) || this.cv.height !== Math.round(h * pr)) { this.r.setSize(w, h, false); this.cam.aspect = w / h; this.cam.updateProjectionMatrix(); }
+        this.root.rotation.y = this.yaw;
+        this.r.render(this.scene, this.cam);
+      }
+      this.raf = requestAnimationFrame(f);
+    };
+    this.raf = requestAnimationFrame(f);
+  },
+};
+
 class Char {
   constructor(game, info, local) {
     this.g = game; this.id = info.id; this.name = info.name; this.color = info.color;
@@ -817,26 +1149,9 @@ class Char {
     if (local) this.makeBody(); else this.makeKinematic();
   }
   buildMesh() {
-    const col = new THREE.Color(this.color);
-    const mat = new THREE.MeshStandardMaterial({ color: col, roughness: 0.55 });
-    const dark = new THREE.MeshStandardMaterial({ color: col.clone().multiplyScalar(0.8), roughness: 0.6 });
-    const eye = new THREE.MeshBasicMaterial({ color: 0x1b2350 });
-    const geos = [
-      new THREE.CapsuleGeometry(0.25, 0.2, 6, 14),
-      new THREE.SphereGeometry(0.25, 18, 14),
-      new THREE.CapsuleGeometry(0.075, 0.28, 4, 8), new THREE.CapsuleGeometry(0.075, 0.28, 4, 8),
-      new THREE.CapsuleGeometry(0.09, 0.22, 4, 8), new THREE.CapsuleGeometry(0.09, 0.22, 4, 8),
-    ];
-    this.meshes = geos.map((g, i) => {
-      const m = new THREE.Mesh(g, i >= 4 ? dark : mat); m.castShadow = true; this.g.scene.add(m); return m;
-    });
-    this.meshes[0].scale.set(1, 1, 0.78);
-    const eg = new THREE.SphereGeometry(0.035, 8, 6);
-    for (const sx of [-0.085, 0.085]) {
-      const e = new THREE.Mesh(eg, eye); e.position.set(sx, 0.04, 0.225); e.scale.set(1, 1.5, 0.6); this.meshes[1].add(e);
-    }
-    const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.012, 6, 12, Math.PI), eye);
-    mouth.position.set(0, -0.06, 0.235); mouth.rotation.z = Math.PI; this.meshes[1].add(mouth);
+    this.av = makeAvatar(this.color, skinOf(this.id));
+    this.meshes = this.av.meshes;
+    for (const m of this.meshes) { m.castShadow = true; this.g.scene.add(m); }
     this.label = makeLabel(this.name, this.color); this.g.scene.add(this.label);
     this.shadow = new THREE.Mesh(new THREE.CircleGeometry(0.38, 20), new THREE.MeshBasicMaterial({ color: 0x1b2350, transparent: true, opacity: 0.22, depthWrite: false }));
     this.shadow.rotation.x = -Math.PI / 2; this.g.scene.add(this.shadow);
@@ -856,6 +1171,7 @@ class Char {
   destroy() {
     for (const m of this.meshes) this.g.scene.remove(m);
     this.g.scene.remove(this.label); this.g.scene.remove(this.shadow);
+    this.av.dispose();
     if (this.body) this.g.world.removeBody(this.body);
     if (this.kbody) this.g.world.removeBody(this.kbody);
     this.clearRag();
@@ -1886,6 +2202,8 @@ class ChairGame {
   }
 }
 
+ChairGame.prototype.onSkin = function (id) { const c = this.chars.get(id); if (c) c.av.apply(skinOf(id), c.color); };
+
 // 탈락 알림 (방장 → 모두)
 const _origOnData = ChairGame.prototype.onData;
 ChairGame.prototype.onData = function (from, d) {
@@ -2321,6 +2639,819 @@ class RopeGame extends ChairGame {
       if (b.shoveT <= 0) { b.shoveT = rand(6, 14); c.heading = Math.random() < 0.5 ? Math.PI / 2 : -Math.PI / 2; inp.kick = true; }
     }
     return inp;
+  }
+}
+
+/* =============== 엄마한테 안 들키기 라면 =============== */
+// 집 구조: 위층 줄 [3번 부엌][안방][2번 부엌], 가운데 [복도][거실][다용도실], 아래 [안전지대][1번 부엌][식탁방]
+const RR = {
+  S: [-12, -6, 0, 6, '안전지대', 0x2f6b4f], K1: [-6, 0, 0, 6, '1번 부엌', 0x9aa3b5], D: [0, 8, 0, 6, '식탁방', 0x8a6a48],
+  H: [-12, -6, -6, 0, '복도', 0x76624e], L: [-6, 2, -6, 0, '거실', 0x8a6844], U: [2, 8, -6, 0, '다용도실', 0x8a929c],
+  K3: [-12, -6, -12, -6, '3번 부엌', 0x9aa3b5], M: [-6, 2, -12, -6, '안방', 0x86607c], K2: [2, 8, -12, -6, '2번 부엌', 0x9aa3b5],
+};
+const R_DW = 1.4;
+// [z, x0, x1, 문 위치들]  /  [x, z0, z1, 문 위치들]
+const R_HW = [[-12, -12, 8, []], [-6, -12, -6, []], [-6, -6, 2, [-2]], [-6, 2, 8, [5]], [0, -12, -6, [-9]], [0, -6, 0, [-3]], [0, 0, 2, []], [0, 2, 8, [5]], [6, -12, 8, []]];
+const R_VW = [[-12, -12, 6, []], [-6, -12, -6, [-9]], [-6, -6, 0, [-3]], [-6, 0, 6, [3]], [2, -12, -6, [-9]], [2, -6, 0, [-3]], [0, 0, 6, [3]], [8, -12, 6, []]];
+// 부엌 기구: cup 찬장, sink 싱크대, stove 가스레인지 / (x,z)는 조리대 가운데, (fx,fz)는 방 안쪽 방향
+const R_ST = [
+  { id: 'c1', t: 'cup', k: 1, x: -4.8, z: 5.67, fx: 0, fz: -1 }, { id: 's1', t: 'sink', k: 1, x: -3, z: 5.67, fx: 0, fz: -1 }, { id: 'g1', t: 'stove', k: 1, x: -1.2, z: 5.67, fx: 0, fz: -1 },
+  { id: 'c2', t: 'cup', k: 2, x: 3.5, z: -11.67, fx: 0, fz: 1 }, { id: 's2', t: 'sink', k: 2, x: 5, z: -11.67, fx: 0, fz: 1 }, { id: 'g2', t: 'stove', k: 2, x: 6.6, z: -11.67, fx: 0, fz: 1 },
+  { id: 'c3', t: 'cup', k: 3, x: -10.6, z: -11.67, fx: 0, fz: 1 }, { id: 's3', t: 'sink', k: 3, x: -9.1, z: -11.67, fx: 0, fz: 1 }, { id: 'g3', t: 'stove', k: 3, x: -7.6, z: -11.67, fx: 0, fz: 1 },
+];
+const R_CHUTE = { x: -11.1, z: -6.9 };
+const R_HIDE = [
+  { x: 0.3, z: -0.45, n: '소파 뒤' }, { x: 1.4, z: -5.4, n: '커튼 뒤' }, { x: -5.35, z: -5.35, n: '화분 옆' },
+  { x: 4, z: 3, n: '식탁 밑' }, { x: 7.3, z: 5.35, n: '의자 뒤' },
+  { x: 6.3, z: -5.35, n: '세탁기 옆' }, { x: 2.65, z: -0.65, n: '빨래 바구니 뒤' }, { x: 7.4, z: -0.6, n: '대걸레 사이' },
+];
+const R_NAV = {
+  S: [-9, 3], K1: [-3, 3], D: [4, 3], H: [-9, -3], L: [-2, -3], U: [5, -3], K3: [-9, -9], M: [-2, -9], K2: [5, -9],
+  dHS: [-9, 0], dSK1: [-6, 3], dK1D: [0, 3], dK1L: [-3, 0], dDU: [5, 0], dHL: [-6, -3], dLU: [2, -3], dLM: [-2, -6], dUK2: [5, -6], dMK3: [-6, -9], dMK2: [2, -9],
+};
+const R_EDGES = (() => {
+  const e = {}; const add = (a, b) => (e[a] = e[a] || []).push(b);
+  [['S', 'dHS'], ['dHS', 'H'], ['H', 'dHL'], ['dHL', 'L'], ['L', 'dK1L'], ['dK1L', 'K1'], ['L', 'dLU'], ['dLU', 'U'], ['L', 'dLM'], ['dLM', 'M'], ['M', 'dMK3'], ['dMK3', 'K3'],
+    ['M', 'dMK2'], ['dMK2', 'K2'], ['K1', 'dK1D'], ['dK1D', 'D'], ['D', 'dDU'], ['dDU', 'U'], ['U', 'dUK2'], ['dUK2', 'K2']].forEach(([a, b]) => { add(a, b); add(b, a); });
+  add('S', 'dSK1'); add('dSK1', 'K1'); // 일방통행 문: 안전지대 → 1번 부엌만
+  return e;
+})();
+const R_BOIL = 20;
+const rRoom = (x, z) => { for (const [k, r] of Object.entries(RR)) if (x >= r[0] && x <= r[1] && z >= r[2] && z <= r[3]) return k; return null; };
+const stPoint = (s) => ({ x: s.x + s.fx * 0.95, z: s.z + s.fz * 0.95 });
+
+class RamenGame {
+  constructor(roster, opts, late) {
+    this.kind = 'ramen'; this.roster = roster.slice(); this.opts = opts || {}; this.late = late; this.dead = false;
+    this.ph = null; this.tl = 0; this.round = 0; this.nr = this.opts.rounds || 3; this.moms = [];
+    this.pot = { loc: 'cup', holder: '', st: '', water: false, ramen: false, boil: 0, ready: false };
+    this.bowls = 0; this.target = 1; this.sc = {};
+    for (const r of roster) this.sc[r.id] = { pts: 0, steps: 0, drops: 0, noise: 0, catches: 0, name: r.name };
+    this.ents = new Map(); this.time = 0; this.sendT = 0; this.wT = 0; this.lit = {}; this.ripples = []; this.wrecks = [];
+    this.yaw = 0; this.pitch = 0; this.mini = null; this.lightCd = 0; this.stepT = 0; this.momStepT = {};
+    this.bot = {}; this.lastNoise = null;
+    this.buildDom(); this.buildScene(); this.buildMap();
+    for (const r of roster) this.addEnt(r);
+    if (late && !this.ents.has(myId)) this.addEnt({ id: myId, name: profile.name, color: profile.color });
+    this.last = performance.now();
+    this.loop = this.loop.bind(this); this.raf = requestAnimationFrame(this.loop);
+    this.onResize = () => this.resize(); window.addEventListener('resize', this.onResize); this.resize();
+    $('#loading').classList.add('hidden');
+    if (isHost() && !late) {
+      const ids = roster.map((r) => r.id); this.momOrder = shuffle(ids);
+      this.setPhase('intro', 8);
+    }
+  }
+  rosterInfo() { return this.roster; }
+  isMom(id) { return this.moms.includes(id); }
+  me() { return this.ents.get(myId); }
+  present() { return new Set([...net.players.map((p) => p.id), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
+
+  // ---- 화면 요소 ----
+  buildDom() {
+    const w = this.wrap = document.createElement('div'); w.id = 'ramen';
+    w.innerHTML = `<canvas></canvas>
+      <div class="r-cross"></div>
+      <div class="r-top"><div class="chips" id="rChips"></div><div class="chip r-pot hidden" id="rPot"></div></div>
+      <div class="r-prompt hidden" id="rPrompt"></div>
+      <div class="r-mini hidden" id="rMini"><div class="r-mini-t" id="rMiniT"></div><div class="r-bar"><i class="r-zone" id="rZone"></i><i class="r-needle" id="rNeedle"></i></div><small>초록 칸에서 행동 버튼!</small></div>
+      <div class="r-hurt hidden" id="rHurt"><span>★</span><span>★</span><span>★</span></div>
+      <div class="r-hand hidden" id="rHand">🖐️</div>
+      <div class="r-lock hidden" id="rLock">화면을 클릭하면 마우스로 둘러볼 수 있어요</div>
+      <div class="r-keys" id="rKeys"></div>
+      <div class="r-look touch" id="rLook"></div>
+      <div class="touch r-btns">
+        <button class="r-b-light hidden" id="rbLight">불<br>켜기</button>
+        <button class="r-b-run" id="rbRun">뛰기</button>
+        <button class="r-b-act" id="rbAct">행동</button>
+      </div>
+      <div class="overlay hidden" id="rOv"><div class="panel" id="rPanel"></div></div>`;
+    gameEl.appendChild(w); gameEl.classList.add('ramen');
+    this.cv = w.querySelector('canvas');
+    const el = (id) => w.querySelector('#' + id);
+    this.el = { chips: el('rChips'), pot: el('rPot'), prompt: el('rPrompt'), mini: el('rMini'), miniT: el('rMiniT'), zone: el('rZone'), needle: el('rNeedle'), hurt: el('rHurt'), hand: el('rHand'), lock: el('rLock'), keys: el('rKeys'), ov: el('rOv'), panel: el('rPanel'), light: el('rbLight') };
+    // 마우스 고정 (PC)
+    this.cv.addEventListener('mousedown', (e) => {
+      if (isTouch) return;
+      if (document.pointerLockElement !== this.cv) { try { this.cv.requestPointerLock(); } catch (er) {} this.swallow = true; }
+    });
+    this.onMouse = (e) => { if (document.pointerLockElement === this.cv) this.look(e.movementX, e.movementY, 0.0022); };
+    document.addEventListener('mousemove', this.onMouse);
+    // 폰: 오른쪽 화면 끌어서 둘러보기
+    const lk = el('rLook'); let pid = null, lx = 0, ly = 0;
+    lk.addEventListener('pointerdown', (e) => { pid = e.pointerId; lx = e.clientX; ly = e.clientY; try { lk.setPointerCapture(pid); } catch (er) {} });
+    lk.addEventListener('pointermove', (e) => { if (e.pointerId !== pid) return; this.look(e.clientX - lx, e.clientY - ly, 0.006); lx = e.clientX; ly = e.clientY; });
+    const end = (e) => { if (e.pointerId === pid) pid = null; };
+    lk.addEventListener('pointerup', end); lk.addEventListener('pointercancel', end);
+    const hold = (b, on) => { b.addEventListener('pointerdown', (e) => { e.preventDefault(); on(true); b.classList.add('down'); }); ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => b.addEventListener(ev, () => { on(false); b.classList.remove('down'); })); };
+    hold(el('rbRun'), (v) => { this.touchRun = v; });
+    hold(el('rbAct'), (v) => { if (v) this.touchAct = true; });
+    hold(el('rbLight'), (v) => { if (v) this.touchLight = true; });
+  }
+  look(dx, dy, s) {
+    this.yaw -= dx * s; this.pitch = clamp(this.pitch - dy * s, -1.2, 1.2);
+  }
+  buildScene() {
+    const r = this.renderer = new THREE.WebGLRenderer({ canvas: this.cv, antialias: !isTouch });
+    r.setPixelRatio(Math.min(window.devicePixelRatio, isTouch ? 1.5 : 2));
+    const s = this.scene = new THREE.Scene();
+    s.background = new THREE.Color(0x05060c);
+    this.fog = s.fog = new THREE.Fog(0x05060c, 0.6, 3.6);
+    this.cam = new THREE.PerspectiveCamera(72, 1, 0.05, 60); s.add(this.cam);
+    s.add(new THREE.HemisphereLight(0x8899cc, 0x221a18, 0.55));
+    this.headLight = new THREE.PointLight(0xffe2b8, 2.2, 5, 1.6); this.cam.add(this.headLight);
+    this.fp = new THREE.Group(); this.cam.add(this.fp);
+  }
+  resize() {
+    const w = gameEl.clientWidth, h = gameEl.clientHeight;
+    this.renderer.setSize(w, h, false); this.cam.aspect = w / h; this.cam.fov = w / h < 1 ? 85 : 72; this.cam.updateProjectionMatrix();
+  }
+  destroy() {
+    this.dead = true; cancelAnimationFrame(this.raf); music.stop();
+    window.removeEventListener('resize', this.onResize); document.removeEventListener('mousemove', this.onMouse);
+    if (document.pointerLockElement) document.exitPointerLock();
+    for (const e of this.ents.values()) e.av.dispose();
+    this.renderer.dispose(); this.wrap.remove(); gameEl.classList.remove('ramen');
+  }
+
+  // ---- 집 만들기 ----
+  buildMap() {
+    const s = this.scene, boxes = this.boxes = [];
+    const solid = (x0, x1, z0, z1, extra = {}) => boxes.push({ x0, x1, z0, z1, ...extra });
+    const wallMat = new THREE.MeshStandardMaterial({ color: 0xd9cbb4, roughness: 0.9 });
+    const wallBox = (x0, x1, z0, z1) => {
+      solid(x0, x1, z0, z1);
+      const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, 2.6, z1 - z0), wallMat); m.position.set((x0 + x1) / 2, 1.3, (z0 + z1) / 2); s.add(m);
+    };
+    const run = (a0, a1, doors, f) => {
+      let a = a0;
+      for (const d of doors.slice().sort((p, q) => p - q)) { if (d - R_DW / 2 > a) f(a, d - R_DW / 2); a = d + R_DW / 2; }
+      if (a1 > a) f(a, a1);
+    };
+    for (const [z, x0, x1, doors] of R_HW) run(x0, x1, doors, (a, b) => wallBox(a, b, z - 0.1, z + 0.1));
+    for (const [x, z0, z1, doors] of R_VW) run(z0, z1, doors, (a, b) => wallBox(x - 0.1, x + 0.1, a, b));
+    // 바닥
+    for (const [k, r] of Object.entries(RR)) {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(r[1] - r[0], r[3] - r[2]), new THREE.MeshStandardMaterial({ color: r[5], roughness: 0.85 }));
+      m.rotation.x = -Math.PI / 2; m.position.set((r[0] + r[1]) / 2, 0, (r[2] + r[3]) / 2); s.add(m);
+      // 방 이름표 (멀리서도 희미하게 보여요)
+      const lab = makeLabel(r[4], k === 'S' ? '#33d69f' : k.startsWith('K') ? '#ffd23f' : '#cfd6ff');
+      lab.material.fog = false; lab.material.depthTest = true; lab.material.opacity = k === 'S' || k.startsWith('K') ? 0.9 : 0.35;
+      lab.scale.set(2, 0.5, 1); lab.position.set((r[0] + r[1]) / 2, 2.35, (r[2] + r[3]) / 2); s.add(lab);
+    }
+    // 천장 등은 하나만 두고, 엄마가 불 켠 방으로 옮겨요 (폰에서도 가볍게)
+    this.lamp = new THREE.PointLight(0xfff1c2, 0, 14, 1.2); s.add(this.lamp);
+    // 안전지대 문틀은 초록빛
+    const glow = new THREE.MeshBasicMaterial({ color: 0x33d69f, fog: false });
+    for (const [x, z, rot] of [[-9, 0, 0], [-6, 3, 1]]) { const g = new THREE.Mesh(new THREE.BoxGeometry(R_DW + 0.2, 0.08, 0.25), glow); g.position.set(x, 2.2, z); g.rotation.y = rot * Math.PI / 2; s.add(g); }
+    // 일방통행 문 표시
+    const ow = makeLabel('나가는 문 →', '#33d69f'); ow.material.fog = false; ow.scale.set(1.4, 0.35, 1); ow.position.set(-6.4, 1.9, 3); s.add(ow);
+    // 가구
+    const wood = new THREE.MeshStandardMaterial({ color: 0x9c6b3f, roughness: 0.8 }), white = new THREE.MeshStandardMaterial({ color: 0xe9ecef, roughness: 0.6 });
+    const metal = new THREE.MeshStandardMaterial({ color: 0x9aa0a6, metalness: 0.6, roughness: 0.35 }), black = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.6 });
+    const add = (geo, mat, x, y, z, ry = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.y = ry; s.add(m); return m; };
+    this.flames = {};
+    for (const st of R_ST) {
+      solid(st.x - 0.7, st.x + 0.7, st.z - 0.33, st.z + 0.33);
+      add(new THREE.BoxGeometry(1.4, 0.9, 0.66), st.t === 'cup' ? wood : white, st.x, 0.45, st.z);
+      if (st.t === 'cup') { add(new THREE.BoxGeometry(1.4, 0.9, 0.5), wood, st.x, 1.9, st.z + st.fz * -0.05); for (const dx of [-0.2, 0.2]) add(new THREE.BoxGeometry(0.05, 0.15, 0.05), metal, st.x + dx, 0.6, st.z + st.fz * 0.34); }
+      if (st.t === 'sink') { add(new THREE.BoxGeometry(0.8, 0.05, 0.45), metal, st.x, 0.91, st.z); add(new THREE.CylinderGeometry(0.03, 0.03, 0.35), metal, st.x, 1.1, st.z - st.fz * 0.22); }
+      if (st.t === 'stove') {
+        add(new THREE.BoxGeometry(1.2, 0.04, 0.55), black, st.x, 0.92, st.z);
+        add(new THREE.TorusGeometry(0.13, 0.02, 6, 16), metal, st.x, 0.95, st.z).rotation.x = Math.PI / 2;
+        const fl = add(new THREE.ConeGeometry(0.12, 0.12, 12, 1, true), new THREE.MeshBasicMaterial({ color: st.k === 3 ? 0x3d7bff : 0x4dabf7, fog: false, transparent: true, opacity: 0.85 }), st.x, 0.99, st.z);
+        fl.visible = false; this.flames[st.id] = fl;
+      }
+      const lab = makeLabel({ cup: '찬장', sink: '싱크대', stove: '가스레인지' }[st.t], '#ffffff'); lab.material.depthTest = true; lab.scale.set(1, 0.25, 1); lab.position.set(st.x, 1.25, st.z + st.fz * 0.1); s.add(lab);
+    }
+    // 빨래 통로 (3번 부엌 → 안전지대, 한 방향)
+    add(new THREE.BoxGeometry(0.9, 0.9, 0.08), new THREE.MeshStandardMaterial({ color: 0x343a40 }), R_CHUTE.x - 0.3, 0.8, -6.12);
+    const ch = makeLabel('빨래 통로 ↓', '#33d69f'); ch.material.fog = false; ch.scale.set(1.4, 0.35, 1); ch.position.set(R_CHUTE.x - 0.3, 1.5, -6.3); s.add(ch);
+    // 거실: 소파, TV, 커튼, 화분
+    solid(-0.9, 1.5, -1.65, -0.85); add(new THREE.BoxGeometry(2.4, 0.8, 0.8), new THREE.MeshStandardMaterial({ color: 0x5c7cfa }), 0.3, 0.4, -1.25);
+    solid(-5.3, -3.7, -5.9, -5.5); add(new THREE.BoxGeometry(1.6, 0.5, 0.4), wood, -4.5, 0.25, -5.7);
+    add(new THREE.BoxGeometry(1.4, 0.8, 0.06), new THREE.MeshBasicMaterial({ color: 0x74c0fc, fog: false }), -4.5, 0.95, -5.75);
+    add(new THREE.BoxGeometry(0.9, 2.4, 0.08), new THREE.MeshStandardMaterial({ color: 0xa61e4d }), 1.4, 1.2, -5.85);
+    add(new THREE.CylinderGeometry(0.25, 0.2, 0.5, 12), new THREE.MeshStandardMaterial({ color: 0x8b5a3c }), -5.6, 0.25, -5.6);
+    add(new THREE.SphereGeometry(0.5, 10, 8), new THREE.MeshStandardMaterial({ color: 0x2f9e44 }), -5.6, 0.9, -5.6);
+    // 식탁방
+    add(new THREE.BoxGeometry(2.4, 0.08, 1.4), wood, 4, 0.78, 3);
+    for (const [dx, dz] of [[-1.1, -0.6], [1.1, -0.6], [-1.1, 0.6], [1.1, 0.6]]) add(new THREE.BoxGeometry(0.07, 0.78, 0.07), wood, 4 + dx, 0.39, 3 + dz);
+    add(new THREE.BoxGeometry(0.5, 1.0, 0.5), wood, 7.3, 0.5, 4.7);
+    // 다용도실
+    solid(6.9, 7.8, -5.8, -4.9); add(new THREE.BoxGeometry(0.9, 0.95, 0.9), white, 7.35, 0.47, -5.35);
+    add(new THREE.CylinderGeometry(0.35, 0.3, 0.55, 12), new THREE.MeshStandardMaterial({ color: 0xffd23f }), 2.65, 0.28, -0.3);
+    for (let i = 0; i < 3; i++) add(new THREE.CylinderGeometry(0.03, 0.03, 1.6), wood, 7.6 + i * 0.12, 0.8, -0.25);
+    // 안방 침대, 안전지대 이층침대
+    solid(-3.1, -0.9, -11.9, -9.8); add(new THREE.BoxGeometry(2.2, 0.5, 2.1), new THREE.MeshStandardMaterial({ color: 0xf783ac }), -2, 0.25, -10.85);
+    solid(-11.9, -10.6, 0.2, 2.6); add(new THREE.BoxGeometry(1.3, 1.6, 2.4), wood, -11.25, 0.8, 1.4);
+    // 숨는 곳 표시 (가까이 가야 보여요)
+    this.hideMarks = R_HIDE.map((h) => { const m = add(new THREE.RingGeometry(0.25, 0.32, 20), new THREE.MeshBasicMaterial({ color: 0xa678ff, transparent: true, opacity: 0.6 }), h.x, 0.02, h.z); m.rotation.x = -Math.PI / 2; return m; });
+    // 냄비
+    this.potMesh = this.makePot(); s.add(this.potMesh);
+    this.fpPot = this.makePot(); this.fpPot.position.set(0.05, -0.42, -0.55); this.fpPot.visible = false; this.fp.add(this.fpPot);
+  }
+  makePot() {
+    const g = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.18, 0.18, 18, 1, true), new THREE.MeshStandardMaterial({ color: 0xf08c00, metalness: 0.4, roughness: 0.4, side: THREE.DoubleSide }));
+    g.add(body);
+    const bottom = new THREE.Mesh(new THREE.CircleGeometry(0.18, 18), body.material); bottom.rotation.x = -Math.PI / 2; bottom.position.y = -0.09; g.add(bottom);
+    for (const s of [-1, 1]) { const h = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.025, 0.04), new THREE.MeshStandardMaterial({ color: 0x1b2350 })); h.position.set(s * 0.24, 0.07, 0); g.add(h); }
+    const water = new THREE.Mesh(new THREE.CircleGeometry(0.19, 18), new THREE.MeshStandardMaterial({ color: 0x74c0fc, transparent: true, opacity: 0.8 })); water.rotation.x = -Math.PI / 2; water.position.y = 0.04; g.add(water);
+    const noodle = new THREE.Mesh(new THREE.TorusKnotGeometry(0.08, 0.02, 40, 6), new THREE.MeshStandardMaterial({ color: 0xffd8a8 })); noodle.position.y = 0.05; noodle.scale.y = 0.4; g.add(noodle);
+    g.userData = { water, noodle };
+    return g;
+  }
+  collide(e, ox, oz) {
+    const r = 0.28;
+    for (const b of this.boxes) {
+      const nx = clamp(e.x, b.x0, b.x1), nz = clamp(e.z, b.z0, b.z1);
+      const dx = e.x - nx, dz = e.z - nz, d2 = dx * dx + dz * dz;
+      if (d2 < r * r) {
+        if (d2 > 1e-8) { const d = Math.sqrt(d2), p = (r - d) / d; e.x += dx * p; e.z += dz * p; }
+        else { e.x = ox; e.z = oz; }
+      }
+    }
+    // 일방통행 문: 1번 부엌 쪽에서 안전지대 쪽으로는 못 넘어가요
+    if (ox >= -6 && e.x < -6 && Math.abs(e.z - 3) < R_DW) e.x = -5.99;
+    // 엄마는 안전지대에 못 들어가요
+    if (this.isMom(e.id) && rRoom(e.x, e.z) === 'S') { e.x = ox; e.z = oz; }
+  }
+
+  // ---- 참가자 ----
+  addEnt(r) {
+    if (this.ents.has(r.id)) return this.ents.get(r.id);
+    const local = r.id === myId || (isHost() && r.id.startsWith('bot_'));
+    const av = makeAvatar(r.color, skinOf(r.id));
+    const e = { id: r.id, name: r.name, color: r.color, bot: !!r.bot, local, av, x: -9, z: 3, yaw: 0, cr: 0, hd: -1, mv: 0, dg: 0, hu: 0, tx: -9, tz: 3, tyaw: 0, phase: 0, run: 0, seen: performance.now() };
+    if (r.id !== myId) { for (const m of av.meshes) this.scene.add(m); e.label = makeLabel(r.name, r.color); e.label.material.depthTest = true; e.label.scale.set(0.9, 0.22, 1); this.scene.add(e.label); }
+    else {
+      // 1인칭: 내 팔만 보여요 (내가 칠한 그대로)
+      for (let i = 0; i < 2; i++) {
+        const a = new THREE.Mesh(av.meshes[2 + i].geometry, av.mat); a.position.set(i ? 0.3 : -0.3, -0.42, -0.6); a.rotation.set(-1.25, 0, i ? 0.3 : -0.3); a.scale.setScalar(0.8);
+        this.fp.add(a); (this.fpArms = this.fpArms || []).push(a);
+      }
+    }
+    e.costume = new THREE.Group(); av.meshes[1].add(e.costume);
+    e.apron = new THREE.Group(); av.meshes[0].add(e.apron);
+    this.ents.set(r.id, e);
+    return e;
+  }
+  onSkin(id) { const e = this.ents.get(id); if (e) e.av.apply(skinOf(id), e.color); }
+  onRoster() {
+    const pr = this.present();
+    for (const [id, e] of this.ents) if (!pr.has(id) && id !== myId) {
+      for (const m of e.av.meshes) this.scene.remove(m); if (e.label) this.scene.remove(e.label); e.av.dispose(); this.ents.delete(id);
+      if (isHost() && this.pot.holder === id) this.resetPot();
+    }
+  }
+  setCostumes() {
+    for (const e of this.ents.values()) {
+      e.costume.clear(); e.apron.clear();
+      const i = this.moms.indexOf(e.id);
+      if (i < 0) continue;
+      if (i === 0) {
+        for (let k = 0; k < 7; k++) { const a = (k / 7) * TAU; const b = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), M(0x6c4f7c)); b.position.set(Math.cos(a) * 0.2, 0.14, Math.sin(a) * 0.2); e.costume.add(b); }
+        const ap = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.42, 0.02), M(0xff8fab)); ap.position.set(0, -0.08, 0.27); e.apron.add(ap);
+      } else {
+        e.costume.add(itemMesh('face', 'mus')); e.costume.add(itemMesh('face', 'glasses'));
+        const tie = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.3, 0.02), M(0x1971c2)); tie.position.set(0, 0.05, 0.27); e.apron.add(tie);
+      }
+    }
+  }
+  spawn(e) {
+    if (this.isMom(e.id)) { const i = this.moms.indexOf(e.id); e.x = -2.6 + i * 1.2; e.z = -8.2; e.yaw = Math.PI; }
+    else { e.x = rand(-10.5, -7.5); e.z = rand(3.2, 5.2); e.yaw = Math.PI; }
+    e.hd = -1; e.cr = 0; e.dg = 0;
+    if (e.id === myId) { this.yaw = e.yaw; this.pitch = 0; }
+  }
+
+  // ---- 방장 진행 ----
+  stateMsg() { return { k: 'w', ph: this.ph, tl: Math.round(this.tl * 10) / 10, rd: this.round, nr: this.nr, moms: this.moms, pot: this.pot, bowls: this.bowls, target: this.target, sc: this.sc, win: this.win }; }
+  setPhase(ph, dur) {
+    const prev = this.ph; this.ph = ph; this.tl = dur;
+    if (ph === 'intro') {
+      this.round++;
+      const pr = [...this.present()], n = (this.opts.momMode === 2 && pr.length >= 4) ? 2 : 1;
+      this.moms = []; let guard = 0;
+      while (this.moms.length < n && guard++ < 50) { const id = this.momOrder[this.momIdx = ((this.momIdx ?? -1) + 1) % this.momOrder.length]; if (pr.includes(id) && !this.moms.includes(id)) this.moms.push(id); }
+      const kids = pr.length - this.moms.length;
+      this.target = kids <= 2 ? 1 : kids <= 4 ? 2 : 3;
+      this.bowls = 0; this.win = ''; this.resetPot(true);
+    }
+    if (ph === 'result') {
+      const kidsWin = this.bowls >= this.target; this.win = kidsWin ? 'kids' : 'mom';
+      for (const [id, s] of Object.entries(this.sc)) { if (this.isMom(id)) { if (!kidsWin) s.pts += 6; } else if (kidsWin) s.pts += 5; }
+    }
+    this.enter(ph, prev);
+    net.bcast(this.stateMsg()); this.wT = 0.2;
+  }
+  resetPot(silent) { this.pot = { loc: 'cup', holder: '', st: '', water: false, ramen: false, boil: 0, ready: false }; if (!silent) net.bcast(this.stateMsg()); }
+  hostTick(dt) {
+    this.tl -= dt;
+    const ph = this.ph, P = this.pot;
+    if (ph === 'intro' && this.tl <= 0) this.setPhase('play', 180);
+    else if (ph === 'play') {
+      if (P.loc === 'stove' && P.ramen && !P.ready) {
+        const st = R_ST.find((s) => s.id === P.st);
+        P.boil += dt * (st && st.k === 3 ? R_BOIL / 12 : 1);
+        this.boilNz = (this.boilNz || 0) - dt;
+        if (this.boilNz <= 0 && st) { this.boilNz = 6; this.noise(stPoint(st).x, stPoint(st).z, 0.3, ''); }
+        if (P.boil >= R_BOIL) { P.ready = true; net.bcast(this.stateMsg()); }
+      }
+      if (this.bowls >= this.target || this.tl <= 0) this.setPhase('result', 7);
+    } else if (ph === 'result' && this.tl <= 0) { if (this.round >= this.nr) this.setPhase('end', 16); else this.setPhase('intro', 7); }
+    else if (ph === 'end' && this.tl <= 0) { endGameAll(); return; }
+    this.wT -= dt;
+    if (this.wT <= 0 && !this.dead) { this.wT = 0.25; net.bcast(this.stateMsg()); }
+  }
+  hostAct(from, d) {
+    const P = this.pot, st = R_ST.find((s) => s.id === d.st), S = this.sc[from];
+    if (this.ph !== 'play' || this.isMom(from) || !st) return;
+    let ok = false;
+    if (d.a === 'take' && P.loc === 'cup' && st.t === 'cup') { Object.assign(P, { loc: 'hand', holder: from, st: '', water: false, ramen: false, boil: 0, ready: false }); ok = true; }
+    else if (d.a === 'water' && P.loc === 'hand' && P.holder === from && !P.water && st.t === 'sink') { P.water = true; ok = true; }
+    else if (d.a === 'stove' && P.loc === 'hand' && P.holder === from && P.water && st.t === 'stove') { Object.assign(P, { loc: 'stove', holder: '', st: st.id }); ok = true; }
+    else if (d.a === 'ramen' && P.loc === 'stove' && P.st === st.id && !P.ramen) { P.ramen = true; ok = true; }
+    else if (d.a === 'lift' && (P.loc === 'stove' || P.loc === 'counter') && P.st === st.id) { Object.assign(P, { loc: 'hand', holder: from, st: '' }); }
+    else if (d.a === 'put' && P.loc === 'hand' && P.holder === from && st.t !== 'stove') { Object.assign(P, { loc: 'counter', holder: '', st: st.id }); }
+    else if (d.a === 'serve' && P.loc === 'stove' && P.st === st.id && P.ready) {
+      this.bowls++; if (S) S.pts += 3; ok = true;
+      this.resetPot(true);
+      net.bcast({ k: 'bowl', by: from, n: this.bowls }); this.onBowl(from, this.bowls);
+    }
+    if (ok && d.mini && S) { S.steps++; S.pts += 1; }
+    if (d.mini && !d.ok) { const p = stPoint(st); this.noise(p.x, p.z, 1, from); }
+    net.bcast(this.stateMsg());
+  }
+  hostCatch(mom, kid) {
+    if (this.ph !== 'play' || !this.isMom(mom) || this.isMom(kid)) return;
+    const a = this.ents.get(mom), b = this.ents.get(kid);
+    if (!a || !b || b.dg > 0 || (b.caughtAt && this.time - b.caughtAt < 3)) return;
+    if (rRoom(b.x, b.z) === 'S' || Math.hypot(a.x - b.x, a.z - b.z) > 1.6) return;
+    b.caughtAt = this.time;
+    const drop = this.pot.loc === 'hand' && this.pot.holder === kid;
+    if (drop) { this.resetPot(true); if (this.sc[kid]) this.sc[kid].drops++; }
+    if (this.sc[mom]) { this.sc[mom].pts += 2; this.sc[mom].catches++; }
+    const m = { k: 'caught', kid, by: mom, drop, x: b.x, z: b.z };
+    net.bcast(m); this.onCaught(m); net.bcast(this.stateMsg());
+  }
+
+  // ---- 메시지 ----
+  onData(from, d) {
+    const host = isHost();
+    switch (d.k) {
+      case 'p': {
+        if (d.id === myId || (host && d.id.startsWith('bot_'))) return;
+        if (!d.id.startsWith('bot_') && d.id !== from) return;
+        let e = this.ents.get(d.id);
+        if (!e) { const info = net.players.find((p) => p.id === d.id) || this.roster.find((r) => r.id === d.id); if (!info) return; e = this.addEnt(info); this.setCostumes(); }
+        if (Math.hypot(e.x - d.x, e.z - d.z) > 3) { e.x = d.x; e.z = d.z; }
+        Object.assign(e, { tx: d.x, tz: d.z, tyaw: d.yaw, cr: d.cr, hd: d.hd, mv: d.mv, hu: d.hu, dgR: d.dg, hold: d.ho, seen: performance.now() });
+        return;
+      }
+      case 'w': {
+        if (host || from !== net.hostId) return;
+        const prev = this.ph, momsChanged = JSON.stringify(this.moms) !== JSON.stringify(d.moms);
+        Object.assign(this, { tl: d.tl, round: d.rd, nr: d.nr, moms: d.moms, pot: d.pot, bowls: d.bowls, target: d.target, sc: d.sc, win: d.win });
+        this.ph = d.ph;
+        if (momsChanged) this.setCostumes();
+        if (d.ph !== prev) this.enter(d.ph, prev);
+        return;
+      }
+      case 'nz': this.onNoise(d); return;
+      case 'lt': this.onLight(d.room); return;
+      case 'caught': if (!host && from === net.hostId) this.onCaught(d); return;
+      case 'bowl': if (!host && from === net.hostId) this.onBowl(d.by, d.n); return;
+    }
+    if (!host) return;
+    if (d.k === 'act') { const who = d.id && d.id.startsWith('bot_') && from === myId ? d.id : from; this.hostAct(who, d); }
+    if (d.k === 'catch') { const who = d.by && d.by.startsWith('bot_') && from === myId ? d.by : from; this.hostCatch(who, d.kid); }
+  }
+  noise(x, z, l, by) {
+    const d = { k: 'nz', x: Math.round(x * 10) / 10, z: Math.round(z * 10) / 10, l, by: by || '' };
+    net.bcast(d); this.onNoise(d);
+  }
+  onNoise(d) {
+    if (isHost() && d.by && this.sc[d.by]) this.sc[d.by].noise += d.l;
+    if (d.l >= 0.5 || Math.random() < 0.35) this.lastNoise = { x: d.x, z: d.z, t: this.time };
+    const me = this.me(), dist = me ? Math.hypot(me.x - d.x, me.z - d.z) : 10;
+    if (d.l >= 1) { const v = clamp(1.2 - dist / 14, 0.15, 1); tone(1400, 0.25, 'square', 0.12 * v, 0.5); kNoise(0, 0.25, 0.35 * v, 3200, 'bandpass'); }
+    if (me && this.isMom(myId)) {
+      const ring = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.62, 32), new THREE.MeshBasicMaterial({ color: d.l >= 1 ? 0xff4f8b : 0xffd23f, fog: false, transparent: true, depthTest: false, side: THREE.DoubleSide }));
+      ring.rotation.x = -Math.PI / 2; ring.position.set(d.x, 0.15, d.z); ring.renderOrder = 20; this.scene.add(ring);
+      this.ripples.push({ m: ring, t: 0, l: d.l });
+    }
+  }
+  onLight(room) {
+    if (!RR[room] || room === 'S') return;
+    this.lit[room] = this.time + 3;
+    tone(2000, 0.05, 'square', 0.1);
+  }
+  onCaught(m) {
+    const e = this.ents.get(m.kid);
+    if (e) { e.dg = 1.3; e.hu = 6.3; }
+    if (m.drop) {
+      const w = this.makePot(); w.position.set(m.x, 0.1, m.z); w.rotation.z = 1.4; w.userData.water.visible = w.userData.noodle.visible = false; this.scene.add(w);
+      this.wrecks.push({ m: w, t: 6 });
+      tone(900, 0.3, 'square', 0.15, 0.4); kNoise(0, 0.35, 0.4, 3000, 'bandpass');
+      toast(`${(this.ents.get(m.kid) || {}).name || '누군가'}님이 냄비를 떨어뜨렸어요! 새 냄비부터 다시`);
+    }
+    const kn = (this.ents.get(m.kid) || {}).name || '?', mn = (this.ents.get(m.by) || {}).name || '엄마';
+    toast(`${mn}한테 ${kn}님이 잡혔어요!`);
+    SFX.ouch();
+    if (m.kid === myId) { this.el.hurt.classList.remove('hidden'); setTimeout(() => this.el.hurt.classList.add('hidden'), 1600); this.cancelMini(); }
+    if (m.by === myId) { this.el.hand.classList.remove('hidden', 'go'); void this.el.hand.offsetWidth; this.el.hand.classList.add('go'); setTimeout(() => this.el.hand.classList.add('hidden'), 700); }
+  }
+  onBowl(by, n) {
+    SFX.lock(); toast(`라면 완성! (${n}/${this.target}그릇) ${(this.ents.get(by) || {}).name || ''}님이 담았어요`);
+  }
+
+  // ---- 단계 화면 ----
+  enter(ph, prev) {
+    const mom = this.isMom(myId);
+    this.el.light.classList.toggle('hidden', !mom);
+    this.el.keys.innerHTML = mom
+      ? '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Shift</kbd> 뛰기 &nbsp; <kbd>F</kbd> 불 켜기 &nbsp; 아이한테 닿으면 잡아요'
+      : '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Shift</kbd> 뛰기(소리 나요) &nbsp; <kbd>E</kbd> 또는 <kbd>클릭</kbd> 행동';
+    if (ph === 'intro') {
+      this.setCostumes();
+      for (const e of this.ents.values()) if (e.local) this.spawn(e);
+      this.cancelMini();
+      const moms = this.moms.map((id, i) => `${esc((this.ents.get(id) || {}).name || '?')} (${i ? '아빠' : '엄마'})`).join(', ');
+      this.panel(`<h2>${mom ? (this.moms.indexOf(myId) ? '당신은 아빠예요' : '당신은 엄마예요') : '당신은 배고픈 아이예요'}</h2>
+        <p>라운드 ${this.round}/${this.nr} · 엄마 팀: ${moms}</p>
+        ${mom ? '<p>새벽 3시, 아이들이 몰래 라면을 끓이려고 해요. 소리가 나면 빨간 파동이 보여요. 아이한테 닿으면 잡아요. F로 방 불을 3초 켤 수 있어요.</p>'
+              : `<p>집에 냄비는 딱 하나예요. 다 같이 3분 안에 라면 <b>${this.target}그릇</b>을 완성하면 이겨요.</p><p>냄비 꺼내기 → 물 받기 → 가스레인지에 올리기 → 라면 넣기 → 끓이기 → 그릇에 담기</p><p>냄비를 들고 있다가 잡히면 처음부터 다시예요. 안전지대에는 엄마가 못 들어와요.</p>`}`);
+      music.stop();
+    }
+    if (ph === 'play') { this.hidePanel(); toast(mom ? '아이들을 찾아요!' : '조용히… 라면을 끓여요'); if (!isTouch && document.pointerLockElement !== this.cv) this.el.lock.classList.remove('hidden'); }
+    if (ph === 'result') {
+      this.cancelMini();
+      const kidsWin = this.win === 'kids';
+      this.panel(`<h2>${kidsWin ? '아이들 승리! 라면 냠냠' : '엄마 승리! 다들 자러 가'}</h2><p>완성한 라면 ${this.bowls}/${this.target}그릇</p>${this.rankHTML()}`);
+      (kidsWin ? SFX.fanfare : SFX.scratch)();
+    }
+    if (ph === 'end') {
+      const st = Object.entries(this.sc), top = (f) => st.reduce((a, b) => (f(b[1]) > (a ? f(a[1]) : 0) ? b : a), null);
+      const win = st.slice().sort((a, b) => b[1].pts - a[1].pts)[0];
+      const aw = [];
+      const c = top((s) => s.steps), t = top((s) => s.drops), m = top((s) => s.catches);
+      const ninja = st.filter(([, s]) => s.steps > 0).sort((a, b) => a[1].noise - b[1].noise)[0];
+      if (c) aw.push(`<li><b>라면 셰프</b>${esc(c[1].name)} (${c[1].steps}단계)</li>`);
+      if (t) aw.push(`<li><b>트롤왕</b>${esc(t[1].name)} (냄비 ${t[1].drops}번 떨어뜨림)</li>`);
+      if (ninja) aw.push(`<li><b>닌자</b>${esc(ninja[1].name)} (제일 조용했어요)</li>`);
+      if (m) aw.push(`<li><b>엄마 오브 엄마</b>${esc(m[1].name)} (${m[1].catches}번 잡음)</li>`);
+      SFX.fanfare();
+      this.panel(`<h2>${win ? esc(win[1].name) + ' 우승!' : '게임 끝!'}</h2><ul class="awards">${aw.join('')}</ul>${this.rankHTML()}
+        ${isHost() ? '<button class="btn pop" id="rBack">대기실로 돌아가기</button>' : '<p class="wait">잠시 뒤 대기실로 돌아가요.</p>'}`);
+      if (isHost()) this.el.panel.querySelector('#rBack').onclick = () => endGameAll();
+      if (document.pointerLockElement) document.exitPointerLock();
+    }
+  }
+  rankHTML() {
+    const st = Object.values(this.sc).slice().sort((a, b) => b.pts - a.pts);
+    return `<ul class="rank">${st.map((s, i) => `<li><span>${i + 1}. ${esc(s.name)}</span><span>${s.pts}점</span></li>`).join('')}</ul>`;
+  }
+  panel(h) { this.el.panel.innerHTML = h; this.el.ov.classList.remove('hidden'); }
+  hidePanel() { this.el.ov.classList.add('hidden'); }
+
+  // ---- 행동 ----
+  nearStation(e) {
+    let best = null, bd = 1.35;
+    for (const s of R_ST) { const p = stPoint(s), d = Math.hypot(p.x - e.x, p.z - e.z); if (d < bd) { bd = d; best = s; } }
+    return best;
+  }
+  nearHide(e) { let best = -1, bd = 0.95; R_HIDE.forEach((h, i) => { const d = Math.hypot(h.x - e.x, h.z - e.z); if (d < bd) { bd = d; best = i; } }); return best; }
+  // 지금 할 수 있는 행동 (아이용)
+  options(e) {
+    if (this.ph !== 'play' || this.isMom(e.id) || e.dg > 0) return null;
+    if (e.hd >= 0) return { a: 'unhide', label: '나오기' };
+    const P = this.pot, hold = P.loc === 'hand' && P.holder === e.id;
+    const st = this.nearStation(e);
+    if (st) {
+      if (st.t === 'cup' && P.loc === 'cup') return { a: 'take', st, mini: true, label: '냄비 꺼내기' };
+      if (st.t === 'sink' && hold && !P.water) return { a: 'water', st, mini: true, label: '물 받기' };
+      if (st.t === 'stove' && hold && P.water) return { a: 'stove', st, mini: true, label: '가스 켜고 냄비 올리기' };
+      if (P.loc === 'stove' && P.st === st.id) {
+        if (!P.ramen) return { a: 'ramen', st, mini: true, label: '라면 넣기' };
+        if (P.ready) return { a: 'serve', st, mini: true, label: '그릇에 담기' };
+        return { a: 'lift', st, label: '끓는 냄비 들기' };
+      }
+      if (P.loc === 'counter' && P.st === st.id) return { a: 'lift', st, label: '냄비 들기' };
+      if (hold && st.t !== 'stove') return { a: 'put', st, label: '조리대에 내려놓기' };
+    }
+    if (Math.hypot(R_CHUTE.x - e.x, R_CHUTE.z - e.z) < 1.2) return hold ? { a: 'none', label: '냄비 들고는 빨래 통로를 못 타요' } : { a: 'chute', label: '빨래 통로 타기 (안전지대로)' };
+    const h = this.nearHide(e);
+    if (h >= 0) return { a: 'hide', h, label: `숨기 (${R_HIDE[h].n})` };
+    return null;
+  }
+  doAction(e, o, botOk) {
+    if (!o || o.a === 'none') return;
+    if (o.a === 'unhide') { e.hd = -1; return; }
+    if (o.a === 'hide') { e.hd = o.h; e.x = R_HIDE[o.h].x; e.z = R_HIDE[o.h].z; return; }
+    if (o.a === 'chute') { e.x = rand(-10.5, -7.5); e.z = rand(1, 2.5); kNoise(0, 0.6, 0.3, 600, 'lowpass'); tone(500, 0.6, 'sine', 0.2, 0.3); if (e.id === myId) toast('슈우웅~ 안전지대 도착'); return; }
+    if (o.mini) {
+      if (e.id === myId) { this.startMini(o); return; }
+      this.toHost({ k: 'act', id: e.id, a: o.a, st: o.st.id, mini: true, ok: botOk });
+      return;
+    }
+    this.toHost({ k: 'act', id: e.id, a: o.a, st: o.st.id });
+  }
+  toHost(d) { net.toHost(d); }
+  startMini(o) {
+    const w = { take: 0.26, water: 0.24, stove: 0.2, ramen: 0.22, serve: 0.18 }[o.a] || 0.22;
+    this.mini = { o, t: 0, zs: rand(0.1, 0.9 - w), w, speed: rand(1.1, 1.5) };
+    this.el.miniT.textContent = o.label;
+    this.el.zone.style.left = this.mini.zs * 100 + '%'; this.el.zone.style.width = w * 100 + '%';
+    this.el.mini.classList.remove('hidden');
+  }
+  cancelMini() { this.mini = null; this.el.mini.classList.add('hidden'); }
+  endMini(press) {
+    const m = this.mini; if (!m) return;
+    const pos = this.needlePos(m), ok = press && pos >= m.zs && pos <= m.zs + m.w;
+    this.cancelMini();
+    if (ok) tone(880, 0.08, 'triangle', 0.12); else toast('쨍그랑! 소리가 났어요');
+    this.toHost({ k: 'act', a: m.o.a, st: m.o.st.id, mini: true, ok });
+  }
+  needlePos(m) { const p = (m.t * m.speed) % 2; return p < 1 ? p : 2 - p; }
+
+  // ---- 봇 ----
+  path(from, to, mom) {
+    const bad = mom ? new Set(['S', 'dHS', 'dSK1']) : new Set();
+    const prev = { [from]: null }, q = [from];
+    while (q.length) { const n = q.shift(); if (n === to) break; for (const m of R_EDGES[n] || []) if (!(m in prev) && !bad.has(m)) { prev[m] = n; q.push(m); } }
+    if (!(to in prev)) return null;
+    const out = []; for (let n = to; n; n = prev[n]) out.unshift(n); return out;
+  }
+  botGo(e, b, x, z) {
+    const room = rRoom(e.x, e.z), troom = rRoom(x, z);
+    if (!b.route || b.goal !== `${x},${z}`) {
+      b.goal = `${x},${z}`; b.route = [];
+      if (room && troom && room !== troom) { const p = this.path(room, troom, this.isMom(e.id)); if (p) b.route = p.slice(1).map((n) => R_NAV[n]); }
+      b.route.push([x, z]);
+    }
+    const [tx, tz] = b.route[0], dx = tx - e.x, dz = tz - e.z, d = Math.hypot(dx, dz);
+    if (d < 0.35) { b.route.shift(); if (!b.route.length) { b.route = null; return true; } }
+    return { x: dx / (d || 1), z: dz / (d || 1) };
+  }
+  botThink(e, dt) {
+    const b = this.bot[e.id] || (this.bot[e.id] = { t: 0 });
+    const out = { x: 0, z: 0, run: false };
+    if (this.ph !== 'play' || e.dg > 0) return out;
+    b.t -= dt;
+    const go = (x, z, run) => { const r = this.botGo(e, b, x, z); if (r === true) return true; if (r) { out.x = r.x; out.z = r.z; out.run = run; } return false; };
+    if (this.isMom(e.id)) {
+      // 엄마 봇: 보이는 아이 쫓기 → 소리 난 곳 → 순찰
+      let tgt = null, td = 5;
+      for (const k of this.ents.values()) {
+        if (this.isMom(k.id) || k.dg > 0 || rRoom(k.x, k.z) === 'S') continue;
+        const d = Math.hypot(k.x - e.x, k.z - e.z);
+        if ((k.hd < 0 || d < 1) && d < td && rRoom(k.x, k.z) === rRoom(e.x, e.z)) { td = d; tgt = k; }
+      }
+      if (tgt) { const dx = tgt.x - e.x, dz = tgt.z - e.z, d = Math.hypot(dx, dz); out.x = dx / d; out.z = dz / d; out.run = true; b.route = null; return out; }
+      if (this.lastNoise && this.time - this.lastNoise.t < 8 && rRoom(this.lastNoise.x, this.lastNoise.z) !== 'S') {
+        if (!go(this.lastNoise.x, this.lastNoise.z, true)) return out;
+        this.lastNoise = null;
+      }
+      if (!b.patrol || go(b.patrol[0], b.patrol[1], false)) {
+        const rooms = ['K1', 'K2', 'K3', 'L', 'D', 'U', 'H', 'M'], k = rooms[Math.floor(Math.random() * rooms.length)];
+        const r = RR[k]; b.patrol = [rand(r[0] + 1, r[1] - 1), rand(r[2] + 1, r[3] - 1)];
+        if (Math.random() < 0.25 && b.t <= 0) { b.t = 20; const room = rRoom(e.x, e.z); if (room && room !== 'S') { net.bcast({ k: 'lt', room }); this.onLight(room); } }
+      }
+      return out;
+    }
+    // 아이 봇
+    const P = this.pot, hold = P.loc === 'hand' && P.holder === e.id;
+    let danger = null;
+    for (const m of this.moms) { const k = this.ents.get(m); if (k && Math.hypot(k.x - e.x, k.z - e.z) < 4 && rRoom(k.x, k.z) === rRoom(e.x, e.z)) danger = k; }
+    if (e.hd >= 0) { if (!danger && b.t <= 0) e.hd = -1; return out; }
+    if (danger && rRoom(e.x, e.z) !== 'S') {
+      const h = this.nearHide({ x: e.x, z: e.z }) ;
+      if (Math.hypot(R_CHUTE.x - e.x, R_CHUTE.z - e.z) < 1.2 && !hold) { this.doAction(e, { a: 'chute' }); return out; }
+      if (h >= 0) { e.hd = h; e.x = R_HIDE[h].x; e.z = R_HIDE[h].z; b.t = rand(3, 6); return out; }
+      go(R_NAV.S[0], R_NAV.S[1], true); return out;
+    }
+    if (b.busy > 0) { b.busy -= dt; if (b.busy <= 0) this.doAction(e, b.pending, Math.random() < 0.8); return out; }
+    // 할 일 정하기: 냄비랑 가장 가까운 아이 봇 하나만 일해요
+    let goal = null;
+    if (hold) goal = !P.water ? R_ST.find((s) => s.t === 'sink' && s.k === (b.k || 1)) : R_ST.find((s) => s.t === 'stove' && s.k === (b.k || 1));
+    else if (P.loc === 'cup') { b.k = b.k || (Math.random() < 0.7 ? 1 : Math.random() < 0.8 ? 2 : 3); goal = R_ST.find((s) => s.t === 'cup' && s.k === b.k); }
+    else if ((P.loc === 'stove' && (!P.ramen || P.ready)) || P.loc === 'counter') goal = R_ST.find((s) => s.id === P.st);
+    const workers = [...this.ents.values()].filter((k) => k.bot && !this.isMom(k.id) && k.dg <= 0);
+    if (goal && !hold) {
+      const gp = stPoint(goal), mine = Math.hypot(gp.x - e.x, gp.z - e.z);
+      if (workers.some((k) => k !== e && Math.hypot(gp.x - k.x, gp.z - k.z) < mine - 0.5)) goal = null;
+      const human = [...this.ents.values()].some((k) => !k.bot && !this.isMom(k.id) && Math.hypot(gp.x - k.x, gp.z - k.z) < 3);
+      if (human) goal = null;
+    }
+    if (goal) {
+      const gp = stPoint(goal);
+      if (go(gp.x, gp.z, false)) { const o = this.options(e); if (o && o.st && o.st.id === goal.id) { if (o.mini) { b.busy = 1.3; b.pending = o; } else this.doAction(e, o); } }
+      return out;
+    }
+    // 할 일 없으면 안전지대와 거실 사이를 어슬렁
+    if (!b.idle || go(b.idle[0], b.idle[1], false)) b.idle = [rand(-11, -7), rand(1, 5)];
+    return out;
+  }
+
+  // ---- 루프 ----
+  loop(now) {
+    if (this.dead) return;
+    this.raf = requestAnimationFrame(this.loop);
+    const dt = Math.min(0.05, (now - this.last) / 1000); this.last = now; this.time += dt;
+    const host = isHost(), me = this.me(), mom = this.isMom(myId), play = this.ph === 'play';
+    // 내 입력
+    const ed = takeEdges();
+    let act = !!(ed.sit || ed.grab || this.touchAct), light = !!(ed.kick || this.touchLight);
+    this.touchAct = this.touchLight = false;
+    if (this.swallow) { act = false; this.swallow = false; }
+    if (document.pointerLockElement === this.cv || isTouch) this.el.lock.classList.add('hidden');
+    if (me) {
+      if (this.mini) {
+        this.mini.t += dt; this.el.needle.style.left = this.needlePos(this.mini) * 100 + '%';
+        if (act) this.endMini(true); else if (this.mini.t > 2.6) this.endMini(false);
+        act = false;
+      }
+      const mv = readMove(), canMove = (play || this.ph === 'intro') && me.dg <= 0 && me.hd < 0 && !this.mini && this.ph !== 'intro';
+      const run = !!(input.keys.has('shift') || this.touchRun);
+      const sp = mom ? (run ? 4.4 : 2.9) : (run ? 4.1 : 2.4);
+      const fx = -Math.sin(this.yaw), fz = -Math.cos(this.yaw), rx = Math.cos(this.yaw), rz = -Math.sin(this.yaw);
+      let vx = 0, vz = 0;
+      if (canMove) { vx = (fx * mv.y + rx * mv.x) * sp; vz = (fz * mv.y + rz * mv.x) * sp; }
+      const ox = me.x, oz = me.z; me.x += vx * dt; me.z += vz * dt; this.collide(me, ox, oz);
+      me.mv = Math.hypot(me.x - ox, me.z - oz) / Math.max(dt, 1e-3); me.yaw = this.yaw; me.run = run && me.mv > 1;
+      // 뛰면 발소리
+      if (!mom && play && me.run) { this.stepT -= dt; if (this.stepT <= 0) { this.stepT = 0.45; this.noise(me.x, me.z, 0.5, myId); } }
+      // 행동
+      const o = !mom ? this.options(me) : null;
+      this.el.prompt.classList.toggle('hidden', !o || !!this.mini);
+      if (o) this.el.prompt.innerHTML = `${isTouch ? '' : '<kbd>E</kbd> '}${o.label}`;
+      if (act && o) this.doAction(me, o);
+      // 엄마: 불 켜기, 잡기
+      this.lightCd = Math.max(0, this.lightCd - dt);
+      if (mom && play && light && this.lightCd <= 0) { const room = rRoom(me.x, me.z); if (room && room !== 'S') { this.lightCd = 20; net.bcast({ k: 'lt', room }); this.onLight(room); } }
+      this.el.light.innerHTML = this.lightCd > 0 ? `${Math.ceil(this.lightCd)}초` : '불<br>켜기';
+      if (mom && play) this.tryCatch(me);
+    }
+    // 봇 (방장)
+    if (host) for (const e of this.ents.values()) {
+      if (!e.bot || !e.local) continue;
+      const o = this.botThink(e, dt), sp = this.isMom(e.id) ? (o.run ? 4.0 : 2.6) : (o.run ? 3.6 : 2.2);
+      const ox = e.x, oz = e.z;
+      if (e.hd < 0 && e.dg <= 0) { e.x += o.x * sp * dt; e.z += o.z * sp * dt; this.collide(e, ox, oz); }
+      e.mv = Math.hypot(e.x - ox, e.z - oz) / Math.max(dt, 1e-3);
+      if (e.mv > 0.2) e.yaw = Math.atan2(-(e.x - ox), -(e.z - oz));
+      if (this.isMom(e.id) && play) this.tryCatch(e);
+      if (!this.isMom(e.id) && play && o.run && e.mv > 1) { e.stepT = (e.stepT || 0) - dt; if (e.stepT <= 0) { e.stepT = 0.45; this.noise(e.x, e.z, 0.5, e.id); } }
+    }
+    // 서로 겹치지 않게 살짝 밀어내기
+    for (const e of this.ents.values()) {
+      if (!e.local || e.hd >= 0 || e.dg > 0) continue;
+      for (const o of this.ents.values()) {
+        if (o === e || o.dg > 0 || o.hd >= 0) continue;
+        const dx = e.x - o.x, dz = e.z - o.z, d = Math.hypot(dx, dz);
+        if (d < 0.55 && d > 1e-4) { const ox = e.x, oz = e.z; e.x += (dx / d) * (0.55 - d) * 0.5; e.z += (dz / d) * (0.55 - d) * 0.5; this.collide(e, ox, oz); }
+      }
+    }
+    // 잡혔을 때: 대롱대롱 → 안전지대로
+    for (const e of this.ents.values()) {
+      if (e.dg > 0) { e.dg -= dt; if (e.dg <= 0 && e.local) this.spawn(e); }
+      if (e.hu > 0) e.hu -= dt;
+    }
+    if (host) { this.hostTick(dt); if (this.dead) return; } else this.tl -= dt;
+    // 상태 보내기
+    this.sendT -= dt;
+    if (this.sendT <= 0) {
+      this.sendT = 1 / 12;
+      for (const e of this.ents.values()) if (e.local) net.bcast({ k: 'p', id: e.id, x: Math.round(e.x * 100) / 100, z: Math.round(e.z * 100) / 100, yaw: Math.round(e.yaw * 100) / 100, cr: e.hd >= 0 ? 1 : 0, hd: e.hd, mv: Math.round(e.mv * 10) / 10, hu: e.hu > 0 ? 1 : 0, dg: e.dg > 0 ? 1 : 0 });
+    }
+    this.render(dt);
+  }
+  tryCatch(m) {
+    for (const k of this.ents.values()) {
+      if (this.isMom(k.id) || k.dg > 0 || (k.caughtReq && this.time - k.caughtReq < 1)) continue;
+      if (rRoom(k.x, k.z) === 'S') continue;
+      if (Math.hypot(k.x - m.x, k.z - m.z) < 0.8) { k.caughtReq = this.time; this.toHost({ k: 'catch', by: m.id, kid: k.id }); }
+    }
+  }
+  render(dt) {
+    const me = this.me(), viewerMom = this.isMom(myId), t = this.time;
+    // 다른 사람 위치 부드럽게
+    const a = 1 - Math.exp(-dt * 12);
+    for (const e of this.ents.values()) {
+      if (!e.local) {
+        e.x += (e.tx - e.x) * a; e.z += (e.tz - e.z) * a;
+        let dy = e.tyaw - e.yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); e.yaw += dy * a;
+        if (e.dgR && e.dg <= 0) e.dg = 0.05;
+      }
+      e.phase += (e.mv || 0) * dt * 3.2;
+      if (e.id === myId) continue;
+      const dist = me ? Math.hypot(e.x - me.x, e.z - me.z) : 0;
+      const hiddenFromMe = viewerMom && e.hd >= 0 && dist > 1.0;
+      const vis = !hiddenFromMe && this.ph !== 'end';
+      for (const m of e.av.meshes) m.visible = vis;
+      e.av.setHurt(e.hu > 0);
+      this.pose(e, t);
+      const showLabel = vis && !viewerMom && !this.isMom(e.id) && dist < 4;
+      e.label.visible = showLabel;
+      if (showLabel) { const h = e.av.meshes[1].position; e.label.position.set(h.x, h.y + 0.42, h.z); }
+    }
+    // 냄비
+    const P = this.pot, pm = this.potMesh;
+    pm.visible = P.loc !== 'cup'; this.fpPot.visible = P.loc === 'hand' && P.holder === myId;
+    if (P.loc === 'stove' || P.loc === 'counter') { const st = R_ST.find((s) => s.id === P.st); if (st) pm.position.set(st.x, 1.03, st.z); }
+    if (P.loc === 'hand') {
+      const h = this.ents.get(P.holder);
+      if (h && h.id !== myId) pm.position.set(h.x - Math.sin(h.yaw) * 0.45, 0.75, h.z - Math.cos(h.yaw) * 0.45); else pm.visible = false;
+      if (h && h.hd >= 0 && viewerMom && me && Math.hypot(h.x - me.x, h.z - me.z) > 1) pm.visible = false;
+    }
+    for (const g of [pm, this.fpPot]) { g.userData.water.visible = P.water; g.userData.noodle.visible = P.ramen; g.userData.water.material.color.setHex(P.ready ? 0xff922b : P.ramen ? 0xffc078 : 0x74c0fc); }
+    if (P.loc === 'stove' && P.ramen && !P.ready) pm.position.y += Math.sin(t * 30) * 0.004;
+    for (const [id, f] of Object.entries(this.flames)) { f.visible = P.loc === 'stove' && P.st === id; f.scale.y = 1 + Math.sin(t * 25) * 0.2; }
+    // 엄마 발소리 (아이들에게)
+    if (me && !viewerMom) for (const id of this.moms) {
+      const m = this.ents.get(id); if (!m || m.mv < 0.8) continue;
+      this.momStepT[id] = (this.momStepT[id] || 0) - dt;
+      if (this.momStepT[id] <= 0) { this.momStepT[id] = m.mv > 3.5 ? 0.32 : 0.5; const d = Math.hypot(m.x - me.x, m.z - me.z); if (d < 11) tone(70 + Math.random() * 20, 0.12, 'sine', 0.5 * (1 - d / 11), 0.6); }
+    }
+    // 끓는 소리 (가까이 있으면)
+    if (me && P.loc === 'stove' && P.ramen && !P.ready) { const st = R_ST.find((s) => s.id === P.st); if (st && Math.hypot(st.x - me.x, st.z - me.z) < 5 && Math.random() < dt * 8) kNoise(0, 0.05, 0.05, 1200 + Math.random() * 800, 'bandpass'); }
+    // 소리 파동, 떨어진 냄비
+    this.ripples = this.ripples.filter((r) => { r.t += dt; const s = 1 + r.t * 3 * (0.6 + r.l); r.m.scale.set(s, s, s); r.m.material.opacity = Math.max(0, 1 - r.t / 1.6); if (r.t > 1.6) { this.scene.remove(r.m); return false; } return true; });
+    this.wrecks = this.wrecks.filter((w) => { w.t -= dt; if (w.t <= 0) { this.scene.remove(w.m); return false; } return true; });
+    // 불 켜진 방, 시야
+    const myRoom = me ? rRoom(me.x, me.z) : null;
+    const litRooms = Object.keys(this.lit).filter((k) => this.lit[k] > t);
+    const lr = litRooms.includes(myRoom) ? myRoom : litRooms[0];
+    this.lamp.intensity = lr ? 12 : 0;
+    if (lr) { const r = RR[lr]; this.lamp.position.set((r[0] + r[1]) / 2, 2.4, (r[2] + r[3]) / 2); }
+    const litHere = myRoom && (this.lit[myRoom] || 0) > t;
+    const far = litHere ? 14 : 3.6;
+    this.fog.far += (far - this.fog.far) * Math.min(1, dt * (litHere ? 8 : 3));
+    // 카메라
+    if (me) {
+      const eye = me.dg > 0 ? 1.45 + Math.sin(t * 14) * 0.08 : me.hd >= 0 ? 0.6 : viewerMom ? 1.55 : 1.15;
+      const bob = me.mv > 0.5 ? Math.sin(me.phase * 2) * 0.03 : 0;
+      this.cam.position.set(me.x, eye + bob, me.z);
+      this.cam.rotation.set(0, 0, 0); this.cam.rotateY(this.yaw); this.cam.rotateX(me.dg > 0 ? Math.sin(t * 9) * 0.3 : this.pitch);
+      if (me.dg > 0) this.cam.rotateZ(Math.sin(t * 7) * 0.25);
+    }
+    // 내 팔 흔들기
+    if (this.fpArms) this.fpArms.forEach((arm, i) => {
+      const holding = this.pot.loc === 'hand' && this.pot.holder === myId;
+      arm.position.y = -0.42 + (me && me.mv > 0.5 ? Math.sin((me.phase || 0) * 2 + i * Math.PI) * 0.03 : 0) + (holding ? 0.06 : 0);
+      arm.position.x = (i ? 0.3 : -0.3) * (holding ? 0.72 : 1);
+      arm.visible = !viewerMom || true;
+    });
+    // 화면 위 정보
+    const chips = [];
+    if (this.round) chips.push(`<span class="chip">라운드 ${this.round}/${this.nr}</span>`);
+    if (this.ph === 'play') chips.push(`<span class="chip">${Math.floor(Math.max(0, this.tl) / 60)}:${String(Math.floor(Math.max(0, this.tl) % 60)).padStart(2, '0')}</span>`);
+    chips.push(`<span class="chip">라면 ${this.bowls}/${this.target}그릇</span>`);
+    chips.push(`<span class="chip ev">${viewerMom ? (this.moms.indexOf(myId) ? '아빠' : '엄마') : '아이'}</span>`);
+    if (myRoom) chips.push(`<span class="chip">${RR[myRoom][4]}</span>`);
+    const html = chips.join(''); if (html !== this.chipsHTML) { this.el.chips.innerHTML = html; this.chipsHTML = html; }
+    let potTxt = '';
+    if (!viewerMom && this.ph === 'play') {
+      const st = R_ST.find((s) => s.id === P.st), kn = st ? `${st.k}번 부엌` : '';
+      if (P.loc === 'cup') potTxt = '냄비: 찬장 안 (새 냄비 꺼내기부터)';
+      else if (P.loc === 'hand') potTxt = `냄비: ${P.holder === myId ? '내 손' : esc((this.ents.get(P.holder) || {}).name || '?') + ' 손'}에 ${P.water ? '(물 받음)' : '(빈 냄비)'}`;
+      else if (P.loc === 'counter') potTxt = `냄비: ${kn} ${st ? { cup: '찬장', sink: '싱크대' }[st.t] : ''} 위`;
+      else if (P.ready) potTxt = `냄비: ${kn} 가스레인지 · 다 끓었어요! 그릇에 담아요`;
+      else if (P.ramen) potTxt = `냄비: ${kn} 가스레인지 · 끓는 중 ${Math.ceil(Math.max(0, R_BOIL - P.boil) / (st && st.k === 3 ? R_BOIL / 12 : 1))}초`;
+      else potTxt = `냄비: ${kn} 가스레인지 · 라면 넣어야 해요`;
+    }
+    this.el.pot.classList.toggle('hidden', !potTxt); if (potTxt && this.el.pot.innerHTML !== potTxt) this.el.pot.innerHTML = potTxt;
+    for (let i = 0; i < this.hideMarks.length; i++) this.hideMarks[i].visible = !viewerMom;
+    this.renderer.render(this.scene, this.cam);
+  }
+  pose(e, t) {
+    const m = e.av.meshes, s = this.isMom(e.id) ? 1.25 : 1;
+    const yq = new Q().setFromAxisAngle(UP, e.yaw + Math.PI);
+    const crouch = e.hd >= 0 ? 1 : 0, dg = e.dg > 0;
+    const sf = Math.min(1, (e.mv || 0) / 3), ph = e.phase || 0;
+    const ry = dg ? 0.45 + Math.sin(t * 10) * 0.06 : 0;
+    const tq = yq.clone().multiply(qe(crouch ? 0.6 : sf * 0.12, 0, dg ? Math.sin(t * 9) * 0.5 : 0));
+    const tc = new V3(e.x, ry + (0.43 - crouch * 0.22) * s, e.z).add(new V3(0, 0.32 * s, 0).applyQuaternion(tq));
+    m[0].position.copy(tc); m[0].quaternion.copy(tq); m[0].scale.set(s, s, s * 0.78);
+    m[1].position.copy(tc).add(new V3(0, 0.34 * s, 0).applyQuaternion(tq)).add(new V3(0, 0.22 * s, 0)); m[1].quaternion.copy(tq); m[1].scale.setScalar(s);
+    const holding = this.pot.loc === 'hand' && this.pot.holder === e.id;
+    for (let i = 0; i < 2; i++) {
+      const side = i ? 1 : -1;
+      let pitch = Math.sin(ph + (i ? 0 : Math.PI)) * 0.8 * sf, roll = side * 0.18;
+      if (holding) { pitch = -1.3; roll = side * 0.05; }
+      if (dg) { pitch = Math.sin(t * 12 + i * 2) * 1.2; roll = side * (0.8 + Math.sin(t * 15 + i) * 0.5); }
+      if (this.isMom(e.id) && (e.mv || 0) > 3) { pitch = -1.4; roll = side * 0.1; }
+      const aq = tq.clone().multiply(qe(pitch, 0, roll));
+      m[2 + i].quaternion.copy(aq); m[2 + i].scale.setScalar(s);
+      m[2 + i].position.copy(tc).add(new V3(side * 0.33 * s, 0.2 * s, 0).applyQuaternion(tq)).add(new V3(0, -0.2 * s, 0).applyQuaternion(aq));
+      let lp = Math.sin(ph + (i ? Math.PI : 0)) * 0.85 * sf;
+      if (crouch) lp = -1.3; if (dg) lp = Math.sin(t * 13 + i * 3) * 0.9;
+      const lq = yq.clone().multiply(qe(lp, 0, 0));
+      m[4 + i].quaternion.copy(lq); m[4 + i].scale.setScalar(s);
+      m[4 + i].position.set(e.x, ry + (0.43 - crouch * 0.22) * s, e.z).add(new V3(side * 0.13 * s, 0, 0).applyQuaternion(yq)).add(new V3(0, -0.2 * s, 0).applyQuaternion(lq));
+    }
   }
 }
 
