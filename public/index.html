@@ -277,6 +277,32 @@ label.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
 .r-b-run{width:74px;height:74px;background:var(--sun)}
 .r-b-light{width:74px;height:74px;background:var(--pop);color:#fff}
 #ramen .overlay .panel{max-height:88vh;overflow:auto}
+/* 비둘기 */
+#game.pigeon{background:#a5d8ff}
+#game.pigeon .keys,#game.pigeon .tbtns,#game.pigeon .rbtns,#game.pigeon .hud-top,#game.pigeon .rotate,#game.pigeon .replay-tag{display:none!important}
+#game.pigeon .feed{top:auto;bottom:150px}
+#pigeon{position:absolute;inset:0;pointer-events:none}
+#pigeon canvas{display:block;width:100%;height:100%;pointer-events:auto}
+.is-touch #pigeon canvas{pointer-events:none}
+#pigeon .r-look,#pigeon .r-btns button,#pigeon .overlay{pointer-events:auto}
+.is-touch #pigeon .r-btns{display:flex;flex-wrap:wrap;width:190px;justify-content:flex-end}
+#game.couple #pigeon .r-btns,#game.couple #joy{display:none!important}
+.p-top{position:absolute;top:12px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 70px}
+.p-gauge{display:flex;align-items:center;gap:10px;background:var(--paper);border:3px solid var(--ink);border-radius:999px;padding:5px 14px;font-weight:700;font-size:14px}
+.p-bar{width:min(220px,34vw);height:14px;border:2px solid var(--ink);border-radius:999px;background:var(--soft);overflow:hidden}
+.p-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--pop));transition:width .3s}
+.p-sub{position:absolute;left:50%;bottom:clamp(20px,9vh,70px);transform:translateX(-50%);width:min(760px,92vw);background:rgba(27,35,80,.88);color:#fff;border-radius:14px;padding:10px 16px;font-size:clamp(15px,2.2vw,20px);font-weight:600;text-align:center;line-height:1.45}
+.p-sub b{display:block;font-family:"Jua",sans-serif;font-weight:400;color:var(--sun);font-size:15px}
+.p-sub.pop{animation:bump .3s}
+.is-touch #game:not(.couple) .p-sub{bottom:auto;top:100px;width:min(560px,70vw)}
+.p-flash{position:absolute;inset:0;background:#fff;opacity:0}
+.p-flash.go{animation:pflash .9s ease-out}
+@keyframes pflash{0%{opacity:1}100%{opacity:0}}
+.p-grab{background:var(--sun)!important;color:var(--ink)!important}
+.polaroid{background:#fff;border:3px solid var(--ink);padding:12px 12px 6px;transform:rotate(-1.5deg);box-shadow:5px 5px 0 var(--ink);margin:0 auto 14px;max-width:420px}
+.polaroid img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#ddd}
+.polaroid p{font-family:"Jua",sans-serif;font-size:18px;margin:8px 0 4px}
+#pigeon .overlay .panel{max-height:90vh;overflow:auto}
 </style>
 </head>
 <body>
@@ -553,7 +579,7 @@ const GAMES = [
   { id: 'rope', ico: '🪢', bg: '#33d69f', name: '단체 줄넘기 지옥', desc: '줄 돌리는 사람도 플레이어', ppl: '3~8명', live: true },
   { id: 'ramen', ico: '🍜', bg: '#ff7a59', name: '엄마한테 안 들키기 라면', desc: '새벽 3시, 1인칭으로 몰래 라면 끓이기', ppl: '3~8명', live: true },
   { id: 'karaoke', ico: '🎤', bg: '#a678ff', name: '노래방 망치기', desc: '마이크로 음정 맞추고, 남은 사람은 몰래 방해', ppl: '2~8명', live: true },
-  { id: 'pigeon', ico: '🐦', bg: '#4aa8f0', name: '비둘기 결혼식 습격', desc: '케이크 훔치고 부케 낚아채기', ppl: '2~8명' },
+  { id: 'pigeon', ico: '🐦', bg: '#4aa8f0', name: '비둘기 결혼식 습격', desc: '신랑신부는 구경만, 비둘기는 난장판', ppl: '2~8명', live: true },
 ];
 function ticketHTML(g) {
   return `<span class="ico" style="--bg:${g.bg}">${g.ico}</span>
@@ -731,7 +757,8 @@ function renderLobby() {
   if (EV_TEXT[lobbyState.game]) $('#evText').textContent = EV_TEXT[lobbyState.game];
   const minP = lobbyState.game === 'rope' || lobbyState.game === 'ramen' ? 3 : 2;
   $('#evToggle').checked = !!lobbyState.events;
-  $('#ramenOpts').classList.toggle('hidden', lobbyState.game !== 'ramen');
+  $('#ramenOpts').classList.toggle('hidden', !['ramen', 'pigeon'].includes(lobbyState.game));
+  $('#momMode').closest('label').classList.toggle('hidden', lobbyState.game !== 'ramen');
   $('#momMode').value = lobbyState.momMode || '1'; $('#rRounds').value = lobbyState.rRounds || '3';
   $('#momMode').disabled = $('#rRounds').disabled = !host;
   skinEd.start();
@@ -783,7 +810,7 @@ function startGame(roster, opts, late, kind) {
   show('game');
   gameEl.classList.toggle('kara', kind === 'karaoke');
   gameEl.classList.toggle('rope', kind === 'rope'); gameEl.classList.remove('turner');
-  game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : kind === 'rope' ? new RopeGame(roster, opts, late) : kind === 'ramen' ? new RamenGame(roster, opts, late) : new ChairGame(roster, opts, late);
+  game = kind === 'karaoke' ? new KaraokeGame(roster, opts, late) : kind === 'rope' ? new RopeGame(roster, opts, late) : kind === 'ramen' ? new RamenGame(roster, opts, late) : kind === 'pigeon' ? new PigeonGame(roster, opts, late) : new ChairGame(roster, opts, late);
 }
 function stopGame() {
   if (game) { game.destroy(); game = null; }
@@ -3452,6 +3479,785 @@ class RamenGame {
       m[4 + i].quaternion.copy(lq); m[4 + i].scale.setScalar(s);
       m[4 + i].position.set(e.x, ry + (0.43 - crouch * 0.22) * s, e.z).add(new V3(side * 0.13 * s, 0, 0).applyQuaternion(yq)).add(new V3(0, -0.2 * s, 0).applyQuaternion(lq));
     }
+  }
+}
+
+/* =============== 비둘기 결혼식 습격 =============== */
+// 신랑신부는 대본대로 움직이고(구경만), 하객은 웃으며 앉아만 있어요. 비둘기만 날뛰어요.
+const PG_NEST = { x: -11, y: 7.2, z: -3 };
+const PG_T = { groom: 12, bride: 34, vows: 58, ring: 92, ringEnd: 118, cake: 122, bouquet: 158, toss: 176, photo: 190, flash: 212, end: 222 };
+const PG_ITEMS = (() => {
+  const a = [{ id: 'wig', n: '신랑 가발', pts: 5, need: 1 }, { id: 'ring', n: '결혼반지', pts: 8, need: 1 }, { id: 'bq', n: '부케', pts: 10, need: 1 }, { id: 'cake', n: '케이크 통째로', pts: 15, need: 3 }];
+  for (let i = 0; i < 6; i++) a.push({ id: 'sl' + i, n: '케이크 한 조각', pts: 3, need: 1 });
+  for (let i = 0; i < 12; i++) a.push({ id: 'f' + i, n: ['닭다리', '초밥', '포도'][i % 3], pts: 1, need: 1 });
+  return a;
+})();
+const MC = {
+  wig: ['신랑님… 어… 머리가… 바람이 잘 통하시겠습니다. 네.', '신랑님 이마에서 빛이 나서… 조명은 끄겠습니다.', '머리카락이 하늘을 납니다. 자유로워 보이시네요… 네.'],
+  ring: ['반지가… 날아갔네요. 비둘기분께서 받으시는 건가요? 축하드립니다…?', '반지는 비둘기분께서 보관하시는 걸로… 네. 안전하겠죠.'],
+  bq: ['부케는 비둘기분께서 받으셨습니다! 다음 결혼은 비둘기분… 어… 날짜 잡으시면 연락 주세요.', '부케가 하늘로… 신부님 꽃가루 걱정은 없으시겠네요.'],
+  cake: ['케이크가… 떠오릅니다. 하늘에서 드시려나 봅니다.', '웨딩 케이크가 비행 중입니다. 기장님께 박수… 네, 마음속으로.'],
+  sl: ['케이크 한 조각을 비둘기분께서 시식하고 계십니다. 맛 평가 부탁드립니다.', '케이크가 한 조각씩… 어… 하객분들보다 먼저 드시네요.'],
+  f: ['뷔페 음식은 비둘기분들께서 먼저 시식해 주시는 걸로…', '음식이 하나씩 사라지고 있습니다. 소식하시는 하객분들께는 다행입니다.'],
+  creamC: ['신부님 달달해 보이시는데요. 맛 좋은지 여쭈어도 되겠습니까?', '신랑님 생크림 팩 하셨네요. 피부가 촉촉해 보이십니다.', '두 분 얼굴이… 케이크랑 깔맞춤이시네요. 센스 있으십니다.'],
+  creamG: ['하객분께 케이크 서비스가 나갔습니다! 직접 배달이네요.', '하객분 머리 위로 디저트가… 네, 맛있게 드세요.'],
+  poopC: ['신랑님의 아름다운 새똥 컬렉션… 어… 아름답습니다.', '신부님 면사포에 장식이… 하나 더 생겼네요. 네.', '두 분께 축복이… 위에서 계속 내려오고 있습니다.', '예로부터 새똥은 행운이라고… 했던 것 같습니다. 아마도요.'],
+  poopG: ['하객분들 머리에 하얀 꽃이… 피었네요.', '하객석이 점점 하얘지고 있습니다. 눈 오는 결혼식이네요. 네.', '하객분들 끝까지 웃고 계십니다. 정말… 대단하십니다.'],
+};
+const qY = (y) => new Q().setFromAxisAngle(UP, y);
+// 사람 캐릭터 자세 잡기 (서기, 걷기, 앉기, 팔 자세)
+function poseHuman(av, o) {
+  const m = av.meshes, yq = qY(o.yaw), sit = o.sit ? 1 : 0;
+  const sf = o.walk || 0, ph = o.ph || 0;
+  const tq = yq.clone().multiply(qe(o.lean || 0, 0, o.roll || 0));
+  const hipY = o.y + (sit ? 0.47 : 0.43);
+  const tc = new V3(o.x, hipY, o.z).add(new V3(0, 0.32, 0).applyQuaternion(tq));
+  m[0].position.copy(tc); m[0].quaternion.copy(tq);
+  m[1].position.copy(tc).add(new V3(0, 0.34, 0).applyQuaternion(tq)).add(new V3(0, 0.22, 0)); m[1].quaternion.copy(tq.clone().multiply(qe(o.nod || 0, 0, 0)));
+  for (let i = 0; i < 2; i++) {
+    const side = i ? 1 : -1, arm = o.arms && o.arms[i];
+    let pitch = arm ? arm[0] : Math.sin(ph + (i ? 0 : Math.PI)) * 0.7 * sf + (sit ? -0.6 : 0), roll = arm ? arm[1] * side : side * 0.16;
+    const aq = tq.clone().multiply(qe(pitch, 0, roll));
+    m[2 + i].quaternion.copy(aq);
+    m[2 + i].position.copy(tc).add(new V3(side * 0.33, 0.2, 0).applyQuaternion(tq)).add(new V3(0, -0.2, 0).applyQuaternion(aq));
+    const lp = sit ? -1.45 : Math.sin(ph + (i ? Math.PI : 0)) * 0.8 * sf;
+    const lq = yq.clone().multiply(qe(lp, 0, 0));
+    m[4 + i].quaternion.copy(lq);
+    m[4 + i].position.set(o.x, hipY, o.z).add(new V3(side * 0.13, 0, 0).applyQuaternion(yq)).add(new V3(0, -0.2, 0).applyQuaternion(lq));
+  }
+}
+function makePigeon(color) {
+  const g = new THREE.Group(), body = new THREE.Group(); g.add(body);
+  const c = new THREE.Color(color), grey = M(c.clone().lerp(new THREE.Color(0x9aa0b4), 0.45)), dark = M(c.clone().multiplyScalar(0.6));
+  const add = (geo, mat, x, y, z, p) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); (p || body).add(m); return m; };
+  const torso = add(new THREE.SphereGeometry(0.22, 14, 10), grey, 0, 0.26, 0); torso.scale.set(0.85, 0.8, 1.25);
+  const head = add(new THREE.SphereGeometry(0.12, 12, 10), M(0x6c6f8a), 0, 0.46, 0.2);
+  add(new THREE.SphereGeometry(0.13, 10, 8), M(0x3fae8f, { metalness: 0.3 }), 0, 0.37, 0.14).scale.set(1, 0.8, 0.9);
+  const beak = add(new THREE.ConeGeometry(0.035, 0.11, 8), M(0xffa94d), 0, 0.44, 0.34); beak.rotation.x = Math.PI / 2;
+  for (const s of [-1, 1]) { const e = add(new THREE.SphereGeometry(0.025, 6, 6), new THREE.MeshBasicMaterial({ color: 0xff6b00 }), s * 0.075, 0.49, 0.27); add(new THREE.SphereGeometry(0.013, 6, 6), new THREE.MeshBasicMaterial({ color: 0x111111 }), s * 0.085, 0.49, 0.29); }
+  const tail = add(new THREE.BoxGeometry(0.18, 0.04, 0.22), dark, 0, 0.27, -0.3); tail.rotation.x = -0.3;
+  const wings = [-1, 1].map((s) => { const pv = new THREE.Group(); pv.position.set(s * 0.15, 0.32, 0); body.add(pv); const w = add(new THREE.SphereGeometry(0.2, 10, 8), dark, s * 0.17, 0, -0.03, pv); w.scale.set(1, 0.18, 0.6); return pv; });
+  for (const s of [-1, 1]) add(new THREE.CylinderGeometry(0.012, 0.012, 0.12), M(0xff8787), s * 0.07, 0.06, 0.02);
+  const hat = new THREE.Group(); hat.position.set(0, 0.5, 0.2); hat.scale.setScalar(0.5); body.add(hat);
+  g.userData = { body, wings, hat, head };
+  return g;
+}
+const pgCostume = {
+  groom(av) {
+    const g = new THREE.Group();
+    const jacket = new THREE.Mesh(new THREE.CapsuleGeometry(0.262, 0.2, 6, 14), M(0x212529)); g.add(jacket);
+    const shirt = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.3, 0.04), M(0xffffff)); shirt.position.set(0, 0.12, 0.2); g.add(shirt);
+    for (const s of [-1, 1]) { const b = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.08, 6), M(0x111111)); b.position.set(s * 0.04, 0.3, 0.23); b.rotation.z = s * Math.PI / 2; g.add(b); }
+    av.meshes[0].add(g);
+    const wig = new THREE.Group(); const cap = new THREE.Mesh(new THREE.SphereGeometry(0.265, 16, 8, 0, TAU, 0, Math.PI / 2.2), M(0x5c3a1e)); cap.position.y = 0.02; wig.add(cap);
+    const tuft = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), M(0x5c3a1e)); tuft.position.set(0.06, 0.24, 0.12); wig.add(tuft);
+    av.meshes[1].add(wig);
+    return { wig };
+  },
+  bride(av) {
+    const dress = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.75, 20, 1, true), M(0xffffff, { side: THREE.DoubleSide })); dress.position.y = -0.33; av.meshes[0].add(dress);
+    const veil = new THREE.Mesh(new THREE.SphereGeometry(0.28, 14, 8, 0, TAU, 0, Math.PI / 2), M(0xffffff, { transparent: true, opacity: 0.75 })); veil.position.set(0, 0.03, -0.03); av.meshes[1].add(veil);
+    const tailV = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.75), M(0xffffff, { transparent: true, opacity: 0.6, side: THREE.DoubleSide })); tailV.position.set(0, -0.3, -0.24); tailV.rotation.x = 0.15; av.meshes[1].add(tailV);
+    return {};
+  },
+};
+function pgItemMesh(id) {
+  const g = new THREE.Group(), add = (geo, mat, x = 0, y = 0, z = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); g.add(m); return m; };
+  if (id === 'wig') { add(new THREE.SphereGeometry(0.2, 12, 8, 0, TAU, 0, Math.PI / 2.2), M(0x5c3a1e)); add(new THREE.SphereGeometry(0.07, 8, 6), M(0x5c3a1e), 0.05, 0.17, 0.08); }
+  else if (id === 'ring') { add(new THREE.TorusGeometry(0.07, 0.018, 8, 20), M(0xffd23f, { metalness: 0.8, roughness: 0.2 })); add(new THREE.OctahedronGeometry(0.04), M(0xd0ebff, { metalness: 0.5, roughness: 0.05 }), 0, 0.085, 0); }
+  else if (id === 'bq') { add(new THREE.ConeGeometry(0.06, 0.25, 8), M(0x2f9e44), 0, -0.1, 0).rotation.x = Math.PI; for (let i = 0; i < 7; i++) add(new THREE.SphereGeometry(0.06, 8, 6), M(i % 2 ? 0xffc9de : 0xffffff), Math.cos(i) * 0.08, 0.06 + (i % 3) * 0.02, Math.sin(i) * 0.08); }
+  else if (id === 'cake') { [[0.42, 0.22, 0.11], [0.3, 0.2, 0.33], [0.18, 0.18, 0.52]].forEach(([r, h, y]) => { add(new THREE.CylinderGeometry(r, r, h, 24), M(0xfff5f7), 0, y, 0); add(new THREE.TorusGeometry(r, 0.025, 6, 24), M(0xff8fab), 0, y - h / 2 + 0.02, 0).rotation.x = Math.PI / 2; }); add(new THREE.SphereGeometry(0.05, 8, 6), M(0xe03131), 0, 0.64, 0); }
+  else if (id.startsWith('sl')) { const s = add(new THREE.CylinderGeometry(0.16, 0.16, 0.12, 12, 1, false, 0, Math.PI / 3), M(0xfff5f7)); s.position.y = 0.06; add(new THREE.SphereGeometry(0.025, 6, 6), M(0xe03131), 0.07, 0.13, 0.05); }
+  else { const k = +id.slice(1) % 3; if (k === 0) { add(new THREE.CapsuleGeometry(0.05, 0.08, 4, 8), M(0xb5651d)).rotation.z = 1.2; add(new THREE.CylinderGeometry(0.012, 0.012, 0.08), M(0xffffff), 0.08, -0.03, 0).rotation.z = 1.2; } else if (k === 1) { add(new THREE.BoxGeometry(0.1, 0.05, 0.06), M(0xffffff)); add(new THREE.BoxGeometry(0.1, 0.02, 0.06), M(0xff922b), 0, 0.035, 0); } else for (let i = 0; i < 6; i++) add(new THREE.SphereGeometry(0.03, 6, 6), M(0x7048e8), (i % 3 - 1) * 0.04, -Math.floor(i / 3) * 0.04, 0); }
+  return g;
+}
+
+class PigeonGame {
+  constructor(roster, opts, late) {
+    this.kind = 'pigeon'; this.roster = roster.slice(); this.opts = opts || {}; this.late = late; this.dead = false;
+    this.ph = null; this.tl = 0; this.t = 0; this.round = 0; this.nr = this.opts.rounds || 2; this.couple = [];
+    this.sc = {}; for (const r of roster) this.sc[r.id] = { pts: 0, thief: 0, poops: 0, team: 0, dmg: 0, name: r.name };
+    this.chaos = 0; this.pigs = new Map(); this.time = 0; this.sendT = 0; this.wT = 0;
+    this.camYaw = 0; this.camPitch = 0.25; this.bot = {}; this.mcQ = []; this.mcCd = {}; this.mcIdx = {}; this.said = {};
+    this.drops = []; this.photo = null;
+    this.buildDom(); this.buildScene(); this.buildVenue();
+    for (const r of roster) this.addPig(r);
+    if (late && !this.pigs.has(myId)) this.addPig({ id: myId, name: profile.name, color: profile.color });
+    this.last = performance.now();
+    this.loop = this.loop.bind(this); this.raf = requestAnimationFrame(this.loop);
+    this.onResize = () => this.resize(); window.addEventListener('resize', this.onResize); this.resize();
+    $('#loading').classList.add('hidden');
+    if (isHost() && !late) { this.coupleOrder = shuffle(roster.map((r) => r.id)); this.setPhase('intro', 7); }
+  }
+  rosterInfo() { return this.roster; }
+  present() { return new Set([...net.players.map((p) => p.id), ...this.roster.filter((r) => r.bot).map((r) => r.id)]); }
+  role(id = myId) { const i = this.couple.indexOf(id); return i === 0 ? 'groom' : i === 1 ? 'bride' : 'pigeon'; }
+  nameOf(id) { return (this.roster.find((r) => r.id === id) || net.players.find((p) => p.id === id) || { name: '?' }).name; }
+
+  // ---- 화면 요소 ----
+  buildDom() {
+    const w = this.wrap = document.createElement('div'); w.id = 'pigeon';
+    w.innerHTML = `<canvas></canvas>
+      <div class="p-top"><div class="p-gauge"><span>망가진 정도</span><div class="p-bar"><i id="pBar"></i></div><b id="pPct">0%</b></div><div class="chips" id="pChips"></div></div>
+      <div class="r-prompt hidden" id="pPrompt"></div>
+      <div class="p-sub hidden" id="pSub"><b id="pWho">사회자</b><span id="pLine"></span></div>
+      <div class="p-flash hidden" id="pFlash"></div>
+      <div class="r-lock hidden" id="pLock">화면을 클릭하면 마우스로 둘러볼 수 있어요</div>
+      <div class="r-keys" id="pKeys"></div>
+      <div class="r-look touch" id="pLook"></div>
+      <div class="touch r-btns" id="pBtns">
+        <button class="r-b-light" id="pbPoop">새똥</button>
+        <button class="r-b-run" id="pbDive">급강하</button>
+        <button class="r-b-light p-grab" id="pbGrab">물기</button>
+        <button class="r-b-act" id="pbFlap">날갯짓</button>
+      </div>
+      <div class="overlay hidden" id="pOv"><div class="panel" id="pPanel"></div></div>`;
+    gameEl.appendChild(w); gameEl.classList.add('pigeon');
+    this.cv = w.querySelector('canvas');
+    const el = (id) => w.querySelector('#' + id);
+    this.el = { bar: el('pBar'), pct: el('pPct'), chips: el('pChips'), prompt: el('pPrompt'), sub: el('pSub'), who: el('pWho'), line: el('pLine'), flash: el('pFlash'), lock: el('pLock'), keys: el('pKeys'), btns: el('pBtns'), ov: el('pOv'), panel: el('pPanel') };
+    this.cv.addEventListener('mousedown', () => { if (isTouch) return; if (document.pointerLockElement !== this.cv) { try { this.cv.requestPointerLock(); } catch (e) {} this.swallow = true; } });
+    this.onMouse = (e) => { if (document.pointerLockElement === this.cv) this.look(e.movementX, e.movementY, 0.0024); };
+    document.addEventListener('mousemove', this.onMouse);
+    const lk = el('pLook'); let pid = null, lx = 0, ly = 0;
+    lk.addEventListener('pointerdown', (e) => { pid = e.pointerId; lx = e.clientX; ly = e.clientY; try { lk.setPointerCapture(pid); } catch (er) {} });
+    lk.addEventListener('pointermove', (e) => { if (e.pointerId !== pid) return; this.look(e.clientX - lx, e.clientY - ly, 0.006); lx = e.clientX; ly = e.clientY; });
+    const end = (e) => { if (e.pointerId === pid) pid = null; };
+    lk.addEventListener('pointerup', end); lk.addEventListener('pointercancel', end);
+    const hold = (b, on) => { b.addEventListener('pointerdown', (e) => { e.preventDefault(); on(true); b.classList.add('down'); }); ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => b.addEventListener(ev, () => { on(false); b.classList.remove('down'); })); };
+    hold(el('pbFlap'), (v) => { this.tFlap = v; if (v) this.tFlapEdge = true; });
+    hold(el('pbDive'), (v) => { if (v) this.tDive = true; });
+    hold(el('pbGrab'), (v) => { if (v) this.tGrab = true; });
+    hold(el('pbPoop'), (v) => { if (v) this.tPoop = true; });
+  }
+  look(dx, dy, s) { this.camYaw -= dx * s; this.camPitch = clamp(this.camPitch + dy * s, -0.6, 1.2); }
+  buildScene() {
+    const r = this.renderer = new THREE.WebGLRenderer({ canvas: this.cv, antialias: !isTouch });
+    r.setPixelRatio(Math.min(window.devicePixelRatio, isTouch ? 1.5 : 2));
+    const s = this.scene = new THREE.Scene();
+    s.background = new THREE.Color(0xa5d8ff); s.fog = new THREE.Fog(0xa5d8ff, 35, 70);
+    this.cam = new THREE.PerspectiveCamera(60, 1, 0.05, 120);
+    s.add(new THREE.HemisphereLight(0xffffff, 0x8fbf6f, 1.6));
+    const sun = new THREE.DirectionalLight(0xfff4e0, 1.8); sun.position.set(8, 16, 10); s.add(sun);
+  }
+  resize() {
+    const w = gameEl.clientWidth, h = gameEl.clientHeight;
+    this.renderer.setSize(w, h, false); this.cam.aspect = w / h; this.cam.fov = w / h < 1 ? 78 : 60; this.cam.updateProjectionMatrix();
+  }
+  destroy() {
+    this.dead = true; cancelAnimationFrame(this.raf); music.stop();
+    window.removeEventListener('resize', this.onResize); document.removeEventListener('mousemove', this.onMouse);
+    if (document.pointerLockElement) document.exitPointerLock();
+    for (const p of this.people || []) p.av.dispose();
+    this.renderer.dispose(); this.wrap.remove(); gameEl.classList.remove('pigeon');
+  }
+
+  // ---- 결혼식장 ----
+  buildVenue() {
+    const s = this.scene, add = (geo, mat, x, y, z, ry = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.y = ry; s.add(m); return m; };
+    const grass = add(new THREE.PlaneGeometry(80, 80), M(0x8ce99a), 0, 0, 0); grass.rotation.x = -Math.PI / 2;
+    const aisle = add(new THREE.PlaneGeometry(1.6, 22), M(0xffffff), 0, 0.01, 2); aisle.rotation.x = -Math.PI / 2;
+    // 아치와 꽃
+    for (const x of [-1.8, 1.8]) add(new THREE.CylinderGeometry(0.1, 0.1, 3), M(0xffffff), x, 1.5, -10.2);
+    const arch = add(new THREE.TorusGeometry(1.8, 0.1, 8, 24, Math.PI), M(0xffffff), 0, 3, -10.2);
+    for (let i = 0; i < 18; i++) { const a = (i / 17) * Math.PI; add(new THREE.SphereGeometry(0.16, 8, 6), M(i % 3 ? 0xffc9de : 0xffffff), Math.cos(a) * 1.8, 3 + Math.sin(a) * 1.8, -10.2); }
+    // 하객 의자
+    this.seats = [];
+    for (let row = 0; row < 6; row++) for (const side of [-1, 1]) for (let c = 0; c < 3; c++) {
+      const x = side * (1.6 + c * 1.1), z = -4.5 + row * 1.7;
+      add(new THREE.BoxGeometry(0.55, 0.06, 0.55), M(0xffffff), x, 0.45, z);
+      add(new THREE.BoxGeometry(0.55, 0.55, 0.05), M(0xffffff), x, 0.75, z + 0.27);
+      this.seats.push({ x, z });
+    }
+    // 케이크 테이블, 뷔페
+    add(new THREE.CylinderGeometry(0.75, 0.75, 0.9, 24), M(0xffffff), 4, 0.45, -7.6);
+    add(new THREE.BoxGeometry(1.4, 0.9, 0.7), M(0xffffff), 6, 0.45, -6.2);
+    add(new THREE.BoxGeometry(1.2, 0.9, 7), M(0xffffff), 9, 0.45, 1.5);
+    // 사회자 단상
+    add(new THREE.BoxGeometry(0.6, 1.0, 0.4), M(0x4c6ef5), -3.3, 0.5, -7.45);
+    // 나무와 둥지
+    add(new THREE.CylinderGeometry(0.35, 0.5, 7, 10), M(0x8b5a3c), PG_NEST.x, 3.5, PG_NEST.z);
+    for (const [dx, dy, dz, r] of [[0, 7.8, 0, 2], [1.2, 7, 0.6, 1.4], [-1.1, 7.2, -0.7, 1.5]]) add(new THREE.SphereGeometry(r, 12, 10), M(0x51cf66), PG_NEST.x + dx, dy + 0.5, PG_NEST.z + dz);
+    add(new THREE.TorusGeometry(0.75, 0.25, 8, 18), M(0x8b5a3c), PG_NEST.x, PG_NEST.y - 0.1, PG_NEST.z).rotation.x = Math.PI / 2;
+    const nl = makeLabel('둥지', '#ffd23f'); nl.material.depthTest = false; nl.scale.set(1.6, 0.4, 1); nl.position.set(PG_NEST.x, PG_NEST.y + 1.1, PG_NEST.z); s.add(nl);
+    // 사람들: 신랑, 신부, 주례, 사회자, 하객
+    this.people = [];
+    const person = (id, name, color, skin) => { const av = makeAvatar(color, skin); for (const m of av.meshes) s.add(m); const p = { id, name, av, decals: 0, hurt: 0 }; this.people.push(p); return p; };
+    this.groom = person('groom', '신랑', '#ffd8a8', null); this.bride = person('bride', '신부', '#ffd8a8', null);
+    this.off = person('off', '주례', '#e9ecef', Object.assign(emptySkin(), { face: 'glasses' }));
+    this.mc = person('mc', '사회자', '#ffe066', Object.assign(emptySkin(), { hat: '', face: 'mus' }));
+    pgCostume.groom(this.off.av);
+    const mic = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.02, 0.18), M(0x212529)); mic.position.set(0, -0.2, 0.05); this.mc.av.meshes[3].add(mic);
+    const guestCols = ['#ff7a59', '#ffd23f', '#33d69f', '#4aa8f0', '#a678ff', '#ff4f8b', '#8b5a3c', '#ffffff', '#ffb3c9', '#9be7ff'];
+    const seatIdx = shuffle(this.seats.map((_, i) => i)).slice(0, 18);
+    this.guests = seatIdx.map((si, i) => {
+      const sk = emptySkin(); const pick = (k) => ITEMS[k][Math.floor(Math.random() * ITEMS[k].length)][0];
+      if (Math.random() < 0.5) sk.hat = pick('hat'); if (Math.random() < 0.4) sk.face = pick('face');
+      const p = person('g' + i, '하객', guestCols[i % guestCols.length], sk); p.seat = this.seats[si];
+      return p;
+    });
+    // 훔칠 물건
+    this.items = new Map();
+    for (const it of PG_ITEMS) { const m = pgItemMesh(it.id); s.add(m); this.items.set(it.id, { ...it, mesh: m, st: 'home', car: [], x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, tx: 0, ty: 0, tz: 0 }); }
+    this.nestRing = add(new THREE.RingGeometry(1.0, 1.15, 32), new THREE.MeshBasicMaterial({ color: 0xffd23f, transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthTest: false }), PG_NEST.x, PG_NEST.y + 0.05, PG_NEST.z);
+    this.nestRing.rotation.x = -Math.PI / 2; this.nestRing.renderOrder = 5;
+    this.camPhoto = new THREE.PerspectiveCamera(58, 4 / 3, 0.1, 80); this.camPhoto.position.set(0, 2.8, -11.8); this.camPhoto.lookAt(0, 0.9, 1);
+  }
+  setCouple() {
+    // 신랑신부: 그 사람이 색칠한 그대로 + 턱시도/드레스
+    const [g, b] = this.couple;
+    for (const [p, id, kind] of [[this.groom, g, 'groom'], [this.bride, b, 'bride']]) {
+      for (const m of p.av.meshes) this.scene.remove(m); p.av.dispose();
+      const info = this.roster.find((r) => r.id === id);
+      p.av = makeAvatar(info ? info.color : '#ffd8a8', id ? skinOf(id) : null);
+      for (const m of p.av.meshes) this.scene.add(m);
+      p.name = info ? info.name : kind === 'groom' ? '신랑' : '신부'; p.decals = 0;
+      p.cos = pgCostume[kind](p.av);
+    }
+  }
+  resetRound() {
+    for (const p of this.people) { if (p.decalG) p.av.meshes[1].remove(p.decalG); p.decalG = new THREE.Group(); p.av.meshes[1].add(p.decalG); p.decals = 0; }
+    for (const it of this.items.values()) { it.st = 'home'; it.car = []; it.mesh.visible = true; }
+    for (const d of this.drops) this.scene.remove(d.m); this.drops = [];
+    for (const g of this.groundSplats || []) this.scene.remove(g); this.groundSplats = [];
+    this.chaos = 0; this.photo = null; this.mcQ = []; this.said = {};
+  }
+
+  // ---- 대본: 시간 t에 따라 신랑신부가 어디서 뭘 하는지 ----
+  couplePose(who, t) {
+    const L = who === 'groom' ? 0.6 : -0.6;
+    const walk = (t0, t1, z0, z1) => { const k = clamp((t - t0) / (t1 - t0), 0, 1); return { z: z0 + (z1 - z0) * k, moving: t > t0 && t < t1 }; };
+    const o = { x: L, z: 13, y: 0, yaw: Math.PI, walk: 0, ph: t * 5, arms: null };
+    const start = who === 'groom' ? PG_T.groom : PG_T.bride;
+    if (t < start) { o.z = 14; return o; }
+    if (t < PG_T.ring) { const w = walk(start, start + 18, 13, -8.2); o.z = w.z; o.walk = w.moving ? 0.6 : 0; if (who === 'bride') o.arms = [null, [-0.9, 0.2]]; if (!w.moving) { o.nod = Math.sin(t * 0.7) * 0.05; } return o; }
+    if (t < PG_T.cake) {
+      o.z = -8.2; o.yaw = who === 'groom' ? -Math.PI / 2 : Math.PI / 2;
+      if (who === 'groom' && t > 100 && t < 108) o.arms = [null, [-1.4, 0.1]];
+      if (who === 'bride' && t > 104 && t < 114) o.arms = [[-1.2, 0.1], null];
+      return o;
+    }
+    if (t < PG_T.bouquet) {
+      const k = clamp((t - PG_T.cake) / 8, 0, 1);
+      o.x = L + (4 + (who === 'groom' ? -0.6 : 0.6) - L) * k; o.z = -8.2 + 1.3 * k; o.walk = k < 1 ? 0.6 : 0;
+      o.yaw = k < 1 ? Math.atan2(4 - L, 1.3) : Math.PI;
+      if (k >= 1 && t > 132 && t < 150) { o.arms = [[-1.3, -0.4], [-1.3, -0.4]]; o.lean = Math.sin(t * 4) * 0.08 + 0.1; }
+      return o;
+    }
+    if (t < PG_T.photo) {
+      const k = clamp((t - PG_T.bouquet) / 8, 0, 1);
+      o.x = (4 + (who === 'groom' ? -0.6 : 0.6)) * (1 - k) + L * k; o.z = -6.9 - 0.6 * k; o.walk = k < 1 ? 0.6 : 0; o.yaw = k < 1 ? -Math.PI / 2 : 0;
+      if (who === 'bride' && k >= 1) { if (t > 170 && t < PG_T.toss) o.arms = [[-2.6 + Math.sin(t * 6) * 0.3, 0.2], null]; if (t >= PG_T.toss && t < PG_T.toss + 1) o.arms = [[-1.0, 0.2], null]; }
+      return o;
+    }
+    o.z = -8.0; o.yaw = Math.PI;
+    if (t > PG_T.flash - 3) o.arms = [[-2.8, 0.3], [-2.8, 0.3]];
+    return o;
+  }
+  homePos(it, t) {
+    const head = (p) => p.av.meshes[1].position, hand = (p, i) => p.av.meshes[2 + i].position;
+    if (it.id === 'wig') { const h = head(this.groom); return [h.x, h.y + 0.04, h.z]; }
+    if (it.id === 'ring') { const h = t < 108 ? hand(this.groom, 1) : hand(this.bride, 0); return [h.x, h.y - 0.15, h.z]; }
+    if (it.id === 'bq') { const h = hand(this.bride, 1); return [h.x, h.y - 0.1, h.z]; }
+    if (it.id === 'cake') return [4, 0.9, -7.6];
+    if (it.id.startsWith('sl')) { const i = +it.id.slice(2); return [5.55 + (i % 3) * 0.45, 0.9, -6.4 + Math.floor(i / 3) * 0.4]; }
+    const i = +it.id.slice(1); return [9 + ((i % 2) ? 0.3 : -0.3), 0.92, -1.5 + Math.floor(i / 2) * 1.2];
+  }
+  available(it, t) {
+    if (this.ph !== 'wed') return false;
+    if (it.id === 'wig') return t >= PG_T.groom;
+    if (it.id === 'ring') return it.st !== 'home' || (t >= PG_T.ring && t < PG_T.ringEnd);
+    if (it.id === 'bq') return t >= PG_T.bride;
+    if (it.id === 'cake' || it.id.startsWith('sl')) return t >= PG_T.cake - 20;
+    return true;
+  }
+
+  // ---- 방장 진행 ----
+  stateMsg() {
+    const its = [...this.items.values()].map((i) => [i.id, i.st, Math.round(i.x * 100) / 100, Math.round(i.y * 100) / 100, Math.round(i.z * 100) / 100, i.car.join('|')]);
+    return { k: 'w', ph: this.ph, tl: Math.round(this.tl * 10) / 10, t: Math.round(this.t * 100) / 100, rd: this.round, nr: this.nr, cp: this.couple, chaos: Math.round(this.chaos), sc: this.sc, its };
+  }
+  setPhase(ph, dur) {
+    const prev = this.ph; this.ph = ph; this.tl = dur;
+    if (ph === 'intro') {
+      this.round++;
+      const pr = this.present();
+      const ids = this.coupleOrder.filter((id) => pr.has(id));
+      if (ids.length >= 3) { const k = ((this.round - 1) * 2) % ids.length; this.couple = [ids[k], ids[(k + 1) % ids.length]]; } else this.couple = [];
+    }
+    if (ph === 'wed') this.t = 0;
+    this.enter(ph, prev);
+    net.bcast(this.stateMsg()); this.wT = 0.15;
+  }
+  hostTick(dt) {
+    this.tl -= dt;
+    if (this.ph === 'intro' && this.tl <= 0) this.setPhase('wed', PG_T.end + 1);
+    else if (this.ph === 'wed') {
+      this.t += dt; this.hostScript();
+      this.hostItems(dt);
+      if (this.t >= PG_T.end) this.setPhase('result', 14);
+    } else if (this.ph === 'result' && this.tl <= 0) { if (this.round >= this.nr) this.setPhase('end', 16); else this.setPhase('intro', 7); }
+    else if (this.ph === 'end' && this.tl <= 0) { endGameAll(); return; }
+    this.wT -= dt;
+    if (this.wT <= 0 && !this.dead) { this.wT = 1 / 8; net.bcast(this.stateMsg()); }
+  }
+  hostScript() {
+    const t = this.t, g = this.groom.name, b = this.bride.name, it = (id) => this.items.get(id);
+    const lost = (id) => it(id).st !== 'home';
+    const at = (k, sec, f) => { if (t >= sec && !this.said[k]) { this.said[k] = 1; const s = typeof f === 'function' ? f() : f; if (s) this.say(s, k.startsWith('off') ? '주례' : '사회자'); } };
+    at('a', 1, `지금부터 신랑 ${g} 군과 신부 ${b} 양의 결혼식을 시작하겠습니다.`);
+    at('b', 6, '하객 여러분께서는… 어… 이미 다 앉아 계시네요. 표정이 아주 밝으십니다.');
+    at('c', PG_T.groom, '신랑 입장! 박수로 맞아주세요… 박수… 네, 마음속으로 쳐주시는 걸로 알겠습니다.');
+    at('d', 31, () => (lost('wig') ? '신랑님 오늘 정말 늠름하십니다. 이마가… 어… 시원하시네요.' : '신랑님 오늘 정말 늠름하십니다. 머리숱도… 어… 풍성하시네요.'));
+    at('e', PG_T.bride, '이어서 신부 입장이 있겠습니다!');
+    at('f', 53, () => (lost('bq') ? '신부님 정말 아름답습니다. 부케는… 비둘기분이 들고 계시네요. 네.' : '신부님 정말 아름답습니다. 부케도… 아직 있네요. 다행입니다.'));
+    at('g', PG_T.vows, '주례 선생님의 말씀이 있겠습니다.');
+    at('off1', 62, '에… 결혼이란… 서로를… 에… 아끼고…');
+    at('off2', 72, '비둘기처럼… 어… 다정하게… 저기 저 비둘기들처럼… 에…');
+    at('off3', 84, '에… 이상입니다.');
+    at('h', PG_T.ring, '다음은 반지 교환이 있겠습니다.');
+    at('i', 100, () => (lost('ring') ? '신랑님께서 신부님 손에… 반지가… 없네요. 마음으로 끼워드리겠습니다.' : '신랑님께서 신부님 손에 반지를… 끼워… 드리고 계십니다.'));
+    at('j', PG_T.ringEnd, '두 분의 사랑이 반지처럼 영원하길 바랍니다. 반지가 있다면요.');
+    at('k', PG_T.cake, () => (lost('cake') ? '다음은 케이크 커팅… 케이크가… 이미 떠나셨네요. 빈 접시를 자르겠습니다.' : '다음은 케이크 커팅입니다! 두 분 케이크 앞으로 이동해 주세요.'));
+    at('l', 135, '두 분의 첫 공동 작업입니다. 칼을 같이 잡아주세요.');
+    at('m', 150, '케이크 맛있어 보이네요. 남아 있다면 하객분들께도 나눠드리겠습니다.');
+    at('n', PG_T.bouquet, '이제 부케 던지기 순서입니다!');
+    at('o', 172, () => (it('bq').st !== 'home' ? '부케 없이… 하나, 둘, 셋! 신부님 손을 시원하게 던지셨습니다.' : '하나… 둘… 셋!'));
+    at('p', PG_T.photo, '마지막으로 단체 사진 촬영이 있겠습니다. 다들 앞을 봐주세요.');
+    at('q', 203, '자 다들 웃으세요~ 이미 웃고 계시네요. 표정이 하나같이… 어… 똑같으십니다.');
+    at('r', 209, '하나, 둘…');
+    at('s', PG_T.flash, '찰칵!');
+    at('t', PG_T.flash + 4, () => (this.chaos < 30 ? '아주 평범하고 아름다운 결혼식이었습니다. 비둘기분들 오늘 좀 조용하셨네요.' : this.chaos < 70 ? '다소… 활기찬 결혼식이었습니다. 두 분 축하드립니다…?' : '역사에 남을 결혼식이었습니다. 어… 두 분 정말… 축하드립니다. 네.'));
+    // 부케 던지기: 아무도 안 채갔으면 하객 쪽으로 날아가요
+    const bq = it('bq');
+    if (t >= PG_T.toss && !this.said.toss) {
+      this.said.toss = 1;
+      if (bq.st === 'home') { const p = this.homePos(bq, t); Object.assign(bq, { st: 'air', x: p[0], y: p[1], z: p[2], vx: rand(-1.2, 1.2), vy: 6.5, vz: 4.2, thrown: true }); }
+    }
+  }
+  say(s, who = '사회자') { const d = { k: 'mc', s, who }; net.bcast(d); this.showSub(d); }
+  adlib(kind) {
+    if (this.ph !== 'wed' || (this.mcCd[kind] || 0) > this.time) return;
+    this.mcCd[kind] = this.time + 7;
+    const arr = MC[kind]; if (!arr) return;
+    const i = (this.mcIdx[kind] = ((this.mcIdx[kind] ?? -1) + 1) % arr.length);
+    this.say(arr[i]);
+  }
+  addChaos(v) { this.chaos = Math.min(100, this.chaos + v); }
+  hostItems(dt) {
+    const t = this.t;
+    for (const it of this.items.values()) {
+      if (it.st === 'nest' || it.st === 'gone') continue;
+      it.car = it.car.filter((id) => this.pigs.has(id));
+      if (it.st === 'home' || it.st === 'grip') {
+        if (it.st === 'home') { const p = this.homePos(it, t); it.x = p[0]; it.y = p[1]; it.z = p[2]; }
+        if (it.car.length >= it.need) it.st = 'carry';
+        else if (it.car.length === 0 && it.st === 'grip') it.st = 'home';
+      }
+      if (it.st === 'carry') {
+        if (it.car.length < it.need) { if (it.car.length === 0 || it.need > 1) { it.st = 'air'; it.vx = it.vz = 0; it.vy = 0; it.dropBy = it.lastCar; } }
+        else {
+          let x = 0, y = 0, z = 0; for (const id of it.car) { const p = this.pigs.get(id); x += p.x; y += p.y; z += p.z; }
+          const n = it.car.length; it.x = x / n; it.y = y / n - 0.3; it.z = z / n; it.lastCar = it.car.slice();
+          if (Math.hypot(it.x - PG_NEST.x, it.z - PG_NEST.z) < 1.8 && Math.abs(it.y - PG_NEST.y) < 1.6) this.deliver(it);
+        }
+      }
+      if (it.st === 'air') {
+        it.vy -= 12 * dt; it.x += it.vx * dt; it.y += it.vy * dt; it.z += it.vz * dt;
+        // 떨어지다가 사람 머리에 맞으면 (케이크 범벅)
+        if (it.vy < 0 && (it.id === 'cake' || it.id.startsWith('sl') || it.id === 'bq')) {
+          for (const p of this.people) {
+            const h = p.av.meshes[1].position;
+            if (Math.hypot(h.x - it.x, h.z - it.z) < 0.5 && it.y < h.y + 0.35 && it.y > h.y - 0.3) {
+              if (it.id === 'bq') { if (it.thrown && p.id.startsWith('g')) { it.st = 'lap'; it.x = h.x; it.y = h.y - 0.45; it.z = h.z + 0.2; this.say('부케는… 하객분께서 받으셨습니다! 끝까지 웃고 계시네요.'); } break; }
+              this.splat(p, 'cream');
+              const by = (it.dropBy || [])[0];
+              if (by && this.sc[by]) { this.sc[by].pts += 2; this.sc[by].thief += 2; }
+              this.addChaos(p === this.groom || p === this.bride ? 8 : 3);
+              this.adlib(p === this.groom || p === this.bride ? 'creamC' : 'creamG');
+              if (it.id === 'cake') { it.st = 'gone'; this.addChaos(10); } else { it.st = 'ground'; it.y = 0.05; }
+              break;
+            }
+          }
+        }
+        if (it.st === 'air') {
+          const floor = Math.abs(it.x - 9) < 0.6 && Math.abs(it.z - 1.5) < 3.5 ? 0.92 : Math.hypot(it.x - 4, it.z + 7.6) < 0.75 ? 0.92 : 0.05;
+          if (it.y <= floor) { it.y = floor; it.st = 'ground'; if (it.id === 'cake') { it.st = 'gone'; this.addChaos(12); this.say('케이크가… 바닥에서 쉬고 계십니다. 네.'); } }
+        }
+      }
+    }
+  }
+  deliver(it) {
+    it.st = 'nest'; it.car.forEach((id) => { const s = this.sc[id]; if (s) { s.pts += it.pts; s.thief += it.pts; if (it.need > 1) s.team++; } });
+    it.car = [];
+    const k = it.id.startsWith('sl') ? 'sl' : it.id.startsWith('f') ? 'f' : it.id;
+    this.addChaos({ wig: 15, ring: 15, bq: 12, cake: 20, sl: 3, f: 1 }[k] || 1);
+    this.adlib(k); net.bcast({ k: 'deliv', id: it.id }); this.onDeliver(it.id);
+  }
+  splat(p, kind, off) {
+    off = off || [rand(-0.12, 0.12), 0.22 + Math.random() * 0.05, rand(-0.12, 0.12)];
+    const d = { k: 'splat', who: p.id, kind, off: off.map((v) => Math.round(v * 100) / 100) };
+    net.bcast(d); this.onSplat(d);
+  }
+  hostPoop(by, x, y, z) {
+    if (this.ph !== 'wed') return;
+    let hit = null, hy = -1;
+    for (const p of this.people) { const h = p.av.meshes[1].position; if (Math.hypot(h.x - x, h.z - z) < 0.42 && h.y < y && h.y > hy) { hy = h.y; hit = p; } }
+    const d = { k: 'poopfx', x, y, z, hit: hit ? hit.id : '', by };
+    net.bcast(d); this.onPoop(d);
+    if (hit) {
+      const s = this.sc[by]; const cpl = hit === this.groom || hit === this.bride;
+      if (s) { s.pts += cpl ? 2 : 1; s.poops++; }
+      this.addChaos(cpl ? 2 : 0.6);
+      this.adlib(cpl ? 'poopC' : 'poopG');
+    }
+  }
+  hostGrab(by, id, drop) {
+    const it = this.items.get(id), pg = this.pigs.get(by);
+    if (!it || !pg || this.ph !== 'wed') return;
+    if (drop) { it.car = it.car.filter((x) => x !== by); if (!it.car.length && it.st === 'carry') { it.st = 'air'; it.vx = it.vy = it.vz = 0; it.dropBy = [by]; } return; }
+    if (!this.available(it, this.t) || it.st === 'nest' || it.st === 'gone' || it.car.includes(by)) return;
+    for (const o of this.items.values()) if (o.car.includes(by)) return;
+    if (Math.hypot(pg.x - it.x, pg.y - it.y, pg.z - it.z) > 2.0) return;
+    if (it.car.length >= it.need) return;
+    if (it.need === 1 && (it.st === 'carry')) return;
+    it.car.push(by);
+    if (it.need > 1 && it.st === 'home') it.st = 'grip';
+    if (it.need === 1) { it.st = 'carry'; if (it.id === 'wig' && !this.said.wigOff) { this.said.wigOff = 1; } }
+    if (it.st === 'carry' || it.car.length >= it.need) {
+      if (['wig', 'ring', 'bq', 'cake'].includes(it.id) && !it.announced) { it.announced = 1; this.addChaos(5); this.adlib(it.id); }
+    }
+  }
+
+  // ---- 메시지 ----
+  addPig(r) {
+    if (this.pigs.has(r.id)) return this.pigs.get(r.id);
+    const local = r.id === myId || (isHost() && r.id.startsWith('bot_'));
+    const m = makePigeon(r.color); this.scene.add(m);
+    const sk = skinOf(r.id); if (sk && sk.hat) m.userData.hat.add(itemMesh('hat', sk.hat));
+    const label = makeLabel(r.name, r.color); label.scale.set(1.1, 0.28, 1); this.scene.add(label);
+    const p = { id: r.id, name: r.name, bot: !!r.bot, local, m, label, x: rand(-14, -8), y: 0, z: rand(10, 15), yaw: 0, vx: 0, vy: 0, vz: 0, gd: true, flap: 0, dive: 0, tx: 0, ty: 0, tz: 0, tyaw: 0 };
+    this.pigs.set(r.id, p); return p;
+  }
+  onSkin(id) {
+    const p = this.pigs.get(id); if (p) { p.m.userData.hat.clear(); const sk = skinOf(id); if (sk && sk.hat) p.m.userData.hat.add(itemMesh('hat', sk.hat)); }
+  }
+  onRoster() {
+    const pr = this.present();
+    for (const [id, p] of this.pigs) if (!pr.has(id) && id !== myId) { this.scene.remove(p.m); this.scene.remove(p.label); this.pigs.delete(id); }
+  }
+  onData(from, d) {
+    const host = isHost();
+    switch (d.k) {
+      case 'p': {
+        if (d.id === myId || (host && d.id.startsWith('bot_'))) return;
+        if (!d.id.startsWith('bot_') && d.id !== from) return;
+        let p = this.pigs.get(d.id);
+        if (!p) { const info = net.players.find((x) => x.id === d.id) || this.roster.find((x) => x.id === d.id); if (!info) return; p = this.addPig(info); }
+        if (Math.hypot(p.x - d.x, p.y - d.y, p.z - d.z) > 4) { p.x = d.x; p.y = d.y; p.z = d.z; }
+        Object.assign(p, { tx: d.x, ty: d.y, tz: d.z, tyaw: d.yaw, flap: d.fl, gd: !!d.gd, seen: performance.now() });
+        return;
+      }
+      case 'w': {
+        if (host || from !== net.hostId) return;
+        const prev = this.ph, cpChanged = JSON.stringify(this.couple) !== JSON.stringify(d.cp);
+        Object.assign(this, { tl: d.tl, round: d.rd, nr: d.nr, couple: d.cp, chaos: d.chaos, sc: d.sc });
+        if (Math.abs(d.t - this.t) > 0.4 || d.ph !== 'wed') this.t = d.t;
+        this.ph = d.ph;
+        for (const [id, st, x, y, z, car] of d.its) { const it = this.items.get(id); if (!it) continue; it.st = st; it.tx = x; it.ty = y; it.tz = z; it.car = car ? car.split('|') : []; }
+        if (cpChanged && d.ph === 'intro' && prev !== 'intro') { /* enter에서 처리 */ }
+        if (d.ph !== prev) this.enter(d.ph, prev);
+        return;
+      }
+      case 'mc': if (from === net.hostId && !host) this.showSub(d); return;
+      case 'splat': if (from === net.hostId && !host) this.onSplat(d); return;
+      case 'poopfx': if (from === net.hostId && !host) this.onPoop(d); return;
+      case 'deliv': if (from === net.hostId && !host) this.onDeliver(d.id); return;
+    }
+    if (!host) return;
+    const who = d.by && d.by.startsWith('bot_') && from === myId ? d.by : from;
+    if (d.k === 'grab') this.hostGrab(who, d.id, !!d.drop);
+    if (d.k === 'poop') this.hostPoop(who, d.x, d.y, d.z);
+  }
+  showSub(d) {
+    this.el.who.textContent = d.who || '사회자'; this.el.line.textContent = d.s;
+    this.el.sub.classList.remove('hidden', 'pop'); void this.el.sub.offsetWidth; this.el.sub.classList.add('pop');
+    clearTimeout(this.subT); this.subT = setTimeout(() => this.el.sub.classList.add('hidden'), 4200);
+    tone(600 + Math.random() * 200, 0.04, 'triangle', 0.05);
+  }
+  onSplat(d) {
+    const p = this.people.find((x) => x.id === d.who); if (!p || p.decals > 9) return;
+    p.decals++;
+    if ((p === this.groom || p === this.bride)) { const id = this.couple[p === this.groom ? 0 : 1]; if (id && this.sc[id]) this.sc[id].dmg++; }
+    const g = new THREE.Group(), cream = d.kind === 'cream';
+    const blob = new THREE.Mesh(new THREE.SphereGeometry(cream ? 0.17 : 0.09, 10, 8), M(cream ? 0xfff0f6 : 0xffffff, { emissive: 0x444444 }));
+    blob.scale.set(1.3, 0.5, 1.1); g.add(blob);
+    if (!cream) { const dot = new THREE.Mesh(new THREE.SphereGeometry(0.03, 6, 6), M(0x495057)); dot.position.set(0.03, 0.03, 0.01); g.add(dot); }
+    else for (let i = 0; i < 3; i++) { const c = new THREE.Mesh(new THREE.SphereGeometry(0.04, 6, 6), M(0xff8fab)); c.position.set(rand(-0.1, 0.1), 0.03, rand(-0.08, 0.08)); g.add(c); }
+    g.position.set(d.off[0], cream ? 0.05 : d.off[1], cream ? 0.18 : d.off[2]);
+    if (cream) g.rotation.x = -1.2;
+    p.decalG.add(g); p.hurt = 1.4;
+    if (cream) kNoise(0, 0.25, 0.3, 500, 'lowpass'); else tone(300, 0.12, 'sine', 0.15, 0.4);
+  }
+  onPoop(d) {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), M(0xf8f9fa)); m.position.set(d.x, d.y, d.z); this.scene.add(m);
+    const tgt = d.hit ? this.people.find((p) => p.id === d.hit) : null;
+    this.drops.push({ m, tgt, vy: 0, hit: d.hit });
+    tone(900, 0.08, 'sine', 0.08, 0.5);
+  }
+  onDeliver(id) {
+    const it = this.items.get(id); SFX.lock();
+    toast(`둥지에 ${it ? it.n : '물건'} 도착!`);
+  }
+
+  // ---- 단계 화면 ----
+  enter(ph, prev) {
+    const role = this.role();
+    gameEl.classList.toggle('couple', role !== 'pigeon' && (ph === 'wed' || ph === 'intro'));
+    this.el.keys.innerHTML = role === 'pigeon'
+      ? '<kbd>WASD</kbd> 이동 &nbsp; <kbd>Space</kbd> 날갯짓 &nbsp; <kbd>Shift</kbd> 급강하 &nbsp; <kbd>E</kbd>/<kbd>클릭</kbd> 물기·놓기 &nbsp; <kbd>F</kbd> 새똥'
+      : '마우스로 고개를 돌려 구경하세요. 조작은 없어요.';
+    if (ph === 'intro') {
+      this.setCouple(); this.resetRound();
+      const me = this.pigs.get(myId);
+      for (const p of this.pigs.values()) if (p.local) { p.x = rand(-14, -9); p.y = 0; p.z = rand(9, 15); p.vx = p.vy = p.vz = 0; }
+      this.camYaw = 0; this.camPitch = 0.25;
+      const g = this.groom.name, b = this.bride.name;
+      this.panel(role === 'pigeon'
+        ? `<h2>당신은 비둘기예요</h2><p>라운드 ${this.round}/${this.nr} · 신랑 ${esc(g)}, 신부 ${esc(b)}의 결혼식</p>
+           <p>가발, 반지, 부케, 케이크, 뷔페 음식을 물어서 나무 위 <b>둥지</b>로 가져가요. 케이크 통째로는 비둘기 3마리가 같이 물어야 떠요.</p>
+           <p>새똥으로 하객과 신랑신부를 꾸며줘도 돼요. 아무도 막지 않아요.</p>`
+        : `<h2>당신은 ${role === 'groom' ? '신랑' : '신부'}예요</h2><p>라운드 ${this.round}/${this.nr}</p>
+           <p>결혼식은 알아서 진행돼요. 조작은 없어요. 고개를 돌려서 비둘기들이 결혼식을 망치는 걸 평화롭게 구경하세요.</p>
+           <p>마지막에 단체 사진을 찍어요.</p>`);
+      music.stop();
+    }
+    if (ph === 'wed') { this.hidePanel(); if (!isTouch && document.pointerLockElement !== this.cv) this.el.lock.classList.remove('hidden'); }
+    if (ph === 'result') {
+      if (!this.photo) this.takePhoto();
+      const st = Object.values(this.sc).slice().sort((a, b) => b.pts - a.pts);
+      this.panel(`<div class="polaroid"><img alt="망가진 웨딩 사진" src="${this.photo || ''}"><p>${esc(this.groom.name)} ♥ ${esc(this.bride.name)} · 망가진 정도 ${Math.round(this.chaos)}%</p></div>
+        <button class="btn mint small" id="pSave">사진 저장</button>
+        <h3>점수</h3><ul class="rank">${st.map((s, i) => `<li><span>${i + 1}. ${esc(s.name)}</span><span>${s.pts}점</span></li>`).join('')}</ul>`);
+      const sv = this.el.panel.querySelector('#pSave');
+      sv.onclick = () => { const a = document.createElement('a'); a.href = this.photo; a.download = `오메가기문_웨딩사진_${this.round}.png`; a.click(); };
+      if (document.pointerLockElement) document.exitPointerLock();
+    }
+    if (ph === 'end') {
+      const st = Object.entries(this.sc), top = (f) => st.reduce((a, b) => (f(b[1]) > (a ? f(a[1]) : 0) ? b : a), null);
+      const win = st.slice().sort((a, b) => b[1].pts - a[1].pts)[0], aw = [];
+      const a1 = top((s) => s.thief), a2 = top((s) => s.poops), a3 = top((s) => s.team), a4 = top((s) => s.dmg);
+      if (a1) aw.push(`<li><b>도둑왕</b>${esc(a1[1].name)} (${a1[1].thief}점어치 훔침)</li>`);
+      if (a2) aw.push(`<li><b>새똥 명사수</b>${esc(a2[1].name)} (${a2[1].poops}번 명중)</li>`);
+      if (a3) aw.push(`<li><b>팀워크상</b>${esc(a3[1].name)} (케이크 통째로 ${a3[1].team}번)</li>`);
+      if (a4) aw.push(`<li><b>최다 피해 커플</b>${esc(a4[1].name)} (${a4[1].dmg}번 묻음)</li>`);
+      SFX.fanfare();
+      this.panel(`<h2>${win ? esc(win[1].name) + ' 우승!' : '게임 끝!'}</h2><ul class="awards">${aw.join('')}</ul>
+        ${isHost() ? '<button class="btn pop" id="pBack">대기실로 돌아가기</button>' : '<p class="wait">잠시 뒤 대기실로 돌아가요.</p>'}`);
+      if (isHost()) this.el.panel.querySelector('#pBack').onclick = () => endGameAll();
+    }
+  }
+  panel(h) { this.el.panel.innerHTML = h; this.el.ov.classList.remove('hidden'); }
+  hidePanel() { this.el.ov.classList.add('hidden'); }
+  takePhoto() {
+    this.posePeople(PG_T.flash);
+    const was = this.cam;
+    const w = 960, h = 720, r = this.renderer, size = new THREE.Vector2(); r.getSize(size);
+    const pr = r.getPixelRatio();
+    r.setPixelRatio(1); r.setSize(w, h, false);
+    for (const p of this.pigs.values()) p.label.visible = false;
+    this.nestRing.visible = false;
+    r.render(this.scene, this.camPhoto);
+    try { this.photo = this.cv.toDataURL('image/jpeg', 0.88); } catch (e) { this.photo = ''; }
+    r.setPixelRatio(pr); r.setSize(size.x, size.y, false); this.nestRing.visible = true;
+    this.el.flash.classList.remove('hidden', 'go'); void this.el.flash.offsetWidth; this.el.flash.classList.add('go');
+    setTimeout(() => this.el.flash.classList.add('hidden'), 900);
+    tone(2400, 0.06, 'square', 0.1); kNoise(0, 0.15, 0.25, 4000, 'highpass');
+  }
+
+  // ---- 봇 비둘기 ----
+  botThink(p, dt) {
+    const b = this.bot[p.id] || (this.bot[p.id] = { t: 0, poopT: rand(3, 6) });
+    const out = { x: 0, z: 0, flap: false, dive: false, grab: false, poop: false };
+    if (this.ph !== 'wed') return out;
+    const mine = [...this.items.values()].find((i) => i.car.includes(p.id));
+    let tx, ty, tz;
+    if (mine && mine.st === 'carry') { tx = PG_NEST.x; ty = PG_NEST.y + 0.6; tz = PG_NEST.z; }
+    else if (mine) { tx = mine.x; ty = mine.y + 0.4; tz = mine.z; }
+    else {
+      if (!b.goal || !this.available(b.goal, this.t) || ['nest', 'gone', 'lap'].includes(b.goal.st) || (b.goal.need === 1 && b.goal.car.length) || b.t <= 0) {
+        b.t = rand(8, 16);
+        const cand = [...this.items.values()].filter((i) => this.available(i, this.t) && !['nest', 'gone', 'lap'].includes(i.st) && i.car.length < i.need);
+        const pref = cand.filter((i) => i.need > 1 || ['wig', 'ring', 'bq'].includes(i.id));
+        const pool = pref.length && Math.random() < 0.7 ? pref : cand;
+        b.goal = pool[Math.floor(Math.random() * pool.length)] || null;
+      }
+      b.t -= dt;
+      if (b.goal) { tx = b.goal.x; ty = b.goal.y + 0.35; tz = b.goal.z; if (Math.hypot(tx - p.x, ty - 0.35 - p.y, tz - p.z) < 1.2) out.grab = true; }
+      else { tx = Math.sin(this.time * 0.3 + p.x) * 5; ty = 4; tz = 2; }
+    }
+    const dx = tx - p.x, dz = tz - p.z, d = Math.hypot(dx, dz);
+    if (d > 0.3) { out.x = dx / d; out.z = dz / d; }
+    const want = d > 4 ? Math.max(ty, 3.5) : ty;
+    if (p.y < want - 0.2 && p.vy < 2) out.flap = true;
+    if (p.y > want + 1.2 && d < 2) out.dive = true;
+    // 사람 위를 지날 때 가끔 새똥
+    b.poopT -= dt;
+    if (b.poopT <= 0 && p.y > 1.8) {
+      for (const q of this.people) { const h = q.av.meshes[1].position; if (Math.hypot(h.x - p.x, h.z - p.z) < 0.5) { out.poop = true; b.poopT = rand(2, 5); break; } }
+    }
+    return out;
+  }
+
+  // ---- 루프 ----
+  loop(now) {
+    if (this.dead) return;
+    this.raf = requestAnimationFrame(this.loop);
+    const dt = Math.min(0.05, (now - this.last) / 1000); this.last = now; this.time += dt;
+    const host = isHost(), role = this.role(), wed = this.ph === 'wed';
+    if (!host && wed) this.t += dt;
+    const ed = takeEdges();
+    let grab = !!(ed.sit || ed.grab || this.tGrab), poop = !!(ed.kick || this.tPoop), dive = !!(input.keys.has('shift') && !this.shiftWas) || !!this.tDive;
+    const flapEdge = !!(ed.jump || this.tFlapEdge), flapHold = input.keys.has(' ') || !!this.tFlap;
+    this.shiftWas = input.keys.has('shift');
+    this.tGrab = this.tPoop = this.tDive = this.tFlapEdge = false;
+    if (this.swallow) { grab = false; this.swallow = false; }
+    if (document.pointerLockElement === this.cv || isTouch) this.el.lock.classList.add('hidden');
+    const me = this.pigs.get(myId);
+    if (me && role === 'pigeon') {
+      const mv = readMove();
+      this.fly(me, { x: -Math.sin(this.camYaw) * mv.y + Math.cos(this.camYaw) * mv.x, z: -Math.cos(this.camYaw) * mv.y - Math.sin(this.camYaw) * mv.x, flap: flapEdge || (flapHold && me.flapCd <= 0), dive }, dt);
+      if (wed) {
+        const carrying = [...this.items.values()].find((i) => i.car.includes(myId));
+        if (grab) {
+          if (carrying) net.toHost({ k: 'grab', id: carrying.id, drop: 1 });
+          else { const n = this.nearItem(me); if (n) net.toHost({ k: 'grab', id: n.id }); }
+        }
+        if (poop && (this.poopCd || 0) <= 0) { this.poopCd = 1.1; net.toHost({ k: 'poop', x: me.x, y: me.y + 0.1, z: me.z }); }
+        const n = carrying ? null : this.nearItem(me);
+        const txt = carrying ? (carrying.st === 'grip' ? `${carrying.n} 붙잡는 중 (${carrying.car.length}/${carrying.need}마리)` : `${carrying.n} 물고 있어요 · 둥지로!`) : n ? `${isTouch ? '' : '<kbd>E</kbd> '}${n.n} 물기 (${n.pts}점${n.need > 1 ? `, ${n.need}마리 필요` : ''})` : '';
+        this.el.prompt.classList.toggle('hidden', !txt); if (txt && this.el.prompt.innerHTML !== txt) this.el.prompt.innerHTML = txt;
+      } else this.el.prompt.classList.add('hidden');
+    } else this.el.prompt.classList.add('hidden');
+    this.poopCd = Math.max(0, (this.poopCd || 0) - dt);
+    if (host) for (const p of this.pigs.values()) {
+      if (!p.bot || !p.local || this.couple.includes(p.id)) continue;
+      const o = this.botThink(p, dt);
+      this.fly(p, { x: o.x, z: o.z, flap: o.flap && p.flapCd <= 0, dive: o.dive }, dt);
+      if (o.grab && !this.couple.includes(p.id)) { const n = this.nearItem(p); if (n) this.hostGrab(p.id, n.id, false); }
+      if (o.poop) this.hostPoop(p.id, p.x, p.y + 0.1, p.z);
+    }
+    if (host) { this.hostTick(dt); if (this.dead) return; } else this.tl -= dt;
+    this.sendT -= dt;
+    if (this.sendT <= 0) {
+      this.sendT = 1 / 12;
+      for (const p of this.pigs.values()) if (p.local && !this.couple.includes(p.id)) net.bcast({ k: 'p', id: p.id, x: Math.round(p.x * 100) / 100, y: Math.round(p.y * 100) / 100, z: Math.round(p.z * 100) / 100, yaw: Math.round(p.yaw * 100) / 100, fl: p.flapA > 0.1 ? 1 : 0, gd: p.gd ? 1 : 0 });
+    }
+    if (wed && this.t >= PG_T.flash && !this.photo) this.takePhoto();
+    this.render(dt);
+  }
+  nearItem(p) {
+    let best = null, bd = 1.6;
+    for (const it of this.items.values()) {
+      if (!this.available(it, this.t) || ['nest', 'gone'].includes(it.st) || it.car.length >= it.need) continue;
+      const d = Math.hypot(it.x - p.x, it.y - p.y, it.z - p.z);
+      if (d < bd) { bd = d; best = it; }
+    }
+    return best;
+  }
+  fly(p, inp, dt) {
+    p.flapCd = Math.max(0, (p.flapCd || 0) - dt); p.flapA = Math.max(0, (p.flapA || 0) - dt);
+    const air = p.y > 0.02;
+    const sp = air ? (p.dive > 0 ? 11 : 7) : 2.4;
+    const k = 1 - Math.exp(-dt * (air ? 3 : 10));
+    p.vx += (inp.x * sp - p.vx) * k; p.vz += (inp.z * sp - p.vz) * k;
+    if (inp.flap) { p.vy = Math.min(p.vy + 4.4, 6.5); p.flapCd = 0.2; p.flapA = 0.3; tone(160 + Math.random() * 40, 0.05, 'triangle', 0.05); }
+    if (inp.dive && air) { p.dive = 0.6; p.vy = -9; }
+    p.dive = Math.max(0, p.dive - dt);
+    p.vy -= (air && Math.hypot(p.vx, p.vz) > 2 && p.dive <= 0 ? 5.5 : 10) * dt;
+    if (p.vy < -12) p.vy = -12;
+    p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
+    // 둥지 위에 앉기
+    if (Math.hypot(p.x - PG_NEST.x, p.z - PG_NEST.z) < 1 && p.y < PG_NEST.y && p.y > PG_NEST.y - 0.5 && p.vy <= 0) { p.y = PG_NEST.y; p.vy = 0; }
+    if (p.y <= 0) { p.y = 0; p.vy = 0; }
+    p.y = Math.min(p.y, 16); p.x = clamp(p.x, -28, 28); p.z = clamp(p.z, -24, 24);
+    p.gd = p.y <= 0.02 || p.y === PG_NEST.y;
+    if (Math.hypot(p.vx, p.vz) > 0.3) { let d = Math.atan2(p.vx, p.vz) - p.yaw; d = Math.atan2(Math.sin(d), Math.cos(d)); p.yaw += d * Math.min(1, dt * 8); }
+    // 케이크 통째로 붙잡고 있으면 서로 떨어지지 않게
+    const it = [...this.items.values()].find((i) => i.car.includes(p.id) && i.need > 1);
+    if (it) { const dx = p.x - it.x, dy = p.y - (it.y + 0.3), dz = p.z - it.z, d = Math.hypot(dx, dy, dz); if (d > 1.3) { const f = 1.3 / d; p.x = it.x + dx * f; p.y = it.y + 0.3 + dy * f; p.z = it.z + dz * f; } }
+  }
+  posePeople(t) {
+    for (const who of ['groom', 'bride']) {
+      const o = this.couplePose(who, t), p = this[who];
+      p.hurt = Math.max(0, p.hurt - 0.016);
+      poseHuman(p.av, o); p.av.setHurt(p.hurt > 0);
+      if (who === 'groom' && p.cos) p.cos.wig.visible = this.items.get('wig').st === 'home';
+    }
+    poseHuman(this.off.av, { x: t >= PG_T.photo ? -2.6 : 0, y: 0, z: t >= PG_T.photo ? -9.0 : -9.7, yaw: 0, nod: Math.sin(this.time * 2) * 0.08, arms: t > 60 && t < 90 ? [[-0.6 + Math.sin(this.time * 3) * 0.3, 0.2], null] : null });
+    poseHuman(this.mc.av, { x: -3.3, y: 0, z: -7.95, yaw: 0.6, arms: [null, [-1.6, 0.1]], nod: Math.sin(this.time * 4) * 0.05 });
+    for (const g of this.guests) { g.hurt = Math.max(0, g.hurt - 0.016); poseHuman(g.av, { x: g.seat.x, y: 0, z: g.seat.z, yaw: Math.PI, sit: true, arms: [[-0.7, 0.1], [-0.7, 0.1]], nod: Math.sin(this.time * 0.8 + g.seat.x) * 0.03 }); g.av.setHurt(false); }
+  }
+  render(dt) {
+    const t = this.ph === 'wed' ? this.t : this.ph === 'result' || this.ph === 'end' ? PG_T.end : 0;
+    this.posePeople(t);
+    const a = 1 - Math.exp(-dt * 12);
+    // 비둘기
+    for (const p of this.pigs.values()) {
+      if (!p.local) { p.x += (p.tx - p.x) * a; p.y += (p.ty - p.y) * a; p.z += (p.tz - p.z) * a; let d = p.tyaw - p.yaw; d = Math.atan2(Math.sin(d), Math.cos(d)); p.yaw += d * a; if (p.flap) p.flapA = 0.3; else p.flapA = Math.max(0, (p.flapA || 0) - dt); }
+      const show = !this.couple.includes(p.id) && this.ph !== 'end';
+      p.m.visible = show; p.label.visible = show && p.id !== myId;
+      if (!show) continue;
+      p.m.position.set(p.x, p.y, p.z); p.m.rotation.y = p.yaw;
+      const ud = p.m.userData, airborne = p.y > 0.05;
+      const flapping = (p.flapA || 0) > 0 || (airborne && !p.local && !p.gd);
+      ud.wings.forEach((w, i) => { const s = i ? 1 : -1; w.rotation.z = airborne ? s * (flapping ? Math.sin(this.time * 28) * 0.9 : 0.15) : s * -0.2; });
+      ud.body.rotation.x = airborne ? (p.dive > 0 ? 0.8 : 0.15) : Math.sin(this.time * 12) * 0.05 * (Math.hypot(p.vx || 0, p.vz || 0) > 0.5 ? 1 : 0);
+      ud.body.position.y = !airborne && Math.hypot(p.vx || 0, p.vz || 0) > 0.5 ? Math.abs(Math.sin(this.time * 12)) * 0.04 : 0;
+      p.label.position.set(p.x, p.y + 0.9, p.z);
+    }
+    // 물건
+    for (const it of this.items.values()) {
+      if (!isHost()) { it.x += (it.tx - it.x) * a; it.y += (it.ty - it.y) * a; it.z += (it.tz - it.z) * a; if (it.st === 'home') { const hp = this.homePos(it, t); it.x = hp[0]; it.y = hp[1]; it.z = hp[2]; } }
+      let x = it.x, y = it.y, z = it.z;
+      if (it.car.length === 1 && it.car[0] === myId) { const me = this.pigs.get(myId); x = me.x + Math.sin(me.yaw) * 0.35; y = me.y + 0.25; z = me.z + Math.cos(me.yaw) * 0.35; }
+      const vis = it.st !== 'gone' && !(it.id === 'wig' && it.st === 'home') && !(it.id === 'ring' && it.st === 'home' && (t < PG_T.ring - 4));
+      it.mesh.visible = vis && !(it.st === 'nest' && it.need > 1 && false);
+      if (it.st === 'nest') { const k = PG_ITEMS.findIndex((q) => q.id === it.id); x = PG_NEST.x + Math.cos(k) * 0.4; y = PG_NEST.y + 0.05; z = PG_NEST.z + Math.sin(k) * 0.4; }
+      it.mesh.position.set(x, y, z);
+      if (it.id === 'ring' && vis) it.mesh.rotation.y += dt * 3;
+      if (it.id === 'cake' && it.st !== 'home' && it.st !== 'grip') it.mesh.rotation.z = it.st === 'ground' ? 1.2 : Math.sin(this.time * 6) * 0.1;
+    }
+    // 떨어지는 새똥
+    this.drops = this.drops.filter((d) => {
+      d.vy -= 14 * dt; d.m.position.y += d.vy * dt;
+      const ty = d.tgt ? d.tgt.av.meshes[1].position.y + 0.2 : 0.03;
+      if (d.m.position.y <= ty) {
+        this.scene.remove(d.m);
+        if (d.tgt) { if (isHost()) this.splat(d.tgt, 'poop'); }
+        else { const s = new THREE.Mesh(new THREE.CircleGeometry(0.09, 10), M(0xf8f9fa)); s.rotation.x = -Math.PI / 2; s.position.set(d.m.position.x, 0.02, d.m.position.z); this.scene.add(s); (this.groundSplats = this.groundSplats || []).push(s); }
+        return false;
+      }
+      return true;
+    });
+    // 카메라
+    const role = this.role();
+    let focus;
+    if (role === 'pigeon') { const me = this.pigs.get(myId); focus = me ? new V3(me.x, me.y + 0.4, me.z) : new V3(0, 2, 5); }
+    else { const h = this[role].av.meshes[1].position; focus = new V3(h.x, h.y + 0.15, h.z); }
+    const dist = role === 'pigeon' ? 3.2 : 2.4, cp = Math.cos(this.camPitch);
+    const off = new V3(Math.sin(this.camYaw) * cp * dist, Math.sin(this.camPitch) * dist + 0.4, Math.cos(this.camYaw) * cp * dist);
+    if (role !== 'pigeon') off.add(new V3(Math.cos(this.camYaw) * 0.45, 0, -Math.sin(this.camYaw) * 0.45));
+    this.cam.position.copy(focus).add(off); if (this.cam.position.y < 0.2) this.cam.position.y = 0.2;
+    this.cam.lookAt(focus.x + (role !== 'pigeon' ? Math.cos(this.camYaw) * 0.45 : 0), focus.y, focus.z + (role !== 'pigeon' ? -Math.sin(this.camYaw) * 0.45 : 0));
+    this.nestRing.material.opacity = 0.5 + Math.abs(Math.sin(this.time * 3)) * 0.4;
+    // 위쪽 정보
+    this.el.bar.style.width = this.chaos + '%'; this.el.pct.textContent = Math.round(this.chaos) + '%';
+    const step = !this.ph || this.ph === 'intro' ? '곧 시작' : this.ph !== 'wed' ? '끝' : t < PG_T.groom ? '하객 입장' : t < PG_T.vows ? '신랑 신부 입장' : t < PG_T.ring ? '주례 말씀' : t < PG_T.cake ? '반지 교환' : t < PG_T.bouquet ? '케이크 커팅' : t < PG_T.photo ? '부케 던지기' : '단체 사진';
+    const chips = [`<span class="chip">라운드 ${this.round || 1}/${this.nr}</span>`, `<span class="chip ev">${step}</span>`, `<span class="chip">${role === 'pigeon' ? '비둘기' : role === 'groom' ? '신랑' : '신부'}</span>`];
+    if (this.sc[myId] && role === 'pigeon') chips.push(`<span class="chip">내 점수 ${this.sc[myId].pts}</span>`);
+    const html = chips.join(''); if (html !== this.chipsHTML) { this.el.chips.innerHTML = html; this.chipsHTML = html; }
+    this.renderer.render(this.scene, this.cam);
   }
 }
 
