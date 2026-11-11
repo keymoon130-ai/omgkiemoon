@@ -458,8 +458,16 @@ const myId = (() => {
 })();
 const COLORS = ['#ff7a59', '#ff4f8b', '#ffd23f', '#33d69f', '#4aa8f0', '#a678ff', '#ffffff', '#8b5a3c'];
 const BOT_NAMES = ['꼬북봇', '말랑봇', '두부봇', '찐빵봇', '떡볶봇', '호떡봇', '만두봇'];
-const isTouch = matchMedia('(pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches;
+// 터치 모드: 처음엔 기기 정보로 짐작하고, 실제로 화면을 터치하면 바로 터치 조작으로 바뀌어요.
+// (S펜 달린 갤럭시처럼 '마우스도 있는 기기'라고 알려주는 폰이 있어서요)
+let isTouch = matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints > 0 && !matchMedia('(hover: hover)').matches);
+function setTouch(on) { if (isTouch === on) return; isTouch = on; document.body.classList.toggle('is-touch', on); }
 if (isTouch) document.body.classList.add('is-touch');
+window.addEventListener('touchstart', () => setTouch(true), { capture: true, passive: true });
+window.addEventListener('pointerdown', (e) => {
+  if (e.pointerType === 'touch') setTouch(true);
+  else if (e.pointerType === 'mouse' && !matchMedia('(pointer: coarse)').matches) setTouch(false);
+}, true);
 const rand = (a, b) => a + Math.random() * (b - a);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
